@@ -114,10 +114,10 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
           <Menu className="w-5 h-5 text-slate-300" />
         </button>
 
-        {/* Mobile Brand Logo (Replaces long truncated titles on mobile to avoid header squish) */}
-        <div className="flex items-center gap-2 sm:hidden">
-          <div className="w-6 h-6 rounded-md bg-indigo-500/20 border border-indigo-500 flex items-center justify-center">
-            <Shield className="w-3.5 h-3.5 text-indigo-400" />
+        {/* Mobile Brand Title (Always compact on mobile) */}
+        <div className="header-mobile-brand sm:hidden">
+          <div className="w-5 h-5 rounded bg-indigo-500/20 border border-indigo-500 flex items-center justify-center">
+            <Shield className="w-3 h-3 text-indigo-400" />
           </div>
           <span className="font-mono font-extrabold text-sm text-white tracking-wider">VAULT.</span>
         </div>
@@ -130,14 +130,14 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
       </div>
 
       <div className="header-right">
-        {/* Enclave Status Pill (Only on wide screens) */}
+        {/* Enclave Status Pill (Only on Desktop) */}
         <div className="enclave-status-indicator hidden lg:flex">
           <Radio className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
           <span className="font-mono text-xs text-emerald-400 font-semibold">{headerT.secureEnv || 'Secure Environment'}</span>
         </div>
 
-        {/* Notifications */}
-        <div className="relative hidden xs:block" ref={notifRef}>
+        {/* Notifications (Hidden on mobile to save space) */}
+        <div className="relative header-notif-wrapper hidden md:block" ref={notifRef}>
           <button 
             onClick={() => setNotificationsOpen(!notificationsOpen)}
             className="header-action-icon-btn"
@@ -218,20 +218,20 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
           title="Toggle Theme"
         >
           {currentTheme === 'dark' ? (
-            <Sun className="w-4 h-4 text-amber-400" />
+            <Sun className="w-3.5 h-3.5 text-amber-400" />
           ) : (
-            <Moon className="w-4 h-4 text-slate-700" />
+            <Moon className="w-3.5 h-3.5 text-slate-700" />
           )}
         </button>
 
-        {/* New Transfer Quick Action (Icon-only on mobile so it never gets clipped) */}
+        {/* New Transfer Button: Icon-only on mobile, icon+text on desktop */}
         <button 
           onClick={onNewTransferClick}
           className="header-cta-btn"
           title={headerT.newTransfer || 'New Transfer'}
         >
-          <Plus className="w-4 h-4" />
-          <span className="hidden sm:inline">{headerT.newTransfer || 'New Transfer'}</span>
+          <Plus className="w-4 h-4 shrink-0" />
+          <span className="cta-btn-text">{headerT.newTransfer || 'New Transfer'}</span>
         </button>
       </div>
     </header>
