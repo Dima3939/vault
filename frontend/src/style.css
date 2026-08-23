@@ -24,7 +24,7 @@
   --os-cyan: #06B6D4;
   --os-cyan-dim: rgba(6, 182, 212, 0.15);
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-mono: 'JetBrains Mono', monospace;
 }
 
 [data-theme="light"] {
@@ -952,12 +952,14 @@ a {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   border-bottom: 1px solid var(--os-border);
+  white-space: nowrap;
 }
 
 .vault-os-table td {
   padding: 1.1rem 1.1rem;
   border-bottom: 1px solid var(--os-border);
   color: var(--os-text-muted);
+  white-space: nowrap;
 }
 
 .asset-tag-circle {
@@ -1019,6 +1021,9 @@ a {
   padding: 0.25rem;
   border-radius: 10px;
   gap: 0.25rem;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .tx-filter-pill-btn {
@@ -1031,6 +1036,7 @@ a {
   border-radius: 7px;
   cursor: pointer;
   transition: all 0.15s;
+  white-space: nowrap;
 }
 
 .tx-filter-pill-btn:hover {
@@ -1141,6 +1147,7 @@ a {
   gap: 0.6rem;
   font-size: 0.74rem;
   color: var(--os-text-muted);
+  flex-wrap: wrap;
 }
 
 .route-node {
@@ -1165,6 +1172,7 @@ a {
   border: 1px solid var(--os-border);
   padding: 0.65rem 0.95rem;
   border-radius: 10px;
+  gap: 0.5rem;
 }
 
 .signer-item.highlight {
@@ -1184,6 +1192,7 @@ a {
   align-items: center;
   justify-content: center;
   font-family: var(--font-mono);
+  flex-shrink: 0;
 }
 
 .signer-avatar.me {
@@ -1193,7 +1202,8 @@ a {
 
 .signer-info {
   flex: 1;
-  margin-left: 0.75rem;
+  min-width: 0;
+  margin-left: 0.5rem;
 }
 
 .signer-name {
@@ -1212,6 +1222,8 @@ a {
   font-size: 0.68rem;
   font-family: var(--font-mono);
   font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .signer-status-badge.approved { color: var(--os-emerald); }
@@ -1532,6 +1544,7 @@ a {
   border: 1px solid var(--os-border);
   border-radius: 16px;
   padding: 1.2rem;
+  overflow: hidden;
 }
 
 .treasury-asset-detail-card {
@@ -1621,6 +1634,8 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 1.2rem;
   box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.6);
+  width: 100%;
+  overflow: hidden;
 }
 
 .mpc-d3-svg {
@@ -1671,6 +1686,8 @@ a {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .terminal-header-title {
@@ -1841,6 +1858,9 @@ a {
   padding: 0.25rem;
   border-radius: 8px;
   border: 1px solid var(--os-border);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
 }
 
 .sdk-tab-btn {
@@ -1867,6 +1887,7 @@ a {
   border: 1px solid var(--os-border);
   border-radius: 16px;
   padding: 1.6rem;
+  overflow: hidden;
 }
 
 .sdk-copy-action-btn {
@@ -1895,6 +1916,7 @@ a {
   line-height: 1.65;
   font-family: var(--font-mono);
   font-size: 0.86rem;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* ==========================================================================
@@ -1923,12 +1945,14 @@ a {
   text-transform: uppercase;
   color: var(--os-text-muted);
   border-bottom: 1px solid var(--os-border);
+  white-space: nowrap;
 }
 
 .swiss-tech-table td {
   padding: 1.1rem 1.3rem;
   border-bottom: 1px solid var(--os-border);
   color: var(--os-text-muted);
+  white-space: nowrap;
 }
 
 .swiss-tech-table .highlight-col {
@@ -2360,7 +2384,7 @@ a {
 }
 
 /* ==========================================================================
-   Responsive Breakpoints
+   Responsive Breakpoints: Flawless Mobile on iPhone 15 Pro, XS, Android, iPad
    ========================================================================== */
 @media (max-width: 1200px) {
   .overview-metrics-grid {
@@ -2401,8 +2425,8 @@ a {
   .sidebar-mobile-backdrop {
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(5px);
     z-index: 90;
   }
   .header-mobile-toggle {
@@ -2417,17 +2441,96 @@ a {
   .vault-os-content {
     padding: 1.2rem 1rem;
   }
+  .vault-top-header {
+    padding: 0.85rem 1rem;
+  }
+  .header-main-title {
+    font-size: 1.05rem;
+  }
+  .header-sub-title {
+    display: none;
+  }
+  .section-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.6rem;
+  }
+  .section-main-heading {
+    font-size: 1.45rem;
+  }
+  .section-sub-desc {
+    font-size: 0.82rem;
+  }
   .overview-metrics-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
   .donut-chart-container {
     grid-template-columns: 1fr;
     justify-items: center;
+    gap: 1.2rem;
   }
   .stat-card-value {
-    font-size: 1.4rem;
+    font-size: 1.45rem;
   }
   .compliance-grid {
     grid-template-columns: 1fr;
+  }
+  .tx-toolbar-container {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+  .tx-search-box {
+    width: 100%;
+    min-width: unset;
+  }
+  .tx-filter-pills {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .tx-filter-pill-btn {
+    font-size: 0.72rem;
+    padding: 0.35rem 0.65rem;
+  }
+  .mpc-metrics-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  .mpc-controls-footer {
+    flex-direction: column;
+  }
+  .mpc-controls-footer button {
+    width: 100%;
+  }
+  .transfer-amount-line {
+    font-size: 1.15rem;
+  }
+  .transfer-route-flex {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
+  .approval-actions-footer {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .segmented-switch-container {
+    width: 100%;
+    justify-content: center;
+  }
+  .switch-segment {
+    padding: 0.5rem 0.85rem;
+    font-size: 0.78rem;
+  }
+  .faq-question-btn {
+    padding: 1rem 1.1rem;
+  }
+  .faq-question-text {
+    font-size: 0.95rem;
+  }
+  .faq-answer-content {
+    padding: 0 1.1rem 1.2rem 1.1rem;
   }
 }
