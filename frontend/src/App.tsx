@@ -382,53 +382,61 @@ export function App() {
                 </div>
               </div>
 
-              <div className="overview-widget-card p-8 mb-8">
-                <div className="widget-header mb-6 pb-4">
-                  <div className="widget-title-group">
-                    <span className="widget-title text-xl font-extrabold">Transfer Request #TX-481-MPC</span>
-                    <span className="high-priority-tag">Quorum Action Required</span>
+              <div className="overview-widget-card mb-8">
+                <div className="widget-header">
+                  <div className="flex flex-col gap-1.5">
+                    <span className="widget-title text-lg sm:text-xl font-extrabold">Transfer Request #TX-481-MPC</span>
+                    <div className="flex items-center gap-2">
+                      <span className="high-priority-tag">Quorum Action Required</span>
+                    </div>
                   </div>
-                  <span className="font-mono text-xs text-indigo-400 font-bold bg-indigo-500/10 border border-indigo-500/30 px-3 py-1.5 rounded">
+                  <span className="enclave-badge-mini font-mono text-xs font-bold">
                     3 of 5 Shards Active
                   </span>
                 </div>
 
-                <div className="p-2">
-                  <div className="transfer-request-banner mb-8 p-6">
-                    <div className="transfer-amount-line font-mono text-3xl font-extrabold text-red-400">
-                      -250.00 BTC <span className="text-sm text-slate-400 font-normal font-sans">($16,250,000.00 USD)</span>
+                <div className="widget-body">
+                  <div className="transfer-request-banner mb-6">
+                    <div className="transfer-amount-line font-mono font-extrabold text-red-400">
+                      -250.00 BTC <span className="text-xs sm:text-sm text-slate-400 font-normal font-sans">($16,250,000.00 USD)</span>
                     </div>
-                    <div className="transfer-route-flex mt-3 text-sm">
+                    <div className="transfer-route-flex mt-2 text-xs sm:text-sm">
                       <span className="route-node font-mono">Cold Storage 1 (bc1q...7w9m)</span>
-                      <span className="text-indigo-400 font-bold text-base">➔</span>
+                      <span className="text-indigo-400 font-bold">➔</span>
                       <span className="route-node font-mono">Binance Institutional Deposit</span>
                     </div>
                   </div>
 
-                  <div className="signers-list mb-8 flex flex-col gap-4">
-                    <div className="signer-item p-4">
-                      <div className="signer-avatar">JS</div>
-                      <div className="signer-info">
-                        <div className="signer-name text-sm font-bold">John Smith</div>
-                        <div className="signer-role text-xs text-slate-400">Chief Compliance Officer</div>
+                  <div className="signers-list mb-6 flex flex-col gap-3">
+                    <div className="signer-item">
+                      <div className="flex items-center gap-3">
+                        <div className="signer-avatar">JS</div>
+                        <div className="signer-info">
+                          <div className="signer-name">John Smith</div>
+                          <div className="signer-role">Chief Compliance Officer</div>
+                        </div>
                       </div>
                       <span className="signer-status-badge approved">✓ Approved via Hardware Token</span>
                     </div>
 
-                    <div className="signer-item p-4">
-                      <div className="signer-avatar">SJ</div>
-                      <div className="signer-info">
-                        <div className="signer-name text-sm font-bold">Sarah Johnson</div>
-                        <div className="signer-role text-xs text-slate-400">Head of Risk Management</div>
+                    <div className="signer-item">
+                      <div className="flex items-center gap-3">
+                        <div className="signer-avatar">SJ</div>
+                        <div className="signer-info">
+                          <div className="signer-name">Sarah Johnson</div>
+                          <div className="signer-role">Head of Risk Management</div>
+                        </div>
                       </div>
                       <span className="signer-status-badge approved">✓ Approved via Biometric Enclave</span>
                     </div>
 
-                    <div className="signer-item highlight p-4">
-                      <div className="signer-avatar me">MC</div>
-                      <div className="signer-info">
-                        <div className="signer-name text-sm font-bold">Michael Chen (You)</div>
-                        <div className="signer-role text-xs text-slate-400">Treasury Manager</div>
+                    <div className="signer-item highlight">
+                      <div className="flex items-center gap-3">
+                        <div className="signer-avatar me">MC</div>
+                        <div className="signer-info">
+                          <div className="signer-name">Michael Chen (You)</div>
+                          <div className="signer-role">Treasury Manager</div>
+                        </div>
                       </div>
                       <span className="signer-status-badge pending">● Signature Required</span>
                     </div>
