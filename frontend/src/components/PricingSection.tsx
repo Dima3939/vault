@@ -29,26 +29,28 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ t, onSelectPlan 
 
   return (
     <section className="vault-section" id="pricing">
-      <div className="section-header text-center max-w-3xl mx-auto mb-12">
+      <div className="section-header">
         <span className="section-tag">{t.tag}</span>
-        <h2 className="section-title text-white">{t.title}</h2>
+        <h2 className="section-title">{t.title}</h2>
         <p className="section-desc">{t.desc}</p>
 
         {/* Segmented Monthly / Annual Switch */}
-        <div className="segmented-switch-container mt-8 inline-flex items-center">
-          <button
-            onClick={() => setIsAnnual(false)}
-            className={`switch-segment ${!isAnnual ? 'active' : ''}`}
-          >
-            {t.monthly}
-          </button>
-          <button
-            onClick={() => setIsAnnual(true)}
-            className={`switch-segment flex items-center gap-2 ${isAnnual ? 'active' : ''}`}
-          >
-            <span>{t.annual}</span>
-            <span className="discount-tag">{t.saveBadge}</span>
-          </button>
+        <div className="segmented-switch-wrapper">
+          <div className="segmented-switch-container">
+            <button
+              onClick={() => setIsAnnual(false)}
+              className={`switch-segment ${!isAnnual ? 'active' : ''}`}
+            >
+              {t.monthly}
+            </button>
+            <button
+              onClick={() => setIsAnnual(true)}
+              className={`switch-segment ${isAnnual ? 'active' : ''}`}
+            >
+              <span>{t.annual}</span>
+              <span className="discount-tag">{t.saveBadge}</span>
+            </button>
+          </div>
         </div>
       </div>
 

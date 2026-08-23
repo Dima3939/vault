@@ -116,39 +116,41 @@ async fn main() -> Result<(), Box<dyn std.error::Error>> {
   return (
     <div className="sdk-hub-card">
       <div className="sdk-header">
-        <div className="flex items-center gap-2">
-          <Code2 className="text-emerald-400 w-5 h-5" />
-          <h3 className="text-lg font-bold text-white tracking-tight">Institutional Developer SDK & REST API</h3>
+        <div className="sdk-header-left">
+          <Code2 className="panel-header-icon text-emerald-400" />
+          <h3 className="sdk-header-title">Institutional Developer SDK & REST API</h3>
         </div>
 
-        <div className="sdk-lang-tabs">
-          {(['ts', 'py', 'go', 'rust', 'curl'] as const).map((lang) => (
-            <button
-              key={lang}
-              onClick={() => setActiveLang(lang)}
-              className={`sdk-tab-btn ${activeLang === lang ? 'active' : ''}`}
-            >
-              {lang === 'ts' ? 'TypeScript' : lang === 'py' ? 'Python' : lang === 'go' ? 'Go' : lang === 'rust' ? 'Rust' : 'cURL'}
-            </button>
-          ))}
+        <div className="sdk-header-right">
+          <div className="sdk-lang-tabs">
+            {(['ts', 'py', 'go', 'rust', 'curl'] as const).map((lang) => (
+              <button
+                key={lang}
+                onClick={() => setActiveLang(lang)}
+                className={`sdk-tab-btn ${activeLang === lang ? 'active' : ''}`}
+              >
+                {lang === 'ts' ? 'TypeScript' : lang === 'py' ? 'Python' : lang === 'go' ? 'Go' : lang === 'rust' ? 'Rust' : 'cURL'}
+              </button>
+            ))}
+          </div>
+
+          <button onClick={handleCopy} className="sdk-copy-action-btn" title="Copy code">
+            {copied ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="text-emerald-400">{t.copied}</span>
+              </>
+            ) : (
+              <>
+                <Copy className="w-3.5 h-3.5" />
+                <span>{t.copyBtn}</span>
+              </>
+            )}
+          </button>
         </div>
       </div>
 
       <div className="sdk-code-wrapper">
-        <button onClick={handleCopy} className="sdk-copy-action-btn" title="Copy code">
-          {copied ? (
-            <>
-              <Check className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-emerald-400">{t.copied}</span>
-            </>
-          ) : (
-            <>
-              <Copy className="w-3.5 h-3.5" />
-              <span>{t.copyBtn}</span>
-            </>
-          )}
-        </button>
-
         <pre className="sdk-code-box font-mono text-xs">
           <code>{snippets[activeLang]}</code>
         </pre>
