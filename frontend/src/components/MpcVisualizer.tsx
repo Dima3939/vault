@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-import { ShieldCheck, RefreshCw, Key, Zap } from 'lucide-react';
+import { ShieldCheck, RefreshCw, Key, Zap, CheckCircle2 } from 'lucide-react';
+import confetti from 'canvas-confetti';
 
 interface MpcVisualizerProps {
   t: {
@@ -22,6 +23,7 @@ interface NodeData extends d3.SimulationNodeDatum {
   active: boolean;
   color: string;
   role: string;
+  badge: string;
 }
 
 export const MpcVisualizer: React.FC<MpcVisualizerProps> = ({ t }) => {
@@ -45,7 +47,8 @@ export const MpcVisualizer: React.FC<MpcVisualizerProps> = ({ t }) => {
       setSignatureHash(`0x${randomHex}`);
       setIsSigning(false);
       setSignatureDone(true);
-    }, 1200);
+      confetti({ particleCount: 65, spread: 60, origin: { y: 0.65 } });
+    }, 1400);
   };
 
   const resetCeremony = () => {
@@ -56,38 +59,83 @@ export const MpcVisualizer: React.FC<MpcVisualizerProps> = ({ t }) => {
   useEffect(() => {
     if (!svgRef.current) return;
 
-    const width = 600;
-    const height = 400;
+    const width = 760;
+    const height = 440;
 
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove();
 
+    // Defs for gradients & filters
+    const defs = svg.append('defs');
+
+    // Laser glow filter
+    const filter = defs.append('filter')
+      .attr('id', 'glow')
+      .attr('x', '-50%').attr('y', '-50%')
+      .attr('width', '200%').attr('height', '200%');
+    filter.append('feGaussianBlur')
+      .attr('stdDeviation', '4')
+      .attr('result', 'coloredBlur');
+    const feMerge = filter.append('feMerge');
+    feMerge.append('feMergeNode').attr('in', 'coloredBlur');
+    feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
+
+    // Laser Gradient
+    const laserGradient = defs.append('linearGradient')
+      .attr('id', 'laserGrad')
+      .attr('x1', '0%').attr('y1', '0%')
+      .attr('x2', '100%').attr('y2', '100%');
+    laserGradient.append('stop').attr('offset', '0%').attr('stop-color', '#818CF8');
+    laserGradient.append('stop').attr('offset', '100%').attr('stop-color', '#10B981');
+
+    // Center Node Gradient
+    const coreGrad = defs.append('radialGradient')
+      .attr('id', 'coreGrad')
+      .attr('cx', '50%').attr('cy', '50%').attr('r', '50%');
+    coreGrad.append('stop').attr('offset', '0%').attr('stop-color', '#312E81');
+    coreGrad.append('stop').attr('offset', '100%').attr('stop-color', '#1E1B4B');
+
+    // Active Node Gradient
+    const nodeGrad = defs.append('linearGradient')
+      .attr('id', 'nodeGrad')
+      .attr('x1', '0%').attr('y1', '0%')
+      .attr('x2', '100%').attr('y2', '100%');
+    nodeGrad.append('stop').attr('offset', '0%').attr('stop-color', '#6366F1');
+    nodeGrad.append('stop').attr('offset', '100%').attr('stop-color', '#4F46E5');
+
     // Container group
     const g = svg.append('g').attr('transform', `translate(${width / 2}, ${height / 2})`);
 
-    // Outer concentric security rings
-    const ringRadius = [150, 100, 50];
+    // Geometric Blueprint Grid & Concentric Rings
+    const ringRadius = [170, 115, 60];
     ringRadius.forEach((r, idx) => {
       g.append('circle')
         .attr('r', r)
         .attr('fill', 'none')
-        .attr('stroke', idx === 0 ? 'var(--vault-border)' : 'var(--vault-emerald-dim)')
+        .attr('stroke', idx === 0 ? 'rgba(99, 102, 241, 0.15)' : 'rgba(255, 255, 255, 0.06)')
         .attr('stroke-width', 1)
-        .attr('stroke-dasharray', idx === 1 ? '4 4' : 'none')
-        .attr('opacity', 0.6);
+        .attr('stroke-dasharray', idx === 1 ? '4 4' : 'none');
     });
+
+    // Crosshair axes
+    g.append('line')
+      .attr('x1', -180).attr('y1', 0).attr('x2', 180).attr('y2', 0)
+      .attr('stroke', 'rgba(255, 255, 255, 0.05)').attr('stroke-dasharray', '2 4');
+    g.append('line')
+      .attr('x1', 0).attr('y1', -180).attr('x2', 0).attr('y2', 180)
+      .attr('stroke', 'rgba(255, 255, 255, 0.05)').attr('stroke-dasharray', '2 4');
 
     // 5 Shard Nodes positioned in pentagon
     const shardNodes: NodeData[] = [
-      { id: '1', name: 'Shard Alpha', type: 'shard', active: true, color: '#00E599', role: 'AWS Nitro Enclave' },
-      { id: '2', name: 'Shard Beta', type: 'shard', active: true, color: '#00E599', role: 'GCP Confidential VM' },
-      { id: '3', name: 'Shard Gamma', type: 'shard', active: true, color: '#00E599', role: 'Ledger HSM Co-Signer' },
-      { id: '4', name: 'Shard Delta', type: 'shard', active: false, color: '#FFB800', role: 'Mobile Biometric' },
-      { id: '5', name: 'Shard Epsilon', type: 'shard', active: false, color: '#64748B', role: 'Cold DR Key Vault' },
+      { id: '1', name: 'Shard Alpha', badge: 'S1', type: 'shard', active: true, color: '#6366F1', role: 'Zurich Nitro Enclave' },
+      { id: '2', name: 'Shard Beta', badge: 'S2', type: 'shard', active: true, color: '#6366F1', role: 'Frankfurt Conf. VM' },
+      { id: '3', name: 'Shard Gamma', badge: 'S3', type: 'shard', active: true, color: '#6366F1', role: 'London Cloud HSM' },
+      { id: '4', name: 'Shard Delta', badge: 'S4', type: 'shard', active: false, color: '#64748B', role: 'Mobile Biometric (Standby)' },
+      { id: '5', name: 'Shard Epsilon', badge: 'S5', type: 'shard', active: false, color: '#64748B', role: 'Cold DR Vault (Standby)' },
     ];
 
     const angleStep = (2 * Math.PI) / 5;
-    const distance = 130;
+    const distance = 145;
 
     shardNodes.forEach((node, i) => {
       const angle = i * angleStep - Math.PI / 2;
@@ -104,16 +152,17 @@ export const MpcVisualizer: React.FC<MpcVisualizerProps> = ({ t }) => {
         .attr('y1', node.y || 0)
         .attr('x2', 0)
         .attr('y2', 0)
-        .attr('stroke', isParticipating ? '#00E599' : 'var(--vault-border)')
-        .attr('stroke-width', isParticipating ? (isSigning ? 3 : 1.5) : 1)
-        .attr('stroke-dasharray', isParticipating ? (isSigning ? '6 3' : 'none') : '3 3')
-        .attr('opacity', isParticipating ? 0.85 : 0.25);
+        .attr('stroke', isParticipating ? (signatureDone ? '#10B981' : '#6366F1') : 'rgba(255, 255, 255, 0.1)')
+        .attr('stroke-width', isParticipating ? (isSigning ? 3 : 2) : 1)
+        .attr('stroke-dasharray', isParticipating ? (isSigning ? '8 4' : 'none') : '3 3')
+        .attr('opacity', isParticipating ? 1 : 0.4)
+        .attr('filter', isParticipating ? 'url(#glow)' : 'none');
 
       if (isSigning && isParticipating) {
         line.append('animate')
           .attr('attributeName', 'stroke-dashoffset')
-          .attr('values', '20;0')
-          .attr('dur', '0.6s')
+          .attr('values', '24;0')
+          .attr('dur', '0.5s')
           .attr('repeatCount', 'indefinite');
       }
     });
@@ -121,22 +170,39 @@ export const MpcVisualizer: React.FC<MpcVisualizerProps> = ({ t }) => {
     // Draw Central Aggregator Hub
     const centerGroup = g.append('g').attr('class', 'center-hub');
     
-    // Central Pulse Circle
+    // Outer glow aura
     centerGroup.append('circle')
-      .attr('r', 28)
-      .attr('fill', signatureDone ? 'rgba(0, 229, 153, 0.25)' : 'rgba(0, 229, 153, 0.1)')
-      .attr('stroke', signatureDone ? '#00E599' : '#00E599')
-      .attr('stroke-width', 2)
-      .attr('filter', 'drop-shadow(0 0 15px rgba(0, 229, 153, 0.5))');
+      .attr('r', 44)
+      .attr('fill', signatureDone ? 'rgba(16, 185, 129, 0.15)' : 'rgba(99, 102, 241, 0.15)')
+      .attr('stroke', signatureDone ? '#10B981' : '#6366F1')
+      .attr('stroke-width', 1.5)
+      .attr('stroke-dasharray', '4 4')
+      .attr('filter', 'url(#glow)');
+
+    // Core Solid Circle
+    centerGroup.append('circle')
+      .attr('r', 32)
+      .attr('fill', 'url(#coreGrad)')
+      .attr('stroke', signatureDone ? '#10B981' : '#818CF8')
+      .attr('stroke-width', 2.5);
 
     centerGroup.append('text')
       .attr('text-anchor', 'middle')
-      .attr('dy', 5)
-      .attr('fill', '#00E599')
-      .attr('font-size', '14px')
-      .attr('font-weight', 'bold')
+      .attr('dy', -2)
+      .attr('fill', '#FFFFFF')
+      .attr('font-size', '13px')
+      .attr('font-weight', '800')
       .attr('font-family', 'var(--font-mono)')
-      .text('MPC');
+      .text('MPC TSS');
+
+    centerGroup.append('text')
+      .attr('text-anchor', 'middle')
+      .attr('dy', 14)
+      .attr('fill', signatureDone ? '#10B981' : '#A5B4FC')
+      .attr('font-size', '9px')
+      .attr('font-weight', '700')
+      .attr('font-family', 'var(--font-mono)')
+      .text(signatureDone ? '✓ VERIFIED' : '3/5 QUORUM');
 
     // Draw Shard Nodes
     const nodeGroups = g.selectAll('.shard-node')
@@ -146,30 +212,61 @@ export const MpcVisualizer: React.FC<MpcVisualizerProps> = ({ t }) => {
       .attr('class', 'shard-node')
       .attr('transform', d => `translate(${d.x}, ${d.y})`);
 
+    // Outer ring for active shards
+    nodeGroups.filter(d => d.active).append('circle')
+      .attr('r', 25)
+      .attr('fill', 'none')
+      .attr('stroke', '#6366F1')
+      .attr('stroke-width', 1.5)
+      .attr('stroke-opacity', 0.6)
+      .attr('filter', 'url(#glow)');
+
+    // Shard Circle Body
     nodeGroups.append('circle')
-      .attr('r', 16)
-      .attr('fill', 'var(--vault-surface)')
-      .attr('stroke', d => d.active ? d.color : 'var(--vault-border)')
-      .attr('stroke-width', d => d.active ? 2 : 1)
-      .attr('filter', d => d.active ? `drop-shadow(0 0 8px ${d.color}40)` : 'none');
+      .attr('r', 19)
+      .attr('fill', d => d.active ? 'url(#nodeGrad)' : '#1E293B')
+      .attr('stroke', d => d.active ? '#A5B4FC' : '#475569')
+      .attr('stroke-width', 2)
+      .attr('filter', d => d.active ? 'url(#glow)' : 'none');
 
+    // Shard Badge Text (S1, S2...)
     nodeGroups.append('text')
       .attr('text-anchor', 'middle')
-      .attr('dy', 4)
-      .attr('font-size', '10px')
-      .attr('font-weight', 'bold')
+      .attr('dy', 5)
+      .attr('font-size', '12px')
+      .attr('font-weight', '800')
       .attr('font-family', 'var(--font-mono)')
-      .attr('fill', d => d.active ? d.color : 'var(--vault-text-dim)')
-      .text((_, i) => `S${i + 1}`);
+      .attr('fill', d => d.active ? '#FFFFFF' : '#94A3B8')
+      .text(d => d.badge);
 
-    // Shard Labels
-    nodeGroups.append('text')
-      .attr('text-anchor', 'middle')
-      .attr('dy', 28)
-      .attr('font-size', '10px')
-      .attr('font-family', 'var(--font-mono)')
-      .attr('fill', 'var(--vault-text-muted)')
-      .text(d => d.name);
+    // High-Contrast Label Pill Under Node
+    nodeGroups.each(function(d) {
+      const el = d3.select(this);
+      const isTop = (d.y || 0) < 0;
+      const pillY = isTop ? -34 : 26;
+
+      // Label background pill
+      el.append('rect')
+        .attr('x', -65)
+        .attr('y', pillY)
+        .attr('width', 130)
+        .attr('height', 20)
+        .attr('rx', 6)
+        .attr('fill', '#0F172A')
+        .attr('stroke', d.active ? 'rgba(99, 102, 241, 0.4)' : 'rgba(255, 255, 255, 0.1)')
+        .attr('stroke-width', 1);
+
+      // Label text
+      el.append('text')
+        .attr('text-anchor', 'middle')
+        .attr('x', 0)
+        .attr('y', pillY + 14)
+        .attr('font-size', '9.5px')
+        .attr('font-weight', '700')
+        .attr('fill', d.active ? '#F8FAFC' : '#94A3B8')
+        .attr('font-family', 'var(--font-sans)')
+        .text(d.role);
+    });
 
   }, [isSigning, signatureDone]);
 
@@ -177,39 +274,38 @@ export const MpcVisualizer: React.FC<MpcVisualizerProps> = ({ t }) => {
     <div className="mpc-visualizer-card">
       <div className="mpc-header">
         <div className="mpc-header-left">
-          <ShieldCheck className="mpc-header-icon" />
+          <Key className="mpc-header-icon text-indigo-400" />
           <h3 className="mpc-header-title">{t.title}</h3>
         </div>
-        <div className="mpc-header-right">
-          <span className="mpc-badge-active">
-            <span className="pulse-dot"></span> 3/5 Quorum Active
-          </span>
+        <div className="mpc-badge-active">
+          <ShieldCheck className="w-3.5 h-3.5" />
+          <span>3/5 Quorum Active</span>
         </div>
       </div>
 
       <div className="mpc-d3-container">
-        <svg 
-          ref={svgRef} 
-          viewBox="0 0 600 400" 
+        <svg
+          ref={svgRef}
+          viewBox="0 0 760 440"
           className="mpc-d3-svg"
         />
       </div>
 
-      {/* Cryptographic Signature Output Terminal */}
       <div className="mpc-terminal-box">
         <div className="terminal-header">
-          <div className="terminal-header-title">
+          <span className="terminal-header-title">
             <Zap className="terminal-icon" />
-            <span>ECDSA_SIGNATURE_PAYLOAD (DER FORMAT)</span>
-          </div>
-          <span className="terminal-header-meta">Curve: secp256k1</span>
+            ECDSA_SIGNATURE_PAYLOAD (DER FORMAT)
+          </span>
+          <span className="terminal-header-meta font-mono text-slate-400">Curve: secp256k1</span>
         </div>
         <div className="terminal-body">
-          <span className="signature-hash-text">{signatureHash}</span>
+          <span className="signature-hash-text font-mono">
+            {signatureHash}
+          </span>
         </div>
       </div>
 
-      {/* Metrics Row */}
       <div className="mpc-metrics-grid">
         <div className="metric-box">
           <span className="metric-label">{t.curveMetric}</span>
@@ -217,36 +313,42 @@ export const MpcVisualizer: React.FC<MpcVisualizerProps> = ({ t }) => {
         </div>
         <div className="metric-box">
           <span className="metric-label">{t.entropyMetric}</span>
-          <span className="metric-value font-mono text-emerald-400">256-bit CSPRNG</span>
+          <span className="metric-value font-mono">256-bit CSPRNG</span>
         </div>
         <div className="metric-box">
           <span className="metric-label">{t.latencyMetric}</span>
-          <span className="metric-value font-mono text-cyan-400">14.2 ms (p99)</span>
+          <span className="metric-value font-mono text-emerald-400">14.2 ms (p99)</span>
         </div>
       </div>
 
-      {/* Interactive Controls */}
       <div className="mpc-controls-footer">
-        <button 
-          onClick={triggerCeremony} 
+        <button
+          onClick={triggerCeremony}
           disabled={isSigning}
-          className="vault-btn-primary"
+          className={`btn-modal-primary flex items-center gap-2 ${isSigning ? 'opacity-75 cursor-not-allowed' : ''}`}
         >
           {isSigning ? (
             <>
-              <RefreshCw className="btn-icon animate-spin" />
-              <span>Generating TSS Protocol Proof...</span>
+              <RefreshCw className="w-4 h-4 animate-spin" />
+              <span>{t.signingStatus}</span>
+            </>
+          ) : signatureDone ? (
+            <>
+              <CheckCircle2 className="w-4 h-4 text-white" />
+              <span>Signature Validated (3/5 Met)</span>
             </>
           ) : (
             <>
-              <Key className="btn-icon" />
+              <Zap className="w-4 h-4" />
               <span>{t.initiateBtn}</span>
             </>
           )}
         </button>
-
-        <button onClick={resetCeremony} className="vault-btn-secondary">
-          <span>{t.resetBtn}</span>
+        <button
+          onClick={resetCeremony}
+          className="btn-modal-secondary"
+        >
+          {t.resetBtn}
         </button>
       </div>
     </div>
