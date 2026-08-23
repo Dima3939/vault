@@ -294,7 +294,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
           <table className="vault-os-table">
             <thead>
               <tr>
-                <th>{ovT.type || 'Type'}</th>
+                <th style={{ width: '130px' }}>{ovT.type || 'Type'}</th>
                 <th>{ovT.amount || 'Amount'}</th>
                 <th>{ovT.asset || 'Asset'}</th>
                 <th>{ovT.from || 'From'}</th>
@@ -306,9 +306,11 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
             <tbody>
               <tr>
                 <td>
-                  <div className="inline-flex items-center gap-2 font-semibold text-red-400">
-                    <ArrowUpRight className="w-4 h-4 shrink-0" />
-                    <span>{ovT.transfer || 'Transfer'}</span>
+                  <div className="tx-type-cell">
+                    <div className="tx-type-icon-box transfer">
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="tx-type-label transfer">{ovT.transfer || 'Transfer'}</span>
                   </div>
                 </td>
                 <td className="font-mono font-bold text-red-400">-250.00 BTC</td>
@@ -328,9 +330,11 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
 
               <tr>
                 <td>
-                  <div className="inline-flex items-center gap-2 font-semibold text-emerald-400">
-                    <ArrowDownLeft className="w-4 h-4 shrink-0" />
-                    <span>{ovT.receive || 'Receive'}</span>
+                  <div className="tx-type-cell">
+                    <div className="tx-type-icon-box receive">
+                      <ArrowDownLeft className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="tx-type-label receive">{ovT.receive || 'Receive'}</span>
                   </div>
                 </td>
                 <td className="font-mono font-bold text-emerald-400">+1,250.00 ETH</td>
@@ -350,9 +354,11 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
 
               <tr>
                 <td>
-                  <div className="inline-flex items-center gap-2 font-semibold text-amber-400">
-                    <ArrowUpRight className="w-4 h-4 shrink-0" />
-                    <span>{ovT.transfer || 'Transfer'}</span>
+                  <div className="tx-type-cell">
+                    <div className="tx-type-icon-box transfer">
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="tx-type-label transfer">{ovT.transfer || 'Transfer'}</span>
                   </div>
                 </td>
                 <td className="font-mono font-bold text-amber-400">-50,000.00 USDC</td>
@@ -379,11 +385,11 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
         {/* Module 1: Transaction Approval Flow */}
         <div className="overview-widget-card approval-widget">
           <div className="widget-header">
-            <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2">
               <span className="widget-title">{ovT.approvalFlowTitle || 'Transaction Approval Flow'}</span>
-              <span className="high-priority-tag w-fit">{ovT.highPriority || 'High Priority'}</span>
+              <span className="high-priority-tag">{ovT.highPriority || 'High Priority'}</span>
             </div>
-            <span className="text-xs font-mono text-indigo-400 font-bold bg-indigo-500/10 border border-indigo-500/30 px-2 py-1 rounded">
+            <span className="text-xs font-mono text-indigo-400 font-bold bg-indigo-500/10 border border-indigo-500/30 px-2.5 py-1 rounded whitespace-nowrap">
               {Object.values(approvedSigners).filter(Boolean).length} {ovT.approvalsCollected || 'of 5 Approvals'}
             </span>
           </div>
@@ -527,7 +533,9 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
 
             <div className="primary-wallet-group-box">
               <div className="flex justify-between items-center mb-3">
-                <span className="font-mono text-xs font-bold text-slate-200">{ovT.primaryKeyShards || 'Primary Key Shards'}</span>
+                <span className="font-mono text-xs font-bold text-slate-200 uppercase tracking-wide">
+                  {ovT.primaryKeyShards || 'Primary Key Shards'}
+                </span>
                 <span className="enclave-badge-mini font-mono">{ovT.teeActive || 'TEE ACTIVE'}</span>
               </div>
 
@@ -540,18 +548,18 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
               </div>
 
               {/* High-Contrast Distinct Metrics Grid */}
-              <div className="grid grid-cols-3 gap-2 mt-4 pt-3 border-t border-white/10 text-center">
-                <div className="p-1.5 rounded bg-black/40 border border-white/5 flex flex-col">
-                  <span className="text-[9px] text-slate-400 font-mono">CURVE</span>
-                  <span className="text-[11px] font-mono text-white font-bold mt-0.5">secp256k1</span>
+              <div className="mpc-chip-grid">
+                <div className="mpc-chip">
+                  <span className="mpc-chip-label">CURVE</span>
+                  <span className="mpc-chip-value">secp256k1</span>
                 </div>
-                <div className="p-1.5 rounded bg-black/40 border border-white/5 flex flex-col">
-                  <span className="text-[9px] text-slate-400 font-mono">LATENCY</span>
-                  <span className="text-[11px] font-mono text-emerald-400 font-bold mt-0.5">14.2 ms</span>
+                <div className="mpc-chip">
+                  <span className="mpc-chip-label">LATENCY</span>
+                  <span className="mpc-chip-value text-emerald-400">14.2 ms</span>
                 </div>
-                <div className="p-1.5 rounded bg-black/40 border border-white/5 flex flex-col">
-                  <span className="text-[9px] text-slate-400 font-mono">COVERAGE</span>
-                  <span className="text-[11px] font-mono text-indigo-400 font-bold mt-0.5">$250M</span>
+                <div className="mpc-chip">
+                  <span className="mpc-chip-label">COVERAGE</span>
+                  <span className="mpc-chip-value text-indigo-400">$250M</span>
                 </div>
               </div>
             </div>

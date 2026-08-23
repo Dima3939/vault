@@ -203,62 +203,62 @@ export function App() {
                 </button>
               </div>
 
-              {/* Multi-Chain Wallets Grid with Generous Internal Spacing */}
+              {/* Multi-Chain Wallets Grid with Generous, Distinct Layout */}
               <div className="wallets-cards-grid">
                 <div className="wallet-card-item">
-                  <div className="flex justify-between items-center mb-6">
-                    <div className="flex items-center gap-3">
+                  <div className="wallet-card-header">
+                    <div className="wallet-card-brand">
                       <span className="asset-tag-circle bg-amber-500 text-black font-bold">₿</span>
-                      <span className="font-bold text-lg text-white">Bitcoin Treasury</span>
+                      <span className="wallet-card-title">Bitcoin Treasury</span>
                     </div>
                     <span className="enclave-badge-tag emerald">SEGWIT NATIVE</span>
                   </div>
-                  <div className="my-3">
-                    <div className="font-mono text-3xl font-extrabold text-white leading-tight">890.45 BTC</div>
-                    <div className="font-mono text-xs text-slate-400 mt-1.5 mb-5">$58,012,450.00 USD</div>
+                  <div className="wallet-card-balance-block">
+                    <div className="wallet-crypto-amount font-mono">890.45 BTC</div>
+                    <div className="wallet-fiat-amount font-mono">$58,012,450.00 USD</div>
                   </div>
-                  <div className="wallet-address-bar mt-auto">
+                  <div className="wallet-address-bar font-mono">
                     bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh
                   </div>
                 </div>
 
                 <div className="wallet-card-item">
-                  <div className="flex justify-between items-center mb-6">
-                    <div className="flex items-center gap-3">
+                  <div className="wallet-card-header">
+                    <div className="wallet-card-brand">
                       <span className="asset-tag-circle bg-indigo-500 text-white font-bold">Ξ</span>
-                      <span className="font-bold text-lg text-white">Ethereum Staking</span>
+                      <span className="wallet-card-title">Ethereum Staking</span>
                     </div>
                     <span className="enclave-badge-tag indigo">ERC-4337</span>
                   </div>
-                  <div className="my-3">
-                    <div className="font-mono text-3xl font-extrabold text-white leading-tight">11,200.00 ETH</div>
-                    <div className="font-mono text-xs text-slate-400 mt-1.5 mb-5">$32,238,450.00 USD</div>
+                  <div className="wallet-card-balance-block">
+                    <div className="wallet-crypto-amount font-mono">11,200.00 ETH</div>
+                    <div className="wallet-fiat-amount font-mono">$32,238,450.00 USD</div>
                   </div>
-                  <div className="wallet-address-bar mt-auto">
+                  <div className="wallet-address-bar font-mono">
                     0x71C...8491 (Lido Staking Pool)
                   </div>
                 </div>
 
                 <div className="wallet-card-item">
-                  <div className="flex justify-between items-center mb-6">
-                    <div className="flex items-center gap-3">
+                  <div className="wallet-card-header">
+                    <div className="wallet-card-brand">
                       <span className="asset-tag-circle bg-emerald-500 text-white font-bold">$</span>
-                      <span className="font-bold text-lg text-white">USDC Liquidity</span>
+                      <span className="wallet-card-title">USDC Liquidity</span>
                     </div>
                     <span className="enclave-badge-tag cyan">YIELD VAULT</span>
                   </div>
-                  <div className="my-3">
-                    <div className="font-mono text-3xl font-extrabold text-white leading-tight">19,648,350 USDC</div>
-                    <div className="font-mono text-xs text-emerald-400 font-bold mt-1.5 mb-5">4.85% Net APY Yield</div>
+                  <div className="wallet-card-balance-block">
+                    <div className="wallet-crypto-amount font-mono">19,648,350 USDC</div>
+                    <div className="wallet-fiat-amount font-mono text-emerald-400 font-bold">4.85% Net APY Yield</div>
                   </div>
-                  <div className="wallet-address-bar mt-auto">
+                  <div className="wallet-address-bar font-mono">
                     0x49F...E21D (Circle Institutional Account)
                   </div>
                 </div>
               </div>
 
               {/* Treasury Liquidity Flow Chart */}
-              <div className="mt-8">
+              <div className="mt-10">
                 <TreasuryFlowChart t={t.treasury} />
               </div>
             </div>
@@ -314,7 +314,7 @@ export function App() {
                   <table className="vault-os-table">
                     <thead>
                       <tr>
-                        <th>Type</th>
+                        <th style={{ width: '140px' }}>Type</th>
                         <th>Amount</th>
                         <th>Asset</th>
                         <th>Tx Hash</th>
@@ -335,9 +335,13 @@ export function App() {
                         filteredTransactions.map(tx => (
                           <tr key={tx.id}>
                             <td>
-                              <div className={`inline-flex items-center gap-2 font-semibold ${tx.type === 'Receive' ? 'text-emerald-400' : 'text-red-400'}`}>
-                                {tx.type === 'Receive' ? <ArrowDownLeft className="w-4 h-4 shrink-0" /> : <ArrowUpRight className="w-4 h-4 shrink-0" />}
-                                <span>{tx.type}</span>
+                              <div className="tx-type-cell">
+                                <div className={`tx-type-icon-box ${tx.type === 'Receive' ? 'receive' : 'transfer'}`}>
+                                  {tx.type === 'Receive' ? <ArrowDownLeft className="w-3.5 h-3.5" /> : <ArrowUpRight className="w-3.5 h-3.5" />}
+                                </div>
+                                <span className={`tx-type-label ${tx.type === 'Receive' ? 'receive' : 'transfer'}`}>
+                                  {tx.type}
+                                </span>
                               </div>
                             </td>
                             <td className={`font-mono font-bold ${tx.type === 'Receive' ? 'text-emerald-400' : 'text-red-400'}`}>
@@ -431,12 +435,12 @@ export function App() {
                   </div>
 
                   {/* Clean side-by-side action buttons with generous spacing */}
-                  <div className="approvals-action-row flex items-center justify-end gap-5 mt-6 pt-4 border-t border-white/10">
-                    <button className="btn-widget-reject py-3 px-6 text-sm">
+                  <div className="approvals-action-row">
+                    <button className="btn-widget-reject">
                       <X className="w-4 h-4" />
                       <span>Reject Request</span>
                     </button>
-                    <button className="btn-widget-approve py-3 px-8 text-sm">
+                    <button className="btn-widget-approve">
                       <ShieldCheck className="w-4 h-4" />
                       <span>Approve & Sign MPC Shard</span>
                     </button>

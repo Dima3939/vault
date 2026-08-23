@@ -964,6 +964,44 @@ a {
   vertical-align: middle;
 }
 
+/* Precise Type Column Alignment */
+.tx-type-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  vertical-align: middle;
+}
+
+.tx-type-icon-box {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tx-type-icon-box.transfer {
+  background: rgba(239, 68, 68, 0.15);
+  color: #EF4444;
+}
+
+.tx-type-icon-box.receive {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10B981;
+}
+
+.tx-type-label {
+  font-size: 0.86rem;
+  font-weight: 700;
+  width: 65px;
+  text-align: left;
+}
+
+.tx-type-label.transfer { color: #EF4444; }
+.tx-type-label.receive { color: #10B981; }
+
 .asset-tag-circle {
   width: 28px;
   height: 28px;
@@ -1126,9 +1164,11 @@ a {
   background: rgba(239, 68, 68, 0.15);
   color: #EF4444;
   border: 1px solid #EF4444;
-  padding: 0.15rem 0.5rem;
+  padding: 0.2rem 0.55rem;
   border-radius: 5px;
   font-weight: 700;
+  white-space: nowrap !important;
+  display: inline-block;
 }
 
 .transfer-request-banner {
@@ -1245,7 +1285,7 @@ a {
   background: var(--os-sidebar);
   border: 1px solid var(--os-border);
   color: var(--os-text-muted);
-  padding: 0.7rem;
+  padding: 0.7rem 1.2rem;
   border-radius: 10px;
   font-size: 0.84rem;
   font-weight: 700;
@@ -1267,7 +1307,7 @@ a {
   background: var(--os-primary);
   border: none;
   color: #FFFFFF;
-  padding: 0.7rem;
+  padding: 0.7rem 1.5rem;
   border-radius: 10px;
   font-size: 0.84rem;
   font-weight: 700;
@@ -1287,6 +1327,29 @@ a {
 .btn-widget-approve.completed {
   background: var(--os-emerald);
   box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+/* Approvals Tab Action Row */
+.approvals-action-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--os-border);
+}
+
+.approvals-action-row .btn-widget-reject {
+  flex: none;
+  width: auto;
+  padding: 0.85rem 2rem;
+}
+
+.approvals-action-row .btn-widget-approve {
+  flex: none;
+  width: auto;
+  padding: 0.85rem 2.4rem;
 }
 
 /* Policy Engine Widget */
@@ -1458,6 +1521,38 @@ a {
   box-shadow: 0 0 12px rgba(99, 102, 241, 0.35);
 }
 
+.mpc-chip-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.mpc-chip {
+  background: #070A12;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 0.45rem 0.3rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.mpc-chip-label {
+  font-size: 0.65rem;
+  color: var(--os-text-dim);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.mpc-chip-value {
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  color: var(--os-text);
+}
+
 /* ==========================================================================
    Wallets & Treasury Cards
    ========================================================================== */
@@ -1471,17 +1566,57 @@ a {
   background: var(--os-card);
   border: 1px solid var(--os-border);
   border-radius: 22px;
-  padding: 2.2rem 2rem;
+  padding: 2.2rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 230px;
+  min-height: 240px;
   transition: transform 0.2s, border-color 0.2s;
 }
 
 .wallet-card-item:hover {
   transform: translateY(-2px);
   border-color: var(--os-border-glow);
+}
+
+.wallet-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.wallet-card-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.wallet-card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--os-text);
+  white-space: nowrap;
+}
+
+.wallet-card-balance-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1.5rem;
+}
+
+.wallet-crypto-amount {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--os-text);
+  line-height: 1.1;
+}
+
+.wallet-fiat-amount {
+  font-size: 0.88rem;
+  color: var(--os-text-muted);
 }
 
 .enclave-badge-tag {
@@ -1492,6 +1627,8 @@ a {
   border-radius: 6px;
   letter-spacing: 0.05em;
   display: inline-block;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .enclave-badge-tag.emerald {
@@ -2022,7 +2159,10 @@ a {
 .segmented-switch-wrapper {
   display: flex;
   justify-content: center;
+  align-items: center;
   width: 100%;
+  margin-top: 1.5rem !important;
+  margin-bottom: 4.5rem !important;
 }
 
 .segmented-switch-container {
@@ -2069,6 +2209,7 @@ a {
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
   align-items: stretch;
+  margin-top: 1.5rem !important;
 }
 
 .pricing-card {
@@ -2105,7 +2246,9 @@ a {
   border-radius: 20px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  white-space: nowrap;
   box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+  z-index: 10;
 }
 
 .pricing-card-top {
@@ -2396,7 +2539,7 @@ a {
 }
 
 /* ==========================================================================
-   Responsive Breakpoints: Flawless Mobile on iPhone 15 Pro, XS, Android, iPad
+   Responsive Breakpoints
    ========================================================================== */
 @media (max-width: 1200px) {
   .overview-metrics-grid {

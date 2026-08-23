@@ -37,8 +37,8 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ t, onSelectPlan 
         </div>
       </div>
 
-      {/* Segmented Monthly / Annual Switch with Generous Top and Bottom Margins */}
-      <div className="segmented-switch-wrapper mb-14 mt-4">
+      {/* Segmented Monthly / Annual Switch with Guaranteed 60px Margin */}
+      <div className="segmented-switch-wrapper" style={{ marginTop: '1.5rem', marginBottom: '4.5rem' }}>
         <div className="segmented-switch-container">
           <button
             onClick={() => setIsAnnual(false)}
@@ -56,7 +56,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ t, onSelectPlan 
         </div>
       </div>
 
-      <div className="pricing-cards-grid mt-6">
+      <div className="pricing-cards-grid" style={{ marginTop: '1.5rem' }}>
         {/* Tier 1: Developer Sandbox */}
         <div className="pricing-card">
           <div className="pricing-card-top">
