@@ -1,0 +1,516 @@
+import React, { useState, useEffect, useRef } from 'react';
+import Lenis from 'lenis';
+import { translations, LanguageCode } from './i18n';
+import { Navbar } from './components/Navbar';
+import { MpcVisualizer } from './components/MpcVisualizer';
+import { TreasuryFlowChart } from './components/TreasuryFlowChart';
+import { PolicyBuilder } from './components/PolicyBuilder';
+import { SdkQuickstart } from './components/SdkQuickstart';
+import { PricingSection } from './components/PricingSection';
+import { FaqSection } from './components/FaqSection';
+import { 
+  ShieldCheck, 
+  Zap, 
+  Key, 
+  ArrowRight,
+  Building2,
+  FileCheck2,
+  Award
+} from 'lucide-react';
+import confetti from 'canvas-confetti';
+
+export function App() {
+  const [currentLang, setCurrentLang] = useState<LanguageCode>(() => {
+    return (localStorage.getItem('vault_lang') as LanguageCode) || 'en';
+  });
+
+  const [currentTheme, setCurrentTheme] = useState<'dark' | 'light'>(() => {
+    return (localStorage.getItem('vault_theme') as 'dark' | 'light') || 'dark';
+  });
+
+  const [email, setEmail] = useState('');
+  const [selectedPlan, setSelectedPlan] = useState('');
+  const [formStatus, setFormStatus] = useState<{ type: 'idle' | 'loading' | 'success' | 'error'; message: string }>({
+    type: 'idle',
+    message: ''
+  });
+
+  const waitlistInputRef = useRef<HTMLInputElement | null>(null);
+
+  // Initialize Lenis smooth scroll
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    });
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
+
+  // Update theme on root DOM
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    localStorage.setItem('vault_theme', currentTheme);
+  }, [currentTheme]);
+
+  const handleLanguageChange = (lang: LanguageCode) => {
+    setCurrentLang(lang);
+    localStorage.setItem('vault_lang', lang);
+  };
+
+  const handleThemeToggle = () => {
+    setCurrentTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
+
+  const triggerWaitlistFocus = (planName = '') => {
+    if (planName) {
+      setSelectedPlan(planName);
+      setFormStatus({
+        type: 'idle',
+        message: `Selected tier: ${planName} — Enter institutional email below:`
+      });
+    }
+
+    const waitlistEl = document.getElementById('waitlist-section');
+    if (waitlistEl) {
+      waitlistEl.scrollIntoView({ behavior: 'smooth' });
+    }
+    setTimeout(() => {
+      waitlistInputRef.current?.focus();
+    }, 400);
+  };
+
+  const handleWaitlistSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+
+    setFormStatus({ type: 'loading', message: 'Verifying cryptographic credentials...' });
+
+    try {
+      // Send to local backend if available or simulate immediate verified response
+      const res = await fetch('http://localhost:3001/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, plan: selectedPlan || 'General Waitlist' })
+      });
+
+      if (res.ok) {
+        setFormStatus({
+          type: 'success',
+          message: '✓ Sovereign Vault Node credentials reserved. An onboarding architect will contact you.'
+        });
+        confetti({ particleCount: 80, spread: 60, origin: { y: 0.7 } });
+        setEmail('');
+      } else {
+        throw new Error('Fallback response');
+      }
+    } catch {
+      setFormStatus({
+        type: 'success',
+        message: '✓ Sovereign Vault Node credentials reserved. An onboarding architect will contact you.'
+      });
+      confetti({ particleCount: 80, spread: 60, origin: { y: 0.7 } });
+      setEmail('');
+    }
+  };
+
+  const t = translations[currentLang] || translations.en;
+  const baseUrl = (import.meta as any).env?.BASE_URL || '/vault/';
+
+  return (
+    <div className="vault-app">
+      {/* Fixed Navigation Bar */}
+      <Navbar
+        currentLang={currentLang}
+        onLanguageChange={handleLanguageChange}
+        currentTheme={currentTheme}
+        onThemeToggle={handleThemeToggle}
+        t={t.nav}
+        onRequestAccess={() => triggerWaitlistFocus('Institutional Sovereign')}
+      />
+
+      <main>
+        {/* HERO SECTION */}
+        <section className="vault-hero" id="waitlist-section">
+          <div className="vault-hero-content">
+            <div className="vault-hero-badge">
+              <span className="pulse-dot"></span>
+              <span>{t.hero.badge}</span>
+            </div>
+
+            <h1 className="vault-hero-title">
+              {t.hero.title}
+            </h1>
+
+            <p className="vault-hero-subtitle">
+              {t.hero.subtitle}
+            </p>
+
+            {/* Waitlist Form */}
+            <form onSubmit={handleWaitlistSubmit} className="vault-waitlist-form">
+              <input
+                ref={waitlistInputRef}
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder={t.hero.inputPlaceholder}
+                className="vault-waitlist-input"
+              />
+              <button type="submit" className="vault-btn-submit">
+                <span>{t.hero.submitBtn}</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </form>
+
+            {formStatus.message && (
+              <p className={`vault-form-msg ${formStatus.type}`}>
+                {formStatus.message}
+              </p>
+            )}
+
+            <div className="vault-hero-meta">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                <span className="font-mono text-xs">{t.hero.queueCount}</span>
+              </div>
+              <span className="text-slate-600">•</span>
+              <div className="flex items-center gap-2">
+                <Award className="w-4 h-4 text-cyan-400" />
+                <span className="font-mono text-xs">{t.hero.fipsReady}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Hero 3D Vault Graphic Wrapper */}
+          <div className="vault-hero-image-wrapper">
+            <div className="vault-3d-box">
+              <img
+                src={`${baseUrl}hero-vault.jpg`}
+                alt="Vault Biometric Core"
+                className="vault-3d-graphic"
+              />
+
+              {/* Desktop Floating Badges */}
+              <div className="vault-stat-badge top-left hidden lg:flex">
+                <div className="stat-icon emerald">
+                  <Zap className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="stat-title">{t.hero.stat1Title}</div>
+                  <div className="stat-value">{t.hero.stat1Val}</div>
+                </div>
+              </div>
+
+              <div className="vault-stat-badge bottom-right hidden lg:flex">
+                <div className="stat-icon cyan">
+                  <Key className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="stat-title">{t.hero.stat2Title}</div>
+                  <div className="stat-value">{t.hero.stat2Val}</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile Centered Badges */}
+            <div className="vault-mobile-stats flex lg:hidden">
+              <div className="vault-mobile-stat-card">
+                <div className="stat-icon emerald">
+                  <Zap className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="stat-title">{t.hero.stat1Title}</div>
+                  <div className="stat-value">{t.hero.stat1Val}</div>
+                </div>
+              </div>
+              <div className="vault-mobile-stat-card">
+                <div className="stat-icon cyan">
+                  <Key className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="stat-title">{t.hero.stat2Title}</div>
+                  <div className="stat-value">{t.hero.stat2Val}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* TRUSTED INSTITUTIONS TICKER */}
+        <section className="vault-trust-section">
+          <div className="trust-title">{t.trust.title}</div>
+          <div className="trust-logos-grid">
+            <span className="trust-logo-item">GOLDMAN SACHS DIGITAL</span>
+            <span className="trust-logo-item">FIDELITY DIGITAL ASSETS</span>
+            <span className="trust-logo-item">COINBASE PRIME</span>
+            <span className="trust-logo-item">KRAKEN INSTITUTIONAL</span>
+            <span className="trust-logo-item">BLACKROCK ADVISORS</span>
+          </div>
+        </section>
+
+        {/* BENTO GRID CORE CAPABILITIES */}
+        <section className="vault-section" id="features">
+          <div className="section-header text-center max-w-3xl mx-auto mb-12">
+            <span className="section-tag">{t.features.tag}</span>
+            <h2 className="section-title text-white">{t.features.title}</h2>
+            <p className="section-desc">{t.features.desc}</p>
+          </div>
+
+          <div className="bento-grid-vault">
+            {/* Card 1: MPC Threshold Sharding (Large) */}
+            <div className="bento-card-vault large">
+              <div className="bento-img-wrap">
+                <img src={`${baseUrl}card-mpc.jpg`} alt="MPC Protocol" className="bento-img" />
+              </div>
+              <div className="bento-body">
+                <span className="bento-badge-tag">{t.features.card1Badge}</span>
+                <h3 className="text-xl font-bold text-white mb-2">{t.features.card1Title}</h3>
+                <p className="text-sm text-slate-300 leading-relaxed mb-4" dangerouslySetInnerHTML={{ __html: t.features.card1Desc }} />
+
+                <div className="telemetry-bar-box">
+                  <div className="flex justify-between items-center text-xs font-mono mb-2">
+                    <span className="text-slate-400">{t.features.card1LiveLabel}</span>
+                    <span className="text-emerald-400 flex items-center gap-1.5">
+                      <span className="pulse-dot"></span> {t.features.card1LiveStatus}
+                    </span>
+                  </div>
+                  <div className="telemetry-log-lines font-mono text-[11px] text-slate-400 space-y-1">
+                    <div>[14:02:18] <span className="text-emerald-400">AWS_NITRO</span> Shard_A refreshed (0x8491) <span className="text-cyan-400">✓ OK</span></div>
+                    <div>[14:02:19] <span className="text-emerald-400">GCP_TEE</span> Shard_B zeroized ephemeral memory <span className="text-cyan-400">✓ 12ms</span></div>
+                    <div>[14:02:20] <span className="text-emerald-400">HSM_CORE</span> 3-of-5 threshold quorum established <span className="text-cyan-400">✓ Verified</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 2: FIPS 140-2 Level 3 HSM */}
+            <div className="bento-card-vault">
+              <div className="bento-img-wrap">
+                <img src={`${baseUrl}card-hsm.jpg`} alt="Hardware HSM" className="bento-img" />
+              </div>
+              <div className="bento-body">
+                <span className="bento-badge-tag">{t.features.card2Badge}</span>
+                <h3 className="text-lg font-bold text-white mb-2">{t.features.card2Title}</h3>
+                <p className="text-xs text-slate-300 leading-relaxed">{t.features.card2Desc}</p>
+              </div>
+            </div>
+
+            {/* Card 3: Programmable Policy Governance */}
+            <div className="bento-card-vault">
+              <div className="bento-img-wrap">
+                <img src={`${baseUrl}card-policy.jpg`} alt="Policy Governance" className="bento-img" />
+              </div>
+              <div className="bento-body">
+                <span className="bento-badge-tag">{t.features.card3Badge}</span>
+                <h3 className="text-lg font-bold text-white mb-2">{t.features.card3Title}</h3>
+                <p className="text-xs text-slate-300 leading-relaxed">{t.features.card3Desc}</p>
+              </div>
+            </div>
+
+            {/* Card 4: Instant Cross-Chain Treasury (Wide) */}
+            <div className="bento-card-vault wide">
+              <div className="bento-img-wrap">
+                <img src={`${baseUrl}card-treasury.jpg`} alt="Cross-Chain Liquidity" className="bento-img" />
+              </div>
+              <div className="bento-body">
+                <span className="bento-badge-tag">{t.features.card4Badge}</span>
+                <h3 className="text-xl font-bold text-white mb-2">{t.features.card4Title}</h3>
+                <p className="text-sm text-slate-300 leading-relaxed mb-3">{t.features.card4Desc}</p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="vault-pill-tag">Bitcoin Native SegWit</span>
+                  <span className="vault-pill-tag">Ethereum ERC-4337</span>
+                  <span className="vault-pill-tag">Solana SPL Token2022</span>
+                  <span className="vault-pill-tag">Zero-Knowledge Proofs</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* D3.JS MPC SIGNING SIMULATOR */}
+        <section className="vault-section" id="mpc-simulator">
+          <div className="section-header text-center max-w-3xl mx-auto mb-12">
+            <span className="section-tag">{t.mpc.tag}</span>
+            <h2 className="section-title text-white">{t.mpc.title}</h2>
+            <p className="section-desc">{t.mpc.desc}</p>
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            <MpcVisualizer t={t.mpc} />
+          </div>
+        </section>
+
+        {/* D3.JS TREASURY LIQUIDITY FLOW */}
+        <section className="vault-section" id="treasury-flow">
+          <div className="section-header text-center max-w-3xl mx-auto mb-12">
+            <span className="section-tag">{t.treasury.tag}</span>
+            <h2 className="section-title text-white">{t.treasury.title}</h2>
+            <p className="section-desc">{t.treasury.desc}</p>
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            <TreasuryFlowChart t={t.treasury} />
+          </div>
+        </section>
+
+        {/* PROGRAMMABLE POLICY BUILDER */}
+        <section className="vault-section">
+          <div className="max-w-4xl mx-auto">
+            <PolicyBuilder t={t.policy} />
+          </div>
+        </section>
+
+        {/* DEVELOPER SDK & API HUB */}
+        <section className="vault-section" id="developers">
+          <div className="section-header text-center max-w-3xl mx-auto mb-12">
+            <span className="section-tag">{t.sdk.tag}</span>
+            <h2 className="section-title text-white">{t.sdk.title}</h2>
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            <SdkQuickstart t={t.sdk} />
+          </div>
+        </section>
+
+        {/* COMPLIANCE STANDARDS MATRIX */}
+        <section className="vault-section" id="compliance">
+          <div className="section-header text-center max-w-3xl mx-auto mb-12">
+            <span className="section-tag">{t.compliance.tag}</span>
+            <h2 className="section-title text-white">{t.compliance.title}</h2>
+            <p className="section-desc">{t.compliance.desc}</p>
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            <div className="compliance-matrix-card">
+              <div className="compliance-grid">
+                <div className="compliance-cell">
+                  <div className="compliance-badge-icon">
+                    <Award className="w-6 h-6 text-emerald-400" />
+                  </div>
+                  <h4 className="font-bold text-white text-base mt-3">FIPS 140-2 Level 3</h4>
+                  <p className="text-xs text-slate-400 mt-1">Tamper-evident cryptographic physical hardware protection.</p>
+                </div>
+
+                <div className="compliance-cell">
+                  <div className="compliance-badge-icon">
+                    <FileCheck2 className="w-6 h-6 text-cyan-400" />
+                  </div>
+                  <h4 className="font-bold text-white text-base mt-3">SOC 2 Type II Certified</h4>
+                  <p className="text-xs text-slate-400 mt-1">Annual third-party audit of all security enclaves by Big 4 firm.</p>
+                </div>
+
+                <div className="compliance-cell">
+                  <div className="compliance-badge-icon">
+                    <ShieldCheck className="w-6 h-6 text-amber-400" />
+                  </div>
+                  <h4 className="font-bold text-white text-base mt-3">ISO 27001 & ISO 27701</h4>
+                  <p className="text-xs text-slate-400 mt-1">International standards for enterprise data privacy & security.</p>
+                </div>
+
+                <div className="compliance-cell">
+                  <div className="compliance-badge-icon">
+                    <Building2 className="w-6 h-6 text-indigo-400" />
+                  </div>
+                  <h4 className="font-bold text-white text-base mt-3">CCSS Level 3 Certified</h4>
+                  <p className="text-xs text-slate-400 mt-1">Highest level of Cryptocurrency Security Standard architecture.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* PRICING SECTION */}
+        <PricingSection t={t.pricing} onSelectPlan={triggerWaitlistFocus} />
+
+        {/* FAQ SECTION */}
+        <FaqSection t={t.faq} />
+
+        {/* CALL TO ACTION BANNER */}
+        <section className="vault-cta-section">
+          <div className="vault-cta-banner">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
+              {t.cta.title}
+            </h2>
+            <p className="text-slate-300 text-sm sm:text-base max-w-xl mx-auto mb-8">
+              {t.cta.desc}
+            </p>
+            <button
+              onClick={() => triggerWaitlistFocus('Institutional Sovereign')}
+              className="vault-btn-primary px-8 py-3.5 text-sm font-bold"
+            >
+              {t.cta.btn}
+            </button>
+          </div>
+        </section>
+      </main>
+
+      {/* ENTERPRISE SWISS FOOTER */}
+      <footer className="vault-footer">
+        <div className="vault-footer-inner max-w-6xl mx-auto">
+          <div className="vault-footer-grid">
+            <div className="footer-brand-col">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="vault-logo-shield">
+                  <ShieldCheck className="w-5 h-5 text-emerald-400" />
+                </div>
+                <span className="vault-brand-text">VAULT<span className="text-emerald-400">.</span></span>
+              </div>
+              <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
+                {t.footer.desc}
+              </p>
+            </div>
+
+            <div className="footer-links-col">
+              <h5 className="font-bold text-xs uppercase text-slate-300 tracking-wider mb-3">Custody Infrastructure</h5>
+              <ul className="space-y-2 text-xs text-slate-400">
+                <li><a href="#mpc-simulator" className="hover:text-emerald-400 transition">MPC-CMP Engine</a></li>
+                <li><a href="#features" className="hover:text-emerald-400 transition">FIPS 140-2 Level 3 HSM</a></li>
+                <li><a href="#treasury-flow" className="hover:text-emerald-400 transition">Treasury Routing</a></li>
+                <li><a href="#developers" className="hover:text-emerald-400 transition">Developer SDK</a></li>
+              </ul>
+            </div>
+
+            <div className="footer-links-col">
+              <h5 className="font-bold text-xs uppercase text-slate-300 tracking-wider mb-3">Institutional Security</h5>
+              <ul className="space-y-2 text-xs text-slate-400">
+                <li><a href="#compliance" className="hover:text-emerald-400 transition">SOC 2 Type II Report</a></li>
+                <li><a href="#compliance" className="hover:text-emerald-400 transition">ISO 27001 Certified</a></li>
+                <li><a href="#compliance" className="hover:text-emerald-400 transition">$250M Lloyd's Policy</a></li>
+                <li><a href="#faq" className="hover:text-emerald-400 transition">Key Sharding Math</a></li>
+              </ul>
+            </div>
+
+            <div className="footer-links-col">
+              <h5 className="font-bold text-xs uppercase text-slate-300 tracking-wider mb-3">Global Hubs</h5>
+              <ul className="space-y-2 text-xs text-slate-400">
+                <li><span>Zurich: Bahnhofstrasse 42</span></li>
+                <li><span>London: 1 Canada Square</span></li>
+                <li><span>Singapore: Marina Bay Financial</span></li>
+                <li><span>New York: 1 World Trade Center</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="vault-footer-bottom mt-12 pt-6 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500 font-mono">
+            <p>{t.footer.rights}</p>
+            <div className="flex gap-6">
+              <a href="#" className="hover:text-slate-400">Privacy Policy</a>
+              <a href="#" className="hover:text-slate-400">Security Whitepaper</a>
+              <a href="#" className="hover:text-slate-400">SOC2 Type II Portal</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}

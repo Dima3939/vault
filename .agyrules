@@ -1,0 +1,24 @@
+# Vault Project Context & Guidelines
+
+## 1. Project Overview
+- **Name**: Vault (Institutional Cryptographic Custody & Digital Asset Treasury)
+- **Live URL**: https://dima3939.github.io/vault/
+- **GitHub Repository**: https://github.com/Dima3939/vault
+- **Local Directory**: `D:\OpenServer\home\vault`
+
+## 2. Architecture & Technology Stack
+- **Frontend**: React 19, TypeScript (Strict Mode), Vite, D3.js (v7), Tailwind CSS / Custom Swiss FinTech Tokens, Lucide Icons, Lenis Smooth Scroll, Canvas Confetti.
+- **Backend**: Node.js, Express API, JSON waitlist storage (`backend/waitlist.json`).
+- **Deployment**: GitHub Actions CI/CD pipeline (`.github/workflows/deploy.yml`) building to GitHub Pages with `base: '/vault/'`.
+
+## 3. Key Feature Specifications
+- **Interactive D3 MPC Visualizer**: Real-time 3-of-5 threshold cryptographic key signing ceremony with dynamic node physics and ECDSA DER payload outputs.
+- **Interactive D3 Treasury Flow**: Dynamic multi-chain asset allocation bar and liquidity chart with hover analytics.
+- **Programmable Policy Engine**: Toggleable institutional rule governance matrix.
+- **Dual Theme Engine**: Titanium Obsidian (`dark`) & Swiss White Banking (`light`) with persistence in `localStorage`.
+- **6-Language i18n**: English (`EN`), Ukrainian (`UA`), German (`DE`), Spanish (`ES`), French (`FR`), Russian (`RU`) in an adaptive dropdown menu.
+- **Developer SDK Hub**: Copy-ready code snippets for TypeScript, Python, Go, Rust, and cURL.
+
+## 4. Code & Contribution Rules
+- **Language & Comments**: All code comments, variable names, documentation, and commit messages must be strictly in **English**.
+- **Discretion**: Zero mentions of AI generation, prompts, or LLMs in source code, commits, or client-facing metadata.
