@@ -32,6 +32,7 @@ interface SidebarProps {
   isOpenMobile: boolean;
   onCloseMobile: () => void;
   approvalsCount: number;
+  t: any;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -39,19 +40,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onSelectTab,
   isOpenMobile,
   onCloseMobile,
-  approvalsCount
+  approvalsCount,
+  t
 }) => {
+  const sidebarT = t?.os?.sidebar || {};
+
   const menuItems: Array<{ id: DashboardTab; label: string; icon: React.ElementType; badge?: string | number }> = [
-    { id: 'overview', label: 'Overview', icon: LayoutDashboard },
-    { id: 'wallets', label: 'Wallets & Treasury', icon: Wallet },
-    { id: 'transactions', label: 'Transactions', icon: ArrowLeftRight },
-    { id: 'approvals', label: 'Approvals', icon: CheckSquare, badge: approvalsCount },
-    { id: 'policies', label: 'Policy Engine', icon: Sliders },
-    { id: 'mpc', label: 'MPC Key Shards', icon: Key },
-    { id: 'sdk', label: 'Developer SDK', icon: Terminal },
-    { id: 'compliance', label: 'Compliance & HSM', icon: ShieldCheck },
-    { id: 'pricing', label: 'Pricing & Tiers', icon: CreditCard },
-    { id: 'faq', label: 'Knowledge Base', icon: HelpCircle },
+    { id: 'overview', label: sidebarT.overview || 'Overview', icon: LayoutDashboard },
+    { id: 'wallets', label: sidebarT.wallets || 'Wallets & Treasury', icon: Wallet },
+    { id: 'transactions', label: sidebarT.transactions || 'Transactions', icon: ArrowLeftRight },
+    { id: 'approvals', label: sidebarT.approvals || 'Approvals', icon: CheckSquare, badge: approvalsCount },
+    { id: 'policies', label: sidebarT.policies || 'Policy Engine', icon: Sliders },
+    { id: 'mpc', label: sidebarT.mpc || 'MPC Key Shards', icon: Key },
+    { id: 'sdk', label: sidebarT.sdk || 'Developer SDK', icon: Terminal },
+    { id: 'compliance', label: sidebarT.compliance || 'Compliance & HSM', icon: ShieldCheck },
+    { id: 'pricing', label: sidebarT.pricing || 'Pricing & Tiers', icon: CreditCard },
+    { id: 'faq', label: sidebarT.faq || 'Knowledge Base', icon: HelpCircle },
   ];
 
   return (
@@ -78,7 +82,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Navigation List */}
         <nav className="sidebar-nav">
-          <div className="nav-section-label">PLATFORM</div>
+          <div className="nav-section-label">{sidebarT.platform || 'PLATFORM'}</div>
           {menuItems.slice(0, 6).map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
@@ -92,18 +96,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 className={`sidebar-nav-item ${isActive ? 'active' : ''}`}
               >
                 <div className="nav-item-left">
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-indigo-400' : 'text-slate-400'}`} />
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-400'}`} />
                   <span>{item.label}</span>
                 </div>
                 {item.badge !== undefined && Number(item.badge) > 0 && (
                   <span className="nav-item-badge">{item.badge}</span>
                 )}
-                {isActive && <ChevronRight className="w-3.5 h-3.5 text-indigo-400 nav-active-arrow" />}
+                {isActive && <ChevronRight className="w-3.5 h-3.5 text-white nav-active-arrow" />}
               </button>
             );
           })}
 
-          <div className="nav-section-label mt-4">INFRASTRUCTURE</div>
+          <div className="nav-section-label mt-4">{sidebarT.infrastructure || 'INFRASTRUCTURE'}</div>
           {menuItems.slice(6).map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
@@ -117,10 +121,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 className={`sidebar-nav-item ${isActive ? 'active' : ''}`}
               >
                 <div className="nav-item-left">
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-indigo-400' : 'text-slate-400'}`} />
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-400'}`} />
                   <span>{item.label}</span>
                 </div>
-                {isActive && <ChevronRight className="w-3.5 h-3.5 text-indigo-400 nav-active-arrow" />}
+                {isActive && <ChevronRight className="w-3.5 h-3.5 text-white nav-active-arrow" />}
               </button>
             );
           })}
@@ -134,7 +138,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
           <div className="profile-info">
             <div className="profile-name">Sovereign Treasury</div>
-            <div className="profile-tier">Tier-1 Enclave Node</div>
+            <div className="profile-tier">{sidebarT.tierLabel || 'Tier-1 Enclave Node'}</div>
           </div>
         </div>
       </aside>

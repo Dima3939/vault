@@ -17,10 +17,12 @@ import confetti from 'canvas-confetti';
 interface OverviewViewProps {
   onNavigateTab: (tab: any) => void;
   onInitiateTransfer: () => void;
+  t: any;
 }
 
 export const OverviewView: React.FC<OverviewViewProps> = ({
-  onNavigateTab
+  onNavigateTab,
+  t
 }) => {
   const [timeframe, setTimeframe] = useState<'1H' | '24H' | '7D' | '30D' | '1Y'>('24H');
   const [approvalsCount, setApprovalsCount] = useState(3);
@@ -32,6 +34,8 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
     'david': false,
     'emily': false
   });
+
+  const ovT = t?.os?.overview || {};
 
   const [policies, setPolicies] = useState([
     { id: '1', title: 'Large Transaction Policy', desc: 'Transfers > $100,000 require 3+ approvals', active: true, conditions: 2 },
@@ -65,7 +69,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
         {/* Total Assets */}
         <div className="overview-stat-card">
           <div className="stat-card-header">
-            <span className="stat-card-label">Total Assets</span>
+            <span className="stat-card-label">{ovT.totalAssets || 'Total Assets'}</span>
             <div className="stat-card-icon-wrap emerald">
               <TrendingUp className="w-4 h-4 text-emerald-400" />
             </div>
@@ -82,21 +86,21 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
         {/* Wallets */}
         <div className="overview-stat-card">
           <div className="stat-card-header">
-            <span className="stat-card-label">Active Wallets</span>
+            <span className="stat-card-label">{ovT.activeWallets || 'Active Wallets'}</span>
             <div className="stat-card-icon-wrap indigo">
               <Wallet className="w-4 h-4 text-indigo-400" />
             </div>
           </div>
           <div className="stat-card-body">
             <div className="stat-card-value font-mono">24</div>
-            <div className="stat-card-subtext">Segregated Enclaves</div>
+            <div className="stat-card-subtext">{ovT.walletsSub || 'Segregated Enclaves'}</div>
           </div>
         </div>
 
         {/* Transactions (24h) */}
         <div className="overview-stat-card">
           <div className="stat-card-header">
-            <span className="stat-card-label">Transactions (24h)</span>
+            <span className="stat-card-label">{ovT.transactions24h || 'Transactions (24h)'}</span>
             <div className="stat-card-icon-wrap purple">
               <Layers className="w-4 h-4 text-purple-400" />
             </div>
@@ -104,7 +108,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
           <div className="stat-card-body">
             <div className="stat-card-value font-mono">47</div>
             <div className="stat-card-badge positive">
-              <span>+12.5% volume</span>
+              <span>{ovT.volume24h || '+12.5% volume'}</span>
             </div>
           </div>
         </div>
@@ -112,14 +116,14 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
         {/* Pending Approvals */}
         <div className="overview-stat-card">
           <div className="stat-card-header">
-            <span className="stat-card-label">Pending Approvals</span>
+            <span className="stat-card-label">{ovT.pendingApprovals || 'Pending Approvals'}</span>
             <div className="stat-card-icon-wrap amber">
               <AlertCircle className="w-4 h-4 text-amber-400" />
             </div>
           </div>
           <div className="stat-card-body">
             <div className="stat-card-value font-mono text-amber-400">{userApproved ? 2 : approvalsCount}</div>
-            <div className="stat-card-subtext text-amber-400/80 font-medium">Requires Quorum Action</div>
+            <div className="stat-card-subtext text-amber-400/80 font-medium">{ovT.requiresQuorum || 'Requires Quorum Action'}</div>
           </div>
         </div>
       </div>
@@ -130,7 +134,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
         <div className="overview-chart-card balance-card">
           <div className="chart-card-header">
             <div>
-              <div className="chart-card-title">Portfolio Balance</div>
+              <div className="chart-card-title">{ovT.portfolioBalance || 'Portfolio Balance'}</div>
               <div className="chart-main-val font-mono">
                 $128,750,350.45 <span className="chart-delta-tag">+3.24% (24h)</span>
               </div>
@@ -201,9 +205,9 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
         {/* Right: Asset Allocation Donut */}
         <div className="overview-chart-card allocation-card">
           <div className="chart-card-header">
-            <div className="chart-card-title">Asset Allocation</div>
+            <div className="chart-card-title">{ovT.assetAllocation || 'Asset Allocation'}</div>
             <button onClick={() => onNavigateTab('wallets')} className="view-all-link">
-              View all
+              {ovT.viewAll || 'View all'}
             </button>
           </div>
 
@@ -242,7 +246,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
               </svg>
               <div className="donut-center-text">
                 <span className="text-[10px] text-slate-400 font-mono">ASSETS</span>
-                <span className="font-mono font-bold text-sm text-white">4 CHAINS</span>
+                <span className="font-mono font-bold text-sm text-white">{ovT.chainsCount || '4 CHAINS'}</span>
               </div>
             </div>
 
@@ -299,9 +303,9 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
       {/* 3. RECENT TRANSACTIONS TABLE */}
       <div className="overview-table-card">
         <div className="table-card-header">
-          <div className="chart-card-title">Recent Transactions</div>
+          <div className="chart-card-title">{ovT.recentTransactions || 'Recent Transactions'}</div>
           <button onClick={() => onNavigateTab('transactions')} className="view-all-link">
-            View all
+            {ovT.viewAll || 'View all'}
           </button>
         </div>
 
@@ -309,13 +313,13 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
           <table className="vault-os-table">
             <thead>
               <tr>
-                <th>Type</th>
-                <th>Amount</th>
-                <th>Asset</th>
-                <th>From</th>
-                <th>To</th>
-                <th>Status</th>
-                <th>Time</th>
+                <th>{ovT.type || 'Type'}</th>
+                <th>{ovT.amount || 'Amount'}</th>
+                <th>{ovT.asset || 'Asset'}</th>
+                <th>{ovT.from || 'From'}</th>
+                <th>{ovT.to || 'To'}</th>
+                <th>{ovT.status || 'Status'}</th>
+                <th>{ovT.time || 'Time'}</th>
               </tr>
             </thead>
             <tbody>
@@ -323,7 +327,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                 <td>
                   <div className="flex items-center gap-1.5 text-red-400">
                     <ArrowUpRight className="w-4 h-4" />
-                    <span>Transfer</span>
+                    <span>{ovT.transfer || 'Transfer'}</span>
                   </div>
                 </td>
                 <td className="font-mono font-bold text-red-400">-250.00 BTC</td>
@@ -336,7 +340,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                 <td className="font-mono text-xs text-slate-400">Cold Storage 1</td>
                 <td className="font-mono text-xs text-slate-300">Binance Deposit</td>
                 <td>
-                  <span className="status-pill completed">Completed</span>
+                  <span className="status-pill completed">{ovT.completed || 'Completed'}</span>
                 </td>
                 <td className="text-xs text-slate-400">2m ago</td>
               </tr>
@@ -345,7 +349,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                 <td>
                   <div className="flex items-center gap-1.5 text-emerald-400">
                     <ArrowDownLeft className="w-4 h-4" />
-                    <span>Receive</span>
+                    <span>{ovT.receive || 'Receive'}</span>
                   </div>
                 </td>
                 <td className="font-mono font-bold text-emerald-400">+1,250.00 ETH</td>
@@ -358,7 +362,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                 <td className="font-mono text-xs text-slate-400">Coinbase Prime</td>
                 <td className="font-mono text-xs text-slate-300">Hot Wallet 1</td>
                 <td>
-                  <span className="status-pill completed">Completed</span>
+                  <span className="status-pill completed">{ovT.completed || 'Completed'}</span>
                 </td>
                 <td className="text-xs text-slate-400">15m ago</td>
               </tr>
@@ -367,7 +371,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                 <td>
                   <div className="flex items-center gap-1.5 text-amber-400">
                     <ArrowUpRight className="w-4 h-4" />
-                    <span>Transfer</span>
+                    <span>{ovT.transfer || 'Transfer'}</span>
                   </div>
                 </td>
                 <td className="font-mono font-bold text-amber-400">-50,000.00 USDC</td>
@@ -380,7 +384,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                 <td className="font-mono text-xs text-slate-400">Treasury Wallet</td>
                 <td className="font-mono text-xs text-slate-300">Vendor Payment</td>
                 <td>
-                  <span className="status-pill pending">Pending Quorum</span>
+                  <span className="status-pill pending">{ovT.pending || 'Pending Quorum'}</span>
                 </td>
                 <td className="text-xs text-slate-400">32m ago</td>
               </tr>
@@ -395,11 +399,11 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
         <div className="overview-widget-card approval-widget">
           <div className="widget-header">
             <div className="widget-title-group">
-              <span className="widget-title">Transaction Approval Flow</span>
-              <span className="high-priority-tag">High Priority</span>
+              <span className="widget-title">{ovT.approvalFlowTitle || 'Transaction Approval Flow'}</span>
+              <span className="high-priority-tag">{ovT.highPriority || 'High Priority'}</span>
             </div>
             <span className="text-xs font-mono text-indigo-400">
-              {Object.values(approvedSigners).filter(Boolean).length} of 5 Approvals
+              {Object.values(approvedSigners).filter(Boolean).length} {ovT.approvalsCollected || 'of 5 Approvals'}
             </span>
           </div>
 
@@ -423,7 +427,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                   <div className="signer-name">John Smith</div>
                   <div className="signer-role">Compliance Officer</div>
                 </div>
-                <span className="signer-status-badge approved">✓ Approved</span>
+                <span className="signer-status-badge approved">✓ {ovT.approved || 'Approved'}</span>
               </div>
 
               <div className="signer-item">
@@ -432,7 +436,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                   <div className="signer-name">Sarah Johnson</div>
                   <div className="signer-role">Risk Manager</div>
                 </div>
-                <span className="signer-status-badge approved">✓ Approved</span>
+                <span className="signer-status-badge approved">✓ {ovT.approved || 'Approved'}</span>
               </div>
 
               <div className="signer-item highlight">
@@ -442,9 +446,9 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                   <div className="signer-role">Treasury Manager</div>
                 </div>
                 {approvedSigners.michael ? (
-                  <span className="signer-status-badge approved">✓ Approved by You</span>
+                  <span className="signer-status-badge approved">✓ {ovT.approvedByYou || 'Approved by You'}</span>
                 ) : (
-                  <span className="signer-status-badge pending">● Signature Required</span>
+                  <span className="signer-status-badge pending">● {ovT.signatureRequired || 'Signature Required'}</span>
                 )}
               </div>
             </div>
@@ -456,7 +460,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                 className="btn-widget-reject"
               >
                 <X className="w-4 h-4" />
-                <span>Reject</span>
+                <span>{ovT.rejectBtn || 'Reject'}</span>
               </button>
               <button 
                 onClick={handleApproveTransaction}
@@ -466,12 +470,12 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                 {userApproved ? (
                   <>
                     <Check className="w-4 h-4" />
-                    <span>Threshold Quorum Met!</span>
+                    <span>{ovT.quorumMet || 'Threshold Quorum Met!'}</span>
                   </>
                 ) : (
                   <>
                     <ShieldCheck className="w-4 h-4" />
-                    <span>Approve MPC Ceremony</span>
+                    <span>{ovT.approveBtn || 'Approve MPC Ceremony'}</span>
                   </>
                 )}
               </button>
@@ -482,10 +486,10 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
         {/* Module 2: Policy Engine */}
         <div className="overview-widget-card policy-widget">
           <div className="widget-header">
-            <span className="widget-title">Policy Engine</span>
+            <span className="widget-title">{ovT.policyEngineTitle || 'Policy Engine'}</span>
             <button onClick={() => onNavigateTab('policies')} className="btn-add-policy">
               <Plus className="w-3.5 h-3.5" />
-              <span>New Policy</span>
+              <span>{ovT.newPolicyBtn || 'New Policy'}</span>
             </button>
           </div>
 
@@ -502,7 +506,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                   </div>
                 </div>
                 <div className="policy-row-right">
-                  <span className="policy-condition-tag font-mono">{p.conditions} rules</span>
+                  <span className="policy-condition-tag font-mono">{p.conditions} {ovT.rulesCount || 'rules'}</span>
                   <button 
                     onClick={() => togglePolicy(p.id)}
                     className={`policy-toggle-switch ${p.active ? 'on' : 'off'}`}
@@ -518,32 +522,32 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
         {/* Module 3: Key Management MPC Infrastructure */}
         <div className="overview-widget-card mpc-widget">
           <div className="widget-header">
-            <span className="widget-title">Key Management (MPC-CMP)</span>
+            <span className="widget-title">{ovT.keyManagementTitle || 'Key Management (MPC-CMP)'}</span>
             <button onClick={() => onNavigateTab('mpc')} className="view-all-link">
-              Inspect Shards
+              {ovT.inspectShards || 'Inspect Shards'}
             </button>
           </div>
 
           <div className="mpc-widget-body">
             <div className="mpc-numbers-row">
               <div className="mpc-mini-stat">
-                <span className="text-[10px] text-slate-400 uppercase">Key Groups</span>
+                <span className="text-[10px] text-slate-400 uppercase">{ovT.keyGroups || 'Key Groups'}</span>
                 <span className="font-mono text-xl font-bold text-white">24</span>
               </div>
               <div className="mpc-mini-stat">
-                <span className="text-[10px] text-slate-400 uppercase">Total Key Shares</span>
+                <span className="text-[10px] text-slate-400 uppercase">{ovT.totalKeyShares || 'Total Key Shares'}</span>
                 <span className="font-mono text-xl font-bold text-white">120</span>
               </div>
               <div className="mpc-mini-stat">
-                <span className="text-[10px] text-slate-400 uppercase">Threshold</span>
+                <span className="text-[10px] text-slate-400 uppercase">{ovT.threshold || 'Threshold'}</span>
                 <span className="font-mono text-xl font-bold text-indigo-400">3 of 5</span>
               </div>
             </div>
 
             <div className="primary-wallet-group-box">
               <div className="flex justify-between items-center mb-2">
-                <span className="font-mono text-xs font-bold text-slate-200">Primary Treasury Key Shards</span>
-                <span className="enclave-badge-mini font-mono">TEE ACTIVE</span>
+                <span className="font-mono text-xs font-bold text-slate-200">{ovT.primaryKeyShards || 'Primary Treasury Key Shards'}</span>
+                <span className="enclave-badge-mini font-mono">{ovT.teeActive || 'TEE ACTIVE'}</span>
               </div>
 
               <div className="shard-circles-row">

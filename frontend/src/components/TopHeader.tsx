@@ -21,7 +21,7 @@ interface TopHeaderProps {
   onThemeToggle: () => void;
   onOpenMobileMenu: () => void;
   onNewTransferClick: () => void;
-  langMenuTitle: string;
+  t: any;
 }
 
 export const TopHeader: React.FC<TopHeaderProps> = ({
@@ -32,12 +32,15 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
   onThemeToggle,
   onOpenMobileMenu,
   onNewTransferClick,
-  langMenuTitle
+  t
 }) => {
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const langRef = useRef<HTMLDivElement | null>(null);
   const notifRef = useRef<HTMLDivElement | null>(null);
+
+  const headerT = t?.os?.header || {};
+  const sidebarT = t?.os?.sidebar || {};
 
   // Click outside to close dropdowns
   useEffect(() => {
@@ -55,43 +58,43 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
 
   const tabTitles: Record<DashboardTab, { title: string; subtitle: string }> = {
     overview: {
-      title: 'Overview',
+      title: sidebarT.overview || 'Overview',
       subtitle: 'Real-time summary of your digital asset treasury & enclave operations'
     },
     wallets: {
-      title: 'Wallets & Treasury',
+      title: sidebarT.wallets || 'Wallets & Treasury',
       subtitle: 'Multi-chain liquidity routing and segregated cold storage enclaves'
     },
     transactions: {
-      title: 'Transactions',
+      title: sidebarT.transactions || 'Transactions',
       subtitle: 'Audited cryptographic ledger of institutional fund movements'
     },
     approvals: {
-      title: 'Pending Approvals',
+      title: sidebarT.approvals || 'Pending Approvals',
       subtitle: 'Multi-Party Computation (MPC-CMP) 3-of-5 threshold quorum requests'
     },
     policies: {
-      title: 'Policy Engine',
+      title: sidebarT.policies || 'Policy Engine',
       subtitle: 'Rule-based execution guards, velocity controls, and whitelists'
     },
     mpc: {
-      title: 'MPC Key Infrastructure',
+      title: sidebarT.mpc || 'MPC Key Infrastructure',
       subtitle: 'Geodistributed mathematical key shard topology and signing ceremony'
     },
     sdk: {
-      title: 'Developer SDK & API',
+      title: sidebarT.sdk || 'Developer SDK & API',
       subtitle: 'REST endpoints and type-safe client libraries for automated treasury'
     },
     compliance: {
-      title: 'Compliance & Hardware HSM',
+      title: sidebarT.compliance || 'Compliance & Hardware HSM',
       subtitle: 'FIPS 140-2 Level 3, SOC 2 Type II and Lloyd\'s of London insurance'
     },
     pricing: {
-      title: 'Institutional Plans',
+      title: sidebarT.pricing || 'Institutional Plans',
       subtitle: 'Transparent sovereign infrastructure scaling with your AUM'
     },
     faq: {
-      title: 'Knowledge Base',
+      title: sidebarT.faq || 'Knowledge Base',
       subtitle: 'Deep cryptographic architecture, security guarantees and operations'
     }
   };
@@ -120,7 +123,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
         {/* Enclave Status Pill */}
         <div className="enclave-status-indicator">
           <Radio className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
-          <span className="font-mono text-xs text-emerald-400 font-semibold">Secure Environment</span>
+          <span className="font-mono text-xs text-emerald-400 font-semibold">{headerT.secureEnv || 'Secure Environment'}</span>
         </div>
 
         {/* Notifications */}
@@ -137,8 +140,8 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
           {notificationsOpen && (
             <div className="header-notif-dropdown">
               <div className="notif-dropdown-header">
-                <span className="font-bold text-xs">Security Notifications</span>
-                <span className="text-[10px] text-emerald-400 font-mono">ALL ENCLAVES OK</span>
+                <span className="font-bold text-xs">{headerT.notifications || 'Security Notifications'}</span>
+                <span className="text-[10px] text-emerald-400 font-mono">{headerT.allEnclavesOk || 'ALL ENCLAVES OK'}</span>
               </div>
               <div className="notif-list">
                 <div className="notif-item unread">
@@ -176,7 +179,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
           {langDropdownOpen && (
             <div className="header-lang-dropdown">
               <div className="lang-menu-title">
-                {langMenuTitle || 'Language'}
+                {t.nav?.langTitle || 'Language'}
               </div>
               {supportedLanguages.map(l => (
                 <button
@@ -217,7 +220,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
           className="header-cta-btn"
         >
           <Plus className="w-4 h-4" />
-          <span className="hidden sm:inline">New Transfer</span>
+          <span className="hidden sm:inline">{headerT.newTransfer || 'New Transfer'}</span>
         </button>
       </div>
     </header>

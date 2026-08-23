@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import Lenis from 'lenis';
 import { translations, LanguageCode } from './i18n';
 import { Sidebar, DashboardTab } from './components/Sidebar';
 import { TopHeader } from './components/TopHeader';
@@ -39,25 +38,6 @@ export function App() {
     return (localStorage.getItem('vault_theme') as 'dark' | 'light') || 'dark';
   });
 
-  // Initialize Lenis smooth scroll
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.0,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-    });
-
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-
-    return () => {
-      lenis.destroy();
-    };
-  }, []);
-
   // Update theme on root DOM
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', currentTheme);
@@ -84,6 +64,7 @@ export function App() {
         isOpenMobile={mobileSidebarOpen}
         onCloseMobile={() => setMobileSidebarOpen(false)}
         approvalsCount={approvalsCount}
+        t={t}
       />
 
       {/* 2. MAIN APPLICATION WORKSPACE */}
@@ -97,7 +78,7 @@ export function App() {
           onThemeToggle={handleThemeToggle}
           onOpenMobileMenu={() => setMobileSidebarOpen(true)}
           onNewTransferClick={() => setTransferModalOpen(true)}
-          langMenuTitle={t.nav.langTitle || 'Language'}
+          t={t}
         />
 
         {/* Dynamic Tab Body */}
@@ -107,6 +88,7 @@ export function App() {
             <OverviewView
               onNavigateTab={setActiveTab}
               onInitiateTransfer={() => setTransferModalOpen(true)}
+              t={t}
             />
           )}
 

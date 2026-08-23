@@ -3,11 +3,7 @@ import * as d3 from 'd3';
 import { TrendingUp, Layers, CheckCircle2 } from 'lucide-react';
 
 interface TreasuryFlowProps {
-  t: {
-    totalAum: string;
-    yieldRate: string;
-    settlementSpeed: string;
-  };
+  t: any;
 }
 
 interface AssetSegment {
