@@ -50,22 +50,22 @@ export const Navbar: React.FC<NavbarProps> = ({
     <header className="vault-header">
       <div className="vault-header-inner">
         {/* Brand Logo */}
-        <div className="flex items-center gap-3">
-          <a href="#" className="flex items-center gap-2 group text-decoration-none">
+        <div className="vault-brand-group">
+          <a href="#" className="vault-brand-link">
             <div className="vault-logo-shield">
-              <Shield className="w-5 h-5 text-emerald-400" />
+              <Shield className="vault-logo-icon" />
             </div>
             <span className="vault-brand-text">
-              VAULT<span className="text-emerald-400">.</span>
+              VAULT<span className="vault-brand-dot">.</span>
             </span>
           </a>
-          <span className="vault-header-version-pill hidden md:inline-flex">
+          <span className="vault-header-version-pill">
             <span className="pulse-dot"></span> v3.8 MPC-CMP
           </span>
         </div>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-7">
+        <nav className="vault-desktop-nav">
           <a href="#features" className="vault-nav-link">{t.features}</a>
           <a href="#mpc-simulator" className="vault-nav-link">{t.mpcSim}</a>
           <a href="#treasury-flow" className="vault-nav-link">{t.treasury}</a>
@@ -76,24 +76,27 @@ export const Navbar: React.FC<NavbarProps> = ({
         </nav>
 
         {/* Header Actions */}
-        <div className="flex items-center gap-2.5">
+        <div className="vault-header-actions">
           {/* 6-Language Dropdown Picker */}
-          <div className="relative" ref={langDropdownRef}>
+          <div className="vault-lang-wrapper" ref={langDropdownRef}>
             <button
-              onClick={() => setLangMenuOpen(!langMenuOpen)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setLangMenuOpen(!langMenuOpen);
+              }}
               className="vault-lang-btn"
               title="Select Language"
               aria-expanded={langMenuOpen}
             >
-              <Globe className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-              <span className="font-mono font-bold text-xs">{currentLangMeta.badge}</span>
-              <ChevronDown className={`w-3 h-3 text-slate-400 transition-transform ${langMenuOpen ? 'rotate-180' : ''}`} />
+              <Globe className="vault-globe-icon" />
+              <span className="vault-lang-code">{currentLangMeta.badge}</span>
+              <ChevronDown className={`vault-chevron ${langMenuOpen ? 'open' : ''}`} />
             </button>
 
             {langMenuOpen && (
               <div className="vault-lang-dropdown-menu">
-                <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-wider text-slate-400 border-b border-white/5 mb-1">
-                  Select Language
+                <div className="vault-lang-menu-title">
+                  Language / Мова / Sprache
                 </div>
                 {supportedLanguages.map((lang) => (
                   <button
@@ -104,10 +107,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                     }}
                     className={`vault-lang-item ${lang.code === currentLang ? 'active' : ''}`}
                   >
-                    <span className="text-xs font-medium">{lang.name}</span>
-                    <div className="flex items-center gap-1.5">
+                    <span className="vault-lang-item-name">{lang.name}</span>
+                    <div className="vault-lang-item-right">
                       <span className="vault-lang-code-tag">{lang.badge}</span>
-                      {lang.code === currentLang && <Check className="w-3.5 h-3.5 text-emerald-400" />}
+                      {lang.code === currentLang && <Check className="vault-check-icon" />}
                     </div>
                   </button>
                 ))}
@@ -121,22 +124,22 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="vault-theme-btn"
             title="Toggle Light/Dark Theme"
           >
-            {currentTheme === 'dark' ? <Sun className="w-4 h-4 text-amber-300" /> : <Moon className="w-4 h-4 text-slate-700" />}
+            {currentTheme === 'dark' ? <Sun className="vault-theme-icon sun" /> : <Moon className="vault-theme-icon moon" />}
           </button>
 
           {/* Request Sovereign Vault CTA */}
           <button
             onClick={onRequestAccess}
-            className="vault-btn-header-primary hidden sm:inline-flex"
+            className="vault-btn-header-primary"
           >
             {t.requestAccess}
           </button>
 
-          {/* Mobile Menu Trigger */}
+          {/* Mobile Menu Trigger (Only on small screens) */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="vault-mobile-menu-btn lg:hidden"
-            aria-label="Toggle Navigation"
+            className="vault-mobile-toggle-btn"
+            aria-label="Toggle Navigation Menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -145,20 +148,22 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="vault-mobile-drawer lg:hidden">
-          <a href="#features" onClick={() => setMobileMenuOpen(false)} className="vault-mobile-link">{t.features}</a>
-          <a href="#mpc-simulator" onClick={() => setMobileMenuOpen(false)} className="vault-mobile-link">{t.mpcSim}</a>
-          <a href="#treasury-flow" onClick={() => setMobileMenuOpen(false)} className="vault-mobile-link">{t.treasury}</a>
-          <a href="#developers" onClick={() => setMobileMenuOpen(false)} className="vault-mobile-link">{t.developers}</a>
-          <a href="#compliance" onClick={() => setMobileMenuOpen(false)} className="vault-mobile-link">{t.compliance}</a>
-          <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="vault-mobile-link">{t.pricing}</a>
-          <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="vault-mobile-link">{t.faq}</a>
+        <div className="vault-mobile-drawer">
+          <div className="vault-mobile-links-grid">
+            <a href="#features" onClick={() => setMobileMenuOpen(false)} className="vault-mobile-link">{t.features}</a>
+            <a href="#mpc-simulator" onClick={() => setMobileMenuOpen(false)} className="vault-mobile-link">{t.mpcSim}</a>
+            <a href="#treasury-flow" onClick={() => setMobileMenuOpen(false)} className="vault-mobile-link">{t.treasury}</a>
+            <a href="#developers" onClick={() => setMobileMenuOpen(false)} className="vault-mobile-link">{t.developers}</a>
+            <a href="#compliance" onClick={() => setMobileMenuOpen(false)} className="vault-mobile-link">{t.compliance}</a>
+            <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="vault-mobile-link">{t.pricing}</a>
+            <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="vault-mobile-link">{t.faq}</a>
+          </div>
           <button
             onClick={() => {
               setMobileMenuOpen(false);
               onRequestAccess();
             }}
-            className="vault-btn-primary w-full mt-3"
+            className="vault-btn-primary w-full mt-4"
           >
             {t.requestAccess}
           </button>

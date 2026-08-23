@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Minus } from 'lucide-react';
+import { Plus, Minus, HelpCircle } from 'lucide-react';
 
 interface FaqSectionProps {
   t: {
@@ -35,7 +35,7 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ t }) => {
         <p className="section-desc">{t.desc}</p>
       </div>
 
-      <div className="max-w-3xl mx-auto space-y-4">
+      <div className="faq-container max-w-3xl mx-auto">
         {faqItems.map((item, idx) => {
           const isOpen = openIndex === idx;
           return (
@@ -43,8 +43,12 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ t }) => {
               <button
                 onClick={() => setOpenIndex(isOpen ? null : idx)}
                 className="faq-question-btn"
+                aria-expanded={isOpen}
               >
-                <span className="text-base font-semibold text-white text-left">{item.q}</span>
+                <div className="flex items-center gap-3">
+                  <HelpCircle className="faq-question-icon" />
+                  <span className="faq-question-text">{item.q}</span>
+                </div>
                 <span className="faq-toggle-icon">
                   {isOpen ? <Minus className="w-4 h-4 text-emerald-400" /> : <Plus className="w-4 h-4 text-slate-400" />}
                 </span>
@@ -52,7 +56,7 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ t }) => {
 
               {isOpen && (
                 <div className="faq-answer-content">
-                  <p className="text-sm text-slate-300 leading-relaxed">{item.a}</p>
+                  <p className="faq-answer-text">{item.a}</p>
                 </div>
               )}
             </div>

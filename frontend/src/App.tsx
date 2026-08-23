@@ -15,7 +15,10 @@ import {
   ArrowRight,
   Building2,
   FileCheck2,
-  Award
+  Award,
+  Lock,
+  Cpu,
+  Server
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -96,7 +99,6 @@ export function App() {
     setFormStatus({ type: 'loading', message: 'Verifying cryptographic credentials...' });
 
     try {
-      // Send to local backend if available or simulate immediate verified response
       const res = await fetch('http://localhost:3001/api/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -138,7 +140,7 @@ export function App() {
         onRequestAccess={() => triggerWaitlistFocus('Institutional Sovereign')}
       />
 
-      <main>
+      <main className="vault-main-content">
         {/* HERO SECTION */}
         <section className="vault-hero" id="waitlist-section">
           <div className="vault-hero-content">
@@ -179,14 +181,14 @@ export function App() {
             )}
 
             <div className="vault-hero-meta">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                <span className="font-mono text-xs">{t.hero.queueCount}</span>
+              <div className="meta-item">
+                <ShieldCheck className="meta-icon emerald" />
+                <span className="meta-text">{t.hero.queueCount}</span>
               </div>
-              <span className="text-slate-600">•</span>
-              <div className="flex items-center gap-2">
-                <Award className="w-4 h-4 text-cyan-400" />
-                <span className="font-mono text-xs">{t.hero.fipsReady}</span>
+              <span className="meta-divider">•</span>
+              <div className="meta-item">
+                <Award className="meta-icon cyan" />
+                <span className="meta-text">{t.hero.fipsReady}</span>
               </div>
             </div>
           </div>
@@ -201,7 +203,7 @@ export function App() {
               />
 
               {/* Desktop Floating Badges */}
-              <div className="vault-stat-badge top-left hidden lg:flex">
+              <div className="vault-stat-badge top-left">
                 <div className="stat-icon emerald">
                   <Zap className="w-4 h-4" />
                 </div>
@@ -211,7 +213,7 @@ export function App() {
                 </div>
               </div>
 
-              <div className="vault-stat-badge bottom-right hidden lg:flex">
+              <div className="vault-stat-badge bottom-right">
                 <div className="stat-icon cyan">
                   <Key className="w-4 h-4" />
                 </div>
@@ -223,7 +225,7 @@ export function App() {
             </div>
 
             {/* Mobile Centered Badges */}
-            <div className="vault-mobile-stats flex lg:hidden">
+            <div className="vault-mobile-stats">
               <div className="vault-mobile-stat-card">
                 <div className="stat-icon emerald">
                   <Zap className="w-4 h-4" />
@@ -250,87 +252,115 @@ export function App() {
         <section className="vault-trust-section">
           <div className="trust-title">{t.trust.title}</div>
           <div className="trust-logos-grid">
-            <span className="trust-logo-item">GOLDMAN SACHS DIGITAL</span>
-            <span className="trust-logo-item">FIDELITY DIGITAL ASSETS</span>
-            <span className="trust-logo-item">COINBASE PRIME</span>
-            <span className="trust-logo-item">KRAKEN INSTITUTIONAL</span>
-            <span className="trust-logo-item">BLACKROCK ADVISORS</span>
+            <div className="trust-logo-item">GOLDMAN SACHS DIGITAL</div>
+            <div className="trust-logo-item">FIDELITY DIGITAL ASSETS</div>
+            <div className="trust-logo-item">COINBASE PRIME</div>
+            <div className="trust-logo-item">KRAKEN INSTITUTIONAL</div>
+            <div className="trust-logo-item">BLACKROCK ADVISORS</div>
           </div>
         </section>
 
-        {/* BENTO GRID CORE CAPABILITIES */}
+        {/* SWISS ENCLAVE ARCHITECTURE GRID */}
         <section className="vault-section" id="features">
           <div className="section-header text-center max-w-3xl mx-auto mb-12">
             <span className="section-tag">{t.features.tag}</span>
-            <h2 className="section-title text-white">{t.features.title}</h2>
+            <h2 className="section-title">{t.features.title}</h2>
             <p className="section-desc">{t.features.desc}</p>
           </div>
 
-          <div className="bento-grid-vault">
-            {/* Card 1: MPC Threshold Sharding (Large) */}
-            <div className="bento-card-vault large">
-              <div className="bento-img-wrap">
-                <img src={`${baseUrl}card-mpc.jpg`} alt="MPC Protocol" className="bento-img" />
+          <div className="enclave-terminal-grid">
+            {/* Enclave Card 1: MPC Threshold Sharding */}
+            <div className="enclave-panel large">
+              <div className="panel-header-bar">
+                <div className="flex items-center gap-2">
+                  <Server className="w-4 h-4 text-emerald-400" />
+                  <span className="font-mono text-xs text-emerald-400 font-bold">[ENCLAVE: CH-ZURICH-01]</span>
+                </div>
+                <span className="panel-status-tag">{t.features.card1Badge}</span>
               </div>
-              <div className="bento-body">
-                <span className="bento-badge-tag">{t.features.card1Badge}</span>
-                <h3 className="text-xl font-bold text-white mb-2">{t.features.card1Title}</h3>
-                <p className="text-sm text-slate-300 leading-relaxed mb-4" dangerouslySetInnerHTML={{ __html: t.features.card1Desc }} />
-
-                <div className="telemetry-bar-box">
-                  <div className="flex justify-between items-center text-xs font-mono mb-2">
-                    <span className="text-slate-400">{t.features.card1LiveLabel}</span>
-                    <span className="text-emerald-400 flex items-center gap-1.5">
-                      <span className="pulse-dot"></span> {t.features.card1LiveStatus}
-                    </span>
-                  </div>
-                  <div className="telemetry-log-lines font-mono text-[11px] text-slate-400 space-y-1">
-                    <div>[14:02:18] <span className="text-emerald-400">AWS_NITRO</span> Shard_A refreshed (0x8491) <span className="text-cyan-400">✓ OK</span></div>
-                    <div>[14:02:19] <span className="text-emerald-400">GCP_TEE</span> Shard_B zeroized ephemeral memory <span className="text-cyan-400">✓ 12ms</span></div>
-                    <div>[14:02:20] <span className="text-emerald-400">HSM_CORE</span> 3-of-5 threshold quorum established <span className="text-cyan-400">✓ Verified</span></div>
+              <div className="enclave-panel-body">
+                <div className="enclave-img-wrap">
+                  <img src={`${baseUrl}card-mpc.jpg`} alt="MPC Protocol" className="enclave-img" />
+                </div>
+                <div className="enclave-info">
+                  <h3 className="enclave-heading">{t.features.card1Title}</h3>
+                  <p className="enclave-desc" dangerouslySetInnerHTML={{ __html: t.features.card1Desc }} />
+                  
+                  <div className="telemetry-bar-box">
+                    <div className="telemetry-header-line">
+                      <span className="telemetry-sub">{t.features.card1LiveLabel}</span>
+                      <span className="telemetry-live-state">
+                        <span className="pulse-dot"></span> {t.features.card1LiveStatus}
+                      </span>
+                    </div>
+                    <div className="telemetry-log-lines">
+                      <div>[14:02:18] <span className="text-emerald-400 font-bold">AWS_NITRO</span> Shard_A refreshed (0x8491) <span className="text-cyan-400 font-bold">✓ OK</span></div>
+                      <div>[14:02:19] <span className="text-emerald-400 font-bold">GCP_TEE</span> Shard_B zeroized ephemeral memory <span className="text-cyan-400 font-bold">✓ 12ms</span></div>
+                      <div>[14:02:20] <span className="text-emerald-400 font-bold">HSM_CORE</span> 3-of-5 threshold quorum established <span className="text-cyan-400 font-bold">✓ Verified</span></div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Card 2: FIPS 140-2 Level 3 HSM */}
-            <div className="bento-card-vault">
-              <div className="bento-img-wrap">
-                <img src={`${baseUrl}card-hsm.jpg`} alt="Hardware HSM" className="bento-img" />
+            {/* Enclave Card 2: FIPS 140-2 Level 3 HSM */}
+            <div className="enclave-panel">
+              <div className="panel-header-bar">
+                <div className="flex items-center gap-2">
+                  <Cpu className="w-4 h-4 text-amber-400" />
+                  <span className="font-mono text-xs text-amber-400 font-bold">[HARDWARE: FIPS 140-2]</span>
+                </div>
+                <span className="panel-status-tag">{t.features.card2Badge}</span>
               </div>
-              <div className="bento-body">
-                <span className="bento-badge-tag">{t.features.card2Badge}</span>
-                <h3 className="text-lg font-bold text-white mb-2">{t.features.card2Title}</h3>
-                <p className="text-xs text-slate-300 leading-relaxed">{t.features.card2Desc}</p>
+              <div className="enclave-img-wrap">
+                <img src={`${baseUrl}card-hsm.jpg`} alt="Hardware HSM" className="enclave-img" />
               </div>
-            </div>
-
-            {/* Card 3: Programmable Policy Governance */}
-            <div className="bento-card-vault">
-              <div className="bento-img-wrap">
-                <img src={`${baseUrl}card-policy.jpg`} alt="Policy Governance" className="bento-img" />
-              </div>
-              <div className="bento-body">
-                <span className="bento-badge-tag">{t.features.card3Badge}</span>
-                <h3 className="text-lg font-bold text-white mb-2">{t.features.card3Title}</h3>
-                <p className="text-xs text-slate-300 leading-relaxed">{t.features.card3Desc}</p>
+              <div className="enclave-info">
+                <h3 className="enclave-heading">{t.features.card2Title}</h3>
+                <p className="enclave-desc">{t.features.card2Desc}</p>
               </div>
             </div>
 
-            {/* Card 4: Instant Cross-Chain Treasury (Wide) */}
-            <div className="bento-card-vault wide">
-              <div className="bento-img-wrap">
-                <img src={`${baseUrl}card-treasury.jpg`} alt="Cross-Chain Liquidity" className="bento-img" />
+            {/* Enclave Card 3: Programmable Policy Governance */}
+            <div className="enclave-panel">
+              <div className="panel-header-bar">
+                <div className="flex items-center gap-2">
+                  <Lock className="w-4 h-4 text-cyan-400" />
+                  <span className="font-mono text-xs text-cyan-400 font-bold">[GOVERNANCE: TSS-QUORUM]</span>
+                </div>
+                <span className="panel-status-tag">{t.features.card3Badge}</span>
               </div>
-              <div className="bento-body">
-                <span className="bento-badge-tag">{t.features.card4Badge}</span>
-                <h3 className="text-xl font-bold text-white mb-2">{t.features.card4Title}</h3>
-                <p className="text-sm text-slate-300 leading-relaxed mb-3">{t.features.card4Desc}</p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="vault-pill-tag">Bitcoin Native SegWit</span>
-                  <span className="vault-pill-tag">Ethereum ERC-4337</span>
-                  <span className="vault-pill-tag">Solana SPL Token2022</span>
-                  <span className="vault-pill-tag">Zero-Knowledge Proofs</span>
+              <div className="enclave-img-wrap">
+                <img src={`${baseUrl}card-policy.jpg`} alt="Policy Governance" className="enclave-img" />
+              </div>
+              <div className="enclave-info">
+                <h3 className="enclave-heading">{t.features.card3Title}</h3>
+                <p className="enclave-desc">{t.features.card3Desc}</p>
+              </div>
+            </div>
+
+            {/* Enclave Card 4: Instant Cross-Chain Treasury */}
+            <div className="enclave-panel wide">
+              <div className="panel-header-bar">
+                <div className="flex items-center gap-2">
+                  <Zap className="w-4 h-4 text-emerald-400" />
+                  <span className="font-mono text-xs text-emerald-400 font-bold">[SETTLEMENT: MULTI-CHAIN]</span>
+                </div>
+                <span className="panel-status-tag">{t.features.card4Badge}</span>
+              </div>
+              <div className="enclave-panel-body wide-grid">
+                <div className="enclave-img-wrap">
+                  <img src={`${baseUrl}card-treasury.jpg`} alt="Cross-Chain Liquidity" className="enclave-img" />
+                </div>
+                <div className="enclave-info">
+                  <h3 className="enclave-heading">{t.features.card4Title}</h3>
+                  <p className="enclave-desc">{t.features.card4Desc}</p>
+                  <div className="vault-tags-row">
+                    <span className="vault-pill-tag">Bitcoin Native SegWit</span>
+                    <span className="vault-pill-tag">Ethereum ERC-4337</span>
+                    <span className="vault-pill-tag">Solana SPL Token2022</span>
+                    <span className="vault-pill-tag">Zero-Knowledge Proofs</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -341,7 +371,7 @@ export function App() {
         <section className="vault-section" id="mpc-simulator">
           <div className="section-header text-center max-w-3xl mx-auto mb-12">
             <span className="section-tag">{t.mpc.tag}</span>
-            <h2 className="section-title text-white">{t.mpc.title}</h2>
+            <h2 className="section-title">{t.mpc.title}</h2>
             <p className="section-desc">{t.mpc.desc}</p>
           </div>
 
@@ -354,7 +384,7 @@ export function App() {
         <section className="vault-section" id="treasury-flow">
           <div className="section-header text-center max-w-3xl mx-auto mb-12">
             <span className="section-tag">{t.treasury.tag}</span>
-            <h2 className="section-title text-white">{t.treasury.title}</h2>
+            <h2 className="section-title">{t.treasury.title}</h2>
             <p className="section-desc">{t.treasury.desc}</p>
           </div>
 
@@ -374,7 +404,7 @@ export function App() {
         <section className="vault-section" id="developers">
           <div className="section-header text-center max-w-3xl mx-auto mb-12">
             <span className="section-tag">{t.sdk.tag}</span>
-            <h2 className="section-title text-white">{t.sdk.title}</h2>
+            <h2 className="section-title">{t.sdk.title}</h2>
           </div>
 
           <div className="max-w-4xl mx-auto">
@@ -386,7 +416,7 @@ export function App() {
         <section className="vault-section" id="compliance">
           <div className="section-header text-center max-w-3xl mx-auto mb-12">
             <span className="section-tag">{t.compliance.tag}</span>
-            <h2 className="section-title text-white">{t.compliance.title}</h2>
+            <h2 className="section-title">{t.compliance.title}</h2>
             <p className="section-desc">{t.compliance.desc}</p>
           </div>
 
@@ -397,32 +427,32 @@ export function App() {
                   <div className="compliance-badge-icon">
                     <Award className="w-6 h-6 text-emerald-400" />
                   </div>
-                  <h4 className="font-bold text-white text-base mt-3">FIPS 140-2 Level 3</h4>
-                  <p className="text-xs text-slate-400 mt-1">Tamper-evident cryptographic physical hardware protection.</p>
+                  <h4 className="compliance-cell-title">FIPS 140-2 Level 3</h4>
+                  <p className="compliance-cell-desc">Tamper-evident cryptographic physical hardware protection.</p>
                 </div>
 
                 <div className="compliance-cell">
                   <div className="compliance-badge-icon">
                     <FileCheck2 className="w-6 h-6 text-cyan-400" />
                   </div>
-                  <h4 className="font-bold text-white text-base mt-3">SOC 2 Type II Certified</h4>
-                  <p className="text-xs text-slate-400 mt-1">Annual third-party audit of all security enclaves by Big 4 firm.</p>
+                  <h4 className="compliance-cell-title">SOC 2 Type II Certified</h4>
+                  <p className="compliance-cell-desc">Annual third-party audit of all security enclaves by Big 4 firm.</p>
                 </div>
 
                 <div className="compliance-cell">
                   <div className="compliance-badge-icon">
                     <ShieldCheck className="w-6 h-6 text-amber-400" />
                   </div>
-                  <h4 className="font-bold text-white text-base mt-3">ISO 27001 & ISO 27701</h4>
-                  <p className="text-xs text-slate-400 mt-1">International standards for enterprise data privacy & security.</p>
+                  <h4 className="compliance-cell-title">ISO 27001 & ISO 27701</h4>
+                  <p className="compliance-cell-desc">International standards for enterprise data privacy & security.</p>
                 </div>
 
                 <div className="compliance-cell">
                   <div className="compliance-badge-icon">
                     <Building2 className="w-6 h-6 text-indigo-400" />
                   </div>
-                  <h4 className="font-bold text-white text-base mt-3">CCSS Level 3 Certified</h4>
-                  <p className="text-xs text-slate-400 mt-1">Highest level of Cryptocurrency Security Standard architecture.</p>
+                  <h4 className="compliance-cell-title">CCSS Level 3 Certified</h4>
+                  <p className="compliance-cell-desc">Highest level of Cryptocurrency Security Standard architecture.</p>
                 </div>
               </div>
             </div>
@@ -438,61 +468,63 @@ export function App() {
         {/* CALL TO ACTION BANNER */}
         <section className="vault-cta-section">
           <div className="vault-cta-banner">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
+            <h2 className="vault-cta-title">
               {t.cta.title}
             </h2>
-            <p className="text-slate-300 text-sm sm:text-base max-w-xl mx-auto mb-8">
+            <p className="vault-cta-desc">
               {t.cta.desc}
             </p>
-            <button
-              onClick={() => triggerWaitlistFocus('Institutional Sovereign')}
-              className="vault-btn-primary px-8 py-3.5 text-sm font-bold"
-            >
-              {t.cta.btn}
-            </button>
+            <div className="vault-cta-btn-wrapper">
+              <button
+                onClick={() => triggerWaitlistFocus('Institutional Sovereign')}
+                className="vault-btn-primary vault-cta-btn"
+              >
+                {t.cta.btn}
+              </button>
+            </div>
           </div>
         </section>
       </main>
 
       {/* ENTERPRISE SWISS FOOTER */}
       <footer className="vault-footer">
-        <div className="vault-footer-inner max-w-6xl mx-auto">
+        <div className="vault-footer-inner">
           <div className="vault-footer-grid">
             <div className="footer-brand-col">
-              <div className="flex items-center gap-2 mb-4">
+              <div className="footer-brand-header">
                 <div className="vault-logo-shield">
                   <ShieldCheck className="w-5 h-5 text-emerald-400" />
                 </div>
                 <span className="vault-brand-text">VAULT<span className="text-emerald-400">.</span></span>
               </div>
-              <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
+              <p className="footer-brand-desc">
                 {t.footer.desc}
               </p>
             </div>
 
             <div className="footer-links-col">
-              <h5 className="font-bold text-xs uppercase text-slate-300 tracking-wider mb-3">Custody Infrastructure</h5>
-              <ul className="space-y-2 text-xs text-slate-400">
-                <li><a href="#mpc-simulator" className="hover:text-emerald-400 transition">MPC-CMP Engine</a></li>
-                <li><a href="#features" className="hover:text-emerald-400 transition">FIPS 140-2 Level 3 HSM</a></li>
-                <li><a href="#treasury-flow" className="hover:text-emerald-400 transition">Treasury Routing</a></li>
-                <li><a href="#developers" className="hover:text-emerald-400 transition">Developer SDK</a></li>
+              <h5 className="footer-col-title">Custody Infrastructure</h5>
+              <ul className="footer-links-list">
+                <li><a href="#mpc-simulator">MPC-CMP Engine</a></li>
+                <li><a href="#features">FIPS 140-2 Level 3 HSM</a></li>
+                <li><a href="#treasury-flow">Treasury Routing</a></li>
+                <li><a href="#developers">Developer SDK</a></li>
               </ul>
             </div>
 
             <div className="footer-links-col">
-              <h5 className="font-bold text-xs uppercase text-slate-300 tracking-wider mb-3">Institutional Security</h5>
-              <ul className="space-y-2 text-xs text-slate-400">
-                <li><a href="#compliance" className="hover:text-emerald-400 transition">SOC 2 Type II Report</a></li>
-                <li><a href="#compliance" className="hover:text-emerald-400 transition">ISO 27001 Certified</a></li>
-                <li><a href="#compliance" className="hover:text-emerald-400 transition">$250M Lloyd's Policy</a></li>
-                <li><a href="#faq" className="hover:text-emerald-400 transition">Key Sharding Math</a></li>
+              <h5 className="footer-col-title">Institutional Security</h5>
+              <ul className="footer-links-list">
+                <li><a href="#compliance">SOC 2 Type II Report</a></li>
+                <li><a href="#compliance">ISO 27001 Certified</a></li>
+                <li><a href="#compliance">$250M Lloyd's Policy</a></li>
+                <li><a href="#faq">Key Sharding Math</a></li>
               </ul>
             </div>
 
             <div className="footer-links-col">
-              <h5 className="font-bold text-xs uppercase text-slate-300 tracking-wider mb-3">Global Hubs</h5>
-              <ul className="space-y-2 text-xs text-slate-400">
+              <h5 className="footer-col-title">Global Hubs</h5>
+              <ul className="footer-links-list">
                 <li><span>Zurich: Bahnhofstrasse 42</span></li>
                 <li><span>London: 1 Canada Square</span></li>
                 <li><span>Singapore: Marina Bay Financial</span></li>
@@ -501,12 +533,12 @@ export function App() {
             </div>
           </div>
 
-          <div className="vault-footer-bottom mt-12 pt-6 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500 font-mono">
-            <p>{t.footer.rights}</p>
-            <div className="flex gap-6">
-              <a href="#" className="hover:text-slate-400">Privacy Policy</a>
-              <a href="#" className="hover:text-slate-400">Security Whitepaper</a>
-              <a href="#" className="hover:text-slate-400">SOC2 Type II Portal</a>
+          <div className="vault-footer-bottom">
+            <p className="footer-rights-text">{t.footer.rights}</p>
+            <div className="vault-footer-legal-links">
+              <a href="#" className="footer-legal-link">Privacy Policy</a>
+              <a href="#" className="footer-legal-link">Security Whitepaper</a>
+              <a href="#" className="footer-legal-link">SOC2 Type II Portal</a>
             </div>
           </div>
         </div>

@@ -8,13 +8,13 @@
   --vault-text-dim: #64748B;
   --vault-emerald: #00E599;
   --vault-emerald-glow: rgba(0, 229, 153, 0.4);
-  --vault-emerald-dim: rgba(0, 229, 153, 0.15);
+  --vault-emerald-dim: rgba(0, 229, 153, 0.12);
   --vault-cyan: #00F0FF;
   --vault-cyan-glow: rgba(0, 240, 255, 0.35);
   --vault-gold: #FFD700;
-  --vault-border: rgba(255, 255, 255, 0.08);
-  --vault-border-glow: rgba(0, 229, 153, 0.5);
-  --vault-header-bg: rgba(7, 8, 12, 0.88);
+  --vault-border: rgba(255, 255, 255, 0.09);
+  --vault-border-glow: rgba(0, 229, 153, 0.45);
+  --vault-header-bg: rgba(7, 8, 12, 0.92);
   --vault-footer-bg: #040508;
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
@@ -36,7 +36,7 @@
   --vault-gold: #D97706;
   --vault-border: rgba(0, 0, 0, 0.08);
   --vault-border-glow: rgba(0, 179, 119, 0.35);
-  --vault-header-bg: rgba(244, 246, 249, 0.9);
+  --vault-header-bg: rgba(244, 246, 249, 0.95);
   --vault-footer-bg: #E2E8F0;
 }
 
@@ -57,28 +57,37 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
 .vault-app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
+.vault-main-content {
+  flex: 1;
+}
+
 /* ==========================================================================
-   Header Navigation
+   Header Navigation Bar
    ========================================================================== */
 .vault-header {
   position: fixed;
   top: 0; left: 0; width: 100%;
-  z-index: 100;
+  z-index: 1000;
   padding: 0.85rem 2rem;
   background: var(--vault-header-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--vault-border);
 }
 
 .vault-header-inner {
-  max-width: 1300px;
+  max-width: 1320px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -86,10 +95,23 @@ html, body {
   width: 100%;
 }
 
+.vault-brand-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.vault-brand-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
 .vault-logo-shield {
-  width: 34px;
-  height: 34px;
-  border-radius: 9px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   background: var(--vault-emerald-dim);
   border: 1px solid var(--vault-emerald-glow);
   display: flex;
@@ -97,11 +119,21 @@ html, body {
   justify-content: center;
 }
 
+.vault-logo-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--vault-emerald);
+}
+
 .vault-brand-text {
   font-weight: 800;
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   letter-spacing: -0.5px;
   color: var(--vault-text);
+}
+
+.vault-brand-dot {
+  color: var(--vault-emerald);
 }
 
 .vault-header-version-pill {
@@ -131,16 +163,34 @@ html, body {
   50% { opacity: 0.4; transform: scale(0.8); }
 }
 
+/* Desktop Navigation */
+.vault-desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.7rem;
+}
+
 .vault-nav-link {
   color: var(--vault-text-muted);
-  text-decoration: none;
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   font-weight: 500;
   transition: color 0.2s;
+  white-space: nowrap;
 }
 
 .vault-nav-link:hover {
   color: var(--vault-emerald);
+}
+
+/* Header Actions */
+.vault-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.vault-lang-wrapper {
+  position: relative;
 }
 
 .vault-lang-btn, .vault-theme-btn {
@@ -157,6 +207,30 @@ html, body {
   transition: all 0.2s;
 }
 
+.vault-globe-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--vault-emerald);
+  flex-shrink: 0;
+}
+
+.vault-lang-code {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.74rem;
+}
+
+.vault-chevron {
+  width: 12px;
+  height: 12px;
+  color: var(--vault-text-dim);
+  transition: transform 0.2s;
+}
+
+.vault-chevron.open {
+  transform: rotate(180deg);
+}
+
 .vault-theme-btn {
   width: 34px;
   padding: 0;
@@ -164,23 +238,43 @@ html, body {
   border-radius: 50%;
 }
 
+.vault-theme-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.vault-theme-icon.sun { color: #FBBF24; }
+.vault-theme-icon.moon { color: var(--vault-text); }
+
 .vault-lang-btn:hover, .vault-theme-btn:hover {
   border-color: var(--vault-emerald);
   box-shadow: 0 0 12px var(--vault-emerald-glow);
 }
 
+/* Perfectly Positioned Language Dropdown */
 .vault-lang-dropdown-menu {
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  min-width: 175px;
+  min-width: 185px;
   background: var(--vault-surface);
   border: 1px solid var(--vault-border);
   border-radius: 14px;
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
   padding: 0.4rem;
-  z-index: 1000;
+  z-index: 2000;
   backdrop-filter: blur(20px);
+}
+
+.vault-lang-menu-title {
+  padding: 0.4rem 0.6rem;
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--vault-text-dim);
+  border-bottom: 1px solid var(--vault-border);
+  margin-bottom: 0.3rem;
 }
 
 .vault-lang-item {
@@ -188,7 +282,7 @@ html, body {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 0.5rem 0.7rem;
+  padding: 0.5rem 0.65rem;
   border: none;
   background: transparent;
   color: var(--vault-text);
@@ -208,6 +302,17 @@ html, body {
   font-weight: 700;
 }
 
+.vault-lang-item-name {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.vault-lang-item-right {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
 .vault-lang-code-tag {
   font-size: 0.65rem;
   font-family: var(--font-mono);
@@ -218,12 +323,67 @@ html, body {
   border: 1px solid var(--vault-border);
 }
 
+.vault-check-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--vault-emerald);
+}
+
+.vault-btn-header-primary {
+  background: var(--vault-emerald);
+  color: #040508 !important;
+  font-weight: 700;
+  font-size: 0.82rem;
+  padding: 0.48rem 1.1rem;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.vault-btn-header-primary:hover {
+  background: #00FFAC;
+  box-shadow: 0 0 15px var(--vault-emerald-glow);
+}
+
+.vault-mobile-toggle-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--vault-text);
+  cursor: pointer;
+  padding: 0.35rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.vault-mobile-drawer {
+  background: var(--vault-surface);
+  border-top: 1px solid var(--vault-border);
+  padding: 1.2rem 1.5rem;
+}
+
+.vault-mobile-links-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.vault-mobile-link {
+  color: var(--vault-text-muted);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.3rem 0;
+}
+
+/* Buttons */
 .vault-btn-primary {
   background: var(--vault-emerald);
   color: #040508 !important;
   font-weight: 700;
-  font-size: 0.86rem;
-  padding: 0.55rem 1.25rem;
+  font-size: 0.88rem;
+  padding: 0.65rem 1.35rem;
   border-radius: 10px;
   border: none;
   cursor: pointer;
@@ -240,25 +400,13 @@ html, body {
   transform: translateY(-1px);
 }
 
-.vault-btn-header-primary {
-  background: var(--vault-emerald);
-  color: #040508 !important;
-  font-weight: 700;
-  font-size: 0.82rem;
-  padding: 0.45rem 1rem;
-  border-radius: 20px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
 .vault-btn-secondary {
   background: var(--vault-surface-light);
   color: var(--vault-text);
   border: 1px solid var(--vault-border);
   font-weight: 600;
   font-size: 0.86rem;
-  padding: 0.55rem 1.25rem;
+  padding: 0.6rem 1.25rem;
   border-radius: 10px;
   cursor: pointer;
   display: inline-flex;
@@ -273,41 +421,17 @@ html, body {
   border-color: var(--vault-emerald);
 }
 
-.vault-mobile-menu-btn {
-  background: transparent;
-  border: none;
-  color: var(--vault-text);
-  cursor: pointer;
-  padding: 0.3rem;
-}
-
-.vault-mobile-drawer {
-  background: var(--vault-surface);
-  border-top: 1px solid var(--vault-border);
-  padding: 1.2rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-}
-
-.vault-mobile-link {
-  color: var(--vault-text-muted);
-  text-decoration: none;
-  font-size: 0.95rem;
-  font-weight: 600;
-}
-
 /* ==========================================================================
    Hero Section
    ========================================================================== */
 .vault-hero {
-  padding: 7rem 2rem 4rem 2rem;
-  max-width: 1300px;
+  padding: 8rem 2rem 4rem 2rem;
+  max-width: 1320px;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 3rem;
+  gap: 3.5rem;
   min-height: 85vh;
 }
 
@@ -411,6 +535,29 @@ html, body {
   flex-wrap: wrap;
 }
 
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.meta-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.meta-icon.emerald { color: var(--vault-emerald); }
+.meta-icon.cyan { color: var(--vault-cyan); }
+
+.meta-text {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.meta-divider {
+  color: var(--vault-text-dim);
+}
+
 /* Hero 3D Graphic */
 .vault-hero-image-wrapper {
   flex: 1;
@@ -440,7 +587,7 @@ html, body {
 
 @keyframes float-core {
   0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-12px) rotate(1deg); }
+  50% { transform: translateY(-10px) rotate(1deg); }
 }
 
 .vault-stat-badge {
@@ -499,6 +646,7 @@ html, body {
 }
 
 .vault-mobile-stats {
+  display: none;
   flex-direction: column;
   gap: 0.65rem;
   width: 100%;
@@ -522,7 +670,7 @@ html, body {
    ========================================================================== */
 .vault-trust-section {
   padding: 2rem 2rem 3.5rem 2rem;
-  max-width: 1300px;
+  max-width: 1320px;
   margin: 0 auto;
   text-align: center;
 }
@@ -553,12 +701,18 @@ html, body {
 }
 
 /* ==========================================================================
-   Bento Grid
+   Sections Common
    ========================================================================== */
 .vault-section {
   padding: 5rem 2rem;
-  max-width: 1300px;
+  max-width: 1320px;
   margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 3rem auto;
 }
 
 .section-tag {
@@ -577,6 +731,7 @@ html, body {
   letter-spacing: -1px;
   line-height: 1.18;
   margin-bottom: 0.9rem;
+  color: var(--vault-text);
 }
 
 .section-desc {
@@ -584,29 +739,51 @@ html, body {
   color: var(--vault-text-muted);
 }
 
-.bento-grid-vault {
+/* ==========================================================================
+   Swiss Enclave Terminal Grid (Distinct from Luminary)
+   ========================================================================== */
+.enclave-terminal-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
 }
 
-.bento-card-vault {
+.enclave-panel {
   background: var(--vault-surface);
   border: 1px solid var(--vault-border);
-  border-radius: 20px;
+  border-radius: 18px;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transition: transform 0.3s, border-color 0.3s;
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
 
-.bento-card-vault:hover {
+.enclave-panel:hover {
   transform: translateY(-4px);
   border-color: var(--vault-emerald);
+  box-shadow: 0 10px 30px var(--vault-emerald-dim);
 }
 
-.bento-img-wrap {
+.panel-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.9rem;
+  margin-bottom: 1.1rem;
+  border-bottom: 1px solid var(--vault-border);
+}
+
+.panel-status-tag {
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  color: var(--vault-emerald);
+  background: var(--vault-emerald-dim);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.enclave-img-wrap {
   width: 100%;
   height: 180px;
   border-radius: 12px;
@@ -615,46 +792,99 @@ html, body {
   background: #000;
 }
 
-.bento-img {
+.enclave-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.bento-badge-tag {
-  font-size: 0.68rem;
-  font-family: var(--font-mono);
-  background: var(--vault-emerald-dim);
-  color: var(--vault-emerald);
-  padding: 0.15rem 0.5rem;
-  border-radius: 4px;
-  display: inline-block;
-  margin-bottom: 0.6rem;
+.enclave-heading {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--vault-text);
+  margin-bottom: 0.5rem;
 }
 
-.bento-card-vault.large {
+.enclave-desc {
+  font-size: 0.88rem;
+  color: var(--vault-text-muted);
+  line-height: 1.6;
+}
+
+.enclave-panel.large {
   grid-column: span 2;
 }
 
-.bento-card-vault.wide {
-  grid-column: span 3;
+.enclave-panel.large .enclave-panel-body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
   align-items: center;
 }
 
-.bento-card-vault.wide .bento-img-wrap {
+.enclave-panel.large .enclave-img-wrap {
   height: 100%;
-  min-height: 200px;
+  min-height: 240px;
+  margin-bottom: 0;
+}
+
+.enclave-panel.wide {
+  grid-column: span 3;
+}
+
+.enclave-panel.wide .wide-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 1.8rem;
+  align-items: center;
+}
+
+.enclave-panel.wide .enclave-img-wrap {
+  height: 100%;
+  min-height: 210px;
   margin-bottom: 0;
 }
 
 .telemetry-bar-box {
-  background: #000000;
+  background: #040508;
   border: 1px solid var(--vault-border);
   border-radius: 10px;
   padding: 0.85rem;
+  margin-top: 1rem;
+}
+
+.telemetry-header-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.45rem;
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+}
+
+.telemetry-sub { color: var(--vault-text-dim); }
+
+.telemetry-live-state {
+  color: var(--vault-emerald);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.telemetry-log-lines {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: #94A3B8;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.vault-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
 }
 
 .vault-pill-tag {
@@ -662,7 +892,7 @@ html, body {
   font-family: var(--font-mono);
   background: var(--vault-surface-light);
   border: 1px solid var(--vault-border);
-  padding: 0.2rem 0.55rem;
+  padding: 0.25rem 0.6rem;
   border-radius: 6px;
   color: var(--vault-text-muted);
 }
@@ -927,7 +1157,7 @@ html, body {
   background: var(--vault-surface-light);
   border: 1px solid var(--vault-border);
   border-radius: 14px;
-  padding: 1.2rem;
+  padding: 1.4rem;
   text-align: center;
 }
 
@@ -940,6 +1170,19 @@ html, body {
   align-items: center;
   justify-content: center;
   margin: 0 auto;
+}
+
+.compliance-cell-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--vault-text);
+  margin-top: 0.75rem;
+}
+
+.compliance-cell-desc {
+  font-size: 0.78rem;
+  color: var(--vault-text-muted);
+  margin-top: 0.35rem;
 }
 
 /* ==========================================================================
@@ -1038,33 +1281,73 @@ html, body {
 }
 
 /* ==========================================================================
-   FAQ Section
+   FAQ Section (High-Contrast, Crisp Headers)
    ========================================================================== */
+.faq-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .faq-accordion-item {
   background: var(--vault-surface);
   border: 1px solid var(--vault-border);
   border-radius: 14px;
   overflow: hidden;
-  transition: border-color 0.2s;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.faq-accordion-item:hover {
+  border-color: rgba(0, 229, 153, 0.4);
 }
 
 .faq-accordion-item.open {
   border-color: var(--vault-emerald);
+  box-shadow: 0 0 20px var(--vault-emerald-dim);
 }
 
 .faq-question-btn {
   width: 100%;
-  padding: 1.2rem 1.5rem;
+  padding: 1.3rem 1.6rem;
   background: transparent;
   border: none;
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
+  text-align: left;
+}
+
+.faq-question-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--vault-emerald);
+  flex-shrink: 0;
+}
+
+.faq-question-text {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--vault-text) !important;
+  letter-spacing: -0.2px;
+}
+
+.faq-toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-left: 1rem;
 }
 
 .faq-answer-content {
-  padding: 0 1.5rem 1.2rem 1.5rem;
+  padding: 0 1.6rem 1.4rem 3rem;
+}
+
+.faq-answer-text {
+  font-size: 0.92rem;
+  color: var(--vault-text-muted);
+  line-height: 1.65;
 }
 
 /* ==========================================================================
@@ -1072,23 +1355,56 @@ html, body {
    ========================================================================== */
 .vault-cta-section {
   padding: 3rem 2rem 5rem 2rem;
-  max-width: 1300px;
+  max-width: 1320px;
   margin: 0 auto;
 }
 
 .vault-cta-banner {
-  background: radial-gradient(circle at 50% 0%, var(--vault-emerald-dim) 0%, var(--vault-surface) 80%);
+  background: radial-gradient(circle at 50% 0%, var(--vault-emerald-dim) 0%, var(--vault-surface) 85%);
   border: 1px solid var(--vault-border);
   border-radius: 28px;
-  padding: 4rem 2rem;
+  padding: 4.5rem 2rem;
   text-align: center;
   box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
+.vault-cta-title {
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-weight: 800;
+  color: var(--vault-text);
+  margin-bottom: 1rem;
+}
+
+.vault-cta-desc {
+  color: var(--vault-text-muted);
+  font-size: 1.05rem;
+  max-width: 580px;
+  line-height: 1.6;
+}
+
+.vault-cta-btn-wrapper {
+  margin-top: 2.2rem;
+}
+
+.vault-cta-btn {
+  padding: 0.9rem 2.5rem !important;
+  font-size: 0.95rem !important;
+  font-weight: 700;
+}
+
+/* Footer (No Eye-straining Blue) */
 .vault-footer {
   border-top: 1px solid var(--vault-border);
   background: var(--vault-footer-bg);
-  padding: 4rem 2rem 2.5rem 2rem;
+  padding: 4.5rem 2rem 2.5rem 2rem;
+}
+
+.vault-footer-inner {
+  max-width: 1320px;
+  margin: 0 auto;
 }
 
 .vault-footer-grid {
@@ -1097,34 +1413,105 @@ html, body {
   gap: 3rem;
 }
 
+.footer-brand-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.footer-brand-desc {
+  font-size: 0.84rem;
+  color: var(--vault-text-dim);
+  line-height: 1.6;
+  max-width: 380px;
+}
+
+.footer-col-title {
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--vault-text-muted);
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+}
+
+.footer-links-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  font-size: 0.84rem;
+  color: var(--vault-text-dim);
+}
+
+.footer-links-list a {
+  color: var(--vault-text-dim);
+  transition: color 0.2s;
+}
+
+.footer-links-list a:hover {
+  color: var(--vault-emerald);
+}
+
+.vault-footer-bottom {
+  margin-top: 3.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--vault-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.footer-rights-text {
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  color: var(--vault-text-dim);
+}
+
+.vault-footer-legal-links {
+  display: flex;
+  gap: 1.8rem;
+  flex-wrap: wrap;
+}
+
+.footer-legal-link {
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  color: var(--vault-text-dim) !important;
+  transition: color 0.2s;
+}
+
+.footer-legal-link:hover {
+  color: var(--vault-emerald) !important;
+}
+
 /* ==========================================================================
    Responsive Breakpoints
    ========================================================================== */
-@media (max-width: 1100px) {
-  .vault-hero {
-    flex-direction: column;
-    text-align: center;
-    padding-top: 6rem;
+@media (max-width: 1024px) {
+  .vault-desktop-nav {
+    display: none;
   }
-  .vault-hero-content {
-    margin: 0 auto;
+  .vault-mobile-toggle-btn {
     display: flex;
-    flex-direction: column;
-    align-items: center;
   }
-  .vault-waitlist-form {
-    margin: 0 auto;
+  .vault-stat-badge {
+    display: none;
   }
-  .vault-hero-meta {
-    justify-content: center;
+  .vault-mobile-stats {
+    display: flex;
   }
-  .bento-grid-vault {
+  .enclave-terminal-grid {
     grid-template-columns: 1fr;
   }
-  .bento-card-vault.large, .bento-card-vault.wide {
+  .enclave-panel.large, .enclave-panel.wide {
     grid-column: span 1;
   }
-  .bento-card-vault.wide {
+  .enclave-panel.large .enclave-panel-body, .enclave-panel.wide .wide-grid {
     grid-template-columns: 1fr;
   }
   .treasury-grid-layout {
@@ -1148,7 +1535,24 @@ html, body {
     padding: 0.75rem 1rem;
   }
   .vault-hero {
+    flex-direction: column;
+    text-align: center;
     padding: 5.5rem 1rem 3rem 1rem;
+  }
+  .vault-hero-content {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .vault-waitlist-form {
+    margin: 0 auto;
+  }
+  .vault-hero-meta {
+    justify-content: center;
+  }
+  .vault-btn-header-primary {
+    display: none;
   }
   .vault-section {
     padding: 3.5rem 1rem;
