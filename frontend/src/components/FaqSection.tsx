@@ -28,14 +28,16 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ t }) => {
   ];
 
   return (
-    <section className="vault-section" id="faq">
-      <div className="section-header text-center max-w-3xl mx-auto mb-12">
-        <span className="section-tag">{t.tag}</span>
-        <h2 className="section-title text-white">{t.title}</h2>
-        <p className="section-desc">{t.desc}</p>
+    <div className="faq-section-wrapper">
+      <div className="section-header-row mb-8">
+        <div>
+          <span className="section-tag-pill">{t.tag}</span>
+          <h2 className="section-main-heading">{t.title}</h2>
+          <p className="section-sub-desc">{t.desc}</p>
+        </div>
       </div>
 
-      <div className="faq-container max-w-3xl mx-auto">
+      <div className="faq-container">
         {faqItems.map((item, idx) => {
           const isOpen = openIndex === idx;
           return (
@@ -50,7 +52,7 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ t }) => {
                   <span className="faq-question-text">{item.q}</span>
                 </div>
                 <span className="faq-toggle-icon">
-                  {isOpen ? <Minus className="w-4 h-4 text-emerald-400" /> : <Plus className="w-4 h-4 text-slate-400" />}
+                  {isOpen ? <Minus className="w-4 h-4 text-indigo-400" /> : <Plus className="w-4 h-4 text-slate-400" />}
                 </span>
               </button>
 
@@ -63,6 +65,6 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ t }) => {
           );
         })}
       </div>
-    </section>
+    </div>
   );
 };

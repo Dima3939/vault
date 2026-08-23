@@ -19,16 +19,32 @@ import {
   ArrowUpRight, 
   ArrowDownLeft,
   Search,
-  Filter,
   Plus,
   ShieldCheck
 } from 'lucide-react';
+
+interface TransactionItem {
+  id: string;
+  type: 'Transfer' | 'Receive';
+  amount: string;
+  asset: string;
+  txHash: string;
+  from: string;
+  to: string;
+  status: 'Completed' | 'Pending Quorum';
+  time: string;
+  isPositive?: boolean;
+}
 
 export function App() {
   const [activeTab, setActiveTab] = useState<DashboardTab>('overview');
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [transferModalOpen, setTransferModalOpen] = useState(false);
   const [approvalsCount] = useState(7);
+
+  // Transactions Search & Filter State
+  const [txSearchQuery, setTxSearchQuery] = useState('');
+  const [txFilterType, setTxFilterType] = useState<'ALL' | 'TRANSFER' | 'RECEIVE' | 'PENDING'>('ALL');
 
   const [currentLang, setCurrentLang] = useState<LanguageCode>(() => {
     return (localStorage.getItem('vault_lang') as LanguageCode) || 'en';
@@ -54,6 +70,82 @@ export function App() {
   };
 
   const t = translations[currentLang] || translations.en;
+
+  const rawTransactions: TransactionItem[] = [
+    {
+      id: 'tx-1',
+      type: 'Transfer',
+      amount: '-250.00 BTC',
+      asset: 'BTC',
+      txHash: '0x8f3a9b1c4e2d0f3a...7d0e',
+      from: 'Cold Storage 1',
+      to: 'Binance Deposit',
+      status: 'Completed',
+      time: '2m ago'
+    },
+    {
+      id: 'tx-2',
+      type: 'Receive',
+      amount: '+1,250.00 ETH',
+      asset: 'ETH',
+      txHash: '0x4a1c902b5e7d1a3c...3b21',
+      from: 'Coinbase Prime',
+      to: 'Hot Wallet 1',
+      status: 'Completed',
+      time: '15m ago',
+      isPositive: true
+    },
+    {
+      id: 'tx-3',
+      type: 'Transfer',
+      amount: '-50,000.00 USDC',
+      asset: 'USDC',
+      txHash: '0x99dc1122aa3344bb...14ae',
+      from: 'Treasury Wallet',
+      to: 'Vendor Payment',
+      status: 'Pending Quorum',
+      time: '32m ago'
+    },
+    {
+      id: 'tx-4',
+      type: 'Receive',
+      amount: '+4,500.00 SOL',
+      asset: 'SOL',
+      txHash: '0x71ba334c90ef221d...892c',
+      from: 'Kraken Institutional',
+      to: 'Staking Enclave',
+      status: 'Completed',
+      time: '1h ago',
+      isPositive: true
+    },
+    {
+      id: 'tx-5',
+      type: 'Transfer',
+      amount: '-100,000.00 USDC',
+      asset: 'USDC',
+      txHash: '0x55ee110099bb44aa...991f',
+      from: 'Yield Reserve',
+      to: 'Aave v3 Pool',
+      status: 'Completed',
+      time: '3h ago'
+    }
+  ];
+
+  const filteredTransactions = rawTransactions.filter(tx => {
+    const matchesSearch = 
+      tx.txHash.toLowerCase().includes(txSearchQuery.toLowerCase()) ||
+      tx.asset.toLowerCase().includes(txSearchQuery.toLowerCase()) ||
+      tx.from.toLowerCase().includes(txSearchQuery.toLowerCase()) ||
+      tx.to.toLowerCase().includes(txSearchQuery.toLowerCase());
+
+    if (!matchesSearch) return false;
+
+    if (txFilterType === 'TRANSFER') return tx.type === 'Transfer';
+    if (txFilterType === 'RECEIVE') return tx.type === 'Receive';
+    if (txFilterType === 'PENDING') return tx.status === 'Pending Quorum';
+
+    return true;
+  });
 
   return (
     <div className="vault-os-layout">
@@ -95,14 +187,16 @@ export function App() {
           {/* TAB 2: WALLETS & TREASURY */}
           {activeTab === 'wallets' && (
             <div className="tab-view-container">
-              <div className="wallets-header-bar flex justify-between items-center mb-6">
+              {/* Header Section */}
+              <div className="section-header-row">
                 <div>
-                  <h2 className="text-xl font-bold text-white">Institutional Multi-Chain Wallets</h2>
-                  <p className="text-xs text-slate-400">Isolated HSM enclaves across Bitcoin, Ethereum, Solana, and ERC-4337</p>
+                  <span className="section-tag-pill">SOVEREIGN ENCLAVES</span>
+                  <h2 className="section-main-heading">Institutional Multi-Chain Wallets</h2>
+                  <p className="section-sub-desc">Isolated HSM cryptographic enclaves across Bitcoin SegWit, Ethereum ERC-4337, and Solana</p>
                 </div>
                 <button 
                   onClick={() => setTransferModalOpen(true)}
-                  className="btn-modal-primary flex items-center gap-1.5 text-xs py-2 px-4"
+                  className="btn-modal-primary flex items-center gap-2"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Deposit / Transfer</span>
@@ -110,78 +204,102 @@ export function App() {
               </div>
 
               {/* Multi-Chain Wallets Grid */}
-              <div className="wallets-cards-grid grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+              <div className="wallets-cards-grid">
                 <div className="wallet-card-item">
-                  <div className="flex justify-between items-center mb-3">
-                    <div className="flex items-center gap-2">
-                      <span className="asset-tag-circle bg-amber-500 text-black">₿</span>
-                      <span className="font-bold text-sm text-white">Bitcoin Treasury</span>
+                  <div className="flex justify-between items-center mb-4">
+                    <div className="flex items-center gap-2.5">
+                      <span className="asset-tag-circle bg-amber-500 text-black font-bold">₿</span>
+                      <span className="font-bold text-base text-white">Bitcoin Treasury</span>
                     </div>
-                    <span className="enclave-badge-mini">SEGWIT NATIVE</span>
+                    <span className="enclave-badge-tag emerald">SEGWIT NATIVE</span>
                   </div>
-                  <div className="font-mono text-2xl font-extrabold text-white mb-1">890.45 BTC</div>
-                  <div className="font-mono text-xs text-slate-400 mb-4">$58,012,450 USD</div>
-                  <div className="wallet-address-bar font-mono text-[11px] text-slate-300 bg-black/40 p-2 rounded border border-white/5 truncate">
+                  <div className="font-mono text-3xl font-extrabold text-white mb-1">890.45 BTC</div>
+                  <div className="font-mono text-xs text-slate-400 mb-5">$58,012,450 USD</div>
+                  <div className="wallet-address-bar">
                     bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh
                   </div>
                 </div>
 
                 <div className="wallet-card-item">
-                  <div className="flex justify-between items-center mb-3">
-                    <div className="flex items-center gap-2">
-                      <span className="asset-tag-circle bg-indigo-500 text-white">Ξ</span>
-                      <span className="font-bold text-sm text-white">Ethereum Staking</span>
+                  <div className="flex justify-between items-center mb-4">
+                    <div className="flex items-center gap-2.5">
+                      <span className="asset-tag-circle bg-indigo-500 text-white font-bold">Ξ</span>
+                      <span className="font-bold text-base text-white">Ethereum Staking</span>
                     </div>
-                    <span className="enclave-badge-mini">ERC-4337</span>
+                    <span className="enclave-badge-tag indigo">ERC-4337</span>
                   </div>
-                  <div className="font-mono text-2xl font-extrabold text-white mb-1">11,200.00 ETH</div>
-                  <div className="font-mono text-xs text-slate-400 mb-4">$32,238,450 USD</div>
-                  <div className="wallet-address-bar font-mono text-[11px] text-slate-300 bg-black/40 p-2 rounded border border-white/5 truncate">
+                  <div className="font-mono text-3xl font-extrabold text-white mb-1">11,200.00 ETH</div>
+                  <div className="font-mono text-xs text-slate-400 mb-5">$32,238,450 USD</div>
+                  <div className="wallet-address-bar">
                     0x71C...8491 (Lido Staking Pool)
                   </div>
                 </div>
 
                 <div className="wallet-card-item">
-                  <div className="flex justify-between items-center mb-3">
-                    <div className="flex items-center gap-2">
-                      <span className="asset-tag-circle bg-emerald-500 text-white">$</span>
-                      <span className="font-bold text-sm text-white">USDC Liquidity</span>
+                  <div className="flex justify-between items-center mb-4">
+                    <div className="flex items-center gap-2.5">
+                      <span className="asset-tag-circle bg-emerald-500 text-white font-bold">$</span>
+                      <span className="font-bold text-base text-white">USDC Liquidity</span>
                     </div>
-                    <span className="enclave-badge-mini">YIELD VAULT</span>
+                    <span className="enclave-badge-tag cyan">YIELD VAULT</span>
                   </div>
-                  <div className="font-mono text-2xl font-extrabold text-white mb-1">19,648,350 USDC</div>
-                  <div className="font-mono text-xs text-emerald-400 mb-4">4.85% Net APY Yield</div>
-                  <div className="wallet-address-bar font-mono text-[11px] text-slate-300 bg-black/40 p-2 rounded border border-white/5 truncate">
+                  <div className="font-mono text-3xl font-extrabold text-white mb-1">19,648,350 USDC</div>
+                  <div className="font-mono text-xs text-emerald-400 font-bold mb-5">4.85% Net APY Yield</div>
+                  <div className="wallet-address-bar">
                     0x49F...E21D (Circle Institutional Account)
                   </div>
                 </div>
               </div>
 
               {/* Treasury Liquidity Flow Chart */}
-              <TreasuryFlowChart t={t.treasury} />
+              <div className="mt-8">
+                <TreasuryFlowChart t={t.treasury} />
+              </div>
             </div>
           )}
 
           {/* TAB 3: TRANSACTIONS */}
           {activeTab === 'transactions' && (
             <div className="tab-view-container">
-              <div className="transactions-header-bar flex flex-wrap justify-between items-center gap-4 mb-6">
+              {/* Header Section */}
+              <div className="section-header-row">
                 <div>
-                  <h2 className="text-xl font-bold text-white">Cryptographic Transaction Ledger</h2>
-                  <p className="text-xs text-slate-400">All transfers are cryptographically signed with 3-of-5 MPC threshold quorums</p>
+                  <span className="section-tag-pill">AUDITED LEDGER</span>
+                  <h2 className="section-main-heading">Cryptographic Transaction Ledger</h2>
+                  <p className="section-sub-desc">All transfers are cryptographically signed with 3-of-5 MPC threshold quorums</p>
                 </div>
-                <div className="flex items-center gap-3">
+
+                {/* Search & Filter Toolbar */}
+                <div className="tx-toolbar-container">
+                  {/* Filter Pills */}
+                  <div className="tx-filter-pills">
+                    {(['ALL', 'TRANSFER', 'RECEIVE', 'PENDING'] as const).map(f => (
+                      <button
+                        key={f}
+                        onClick={() => setTxFilterType(f)}
+                        className={`tx-filter-pill-btn ${txFilterType === f ? 'active' : ''}`}
+                      >
+                        {f === 'ALL' ? 'All Transactions' : f === 'TRANSFER' ? 'Transfers' : f === 'RECEIVE' ? 'Receives' : 'Pending Quorum'}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Search Input Box */}
                   <div className="tx-search-box">
-                    <Search className="w-4 h-4 text-slate-400" />
+                    <Search className="w-4 h-4 text-slate-400 shrink-0" />
                     <input 
                       type="text" 
-                      placeholder="Search tx hash, address, or asset..." 
-                      className="tx-search-input font-mono text-xs"
+                      value={txSearchQuery}
+                      onChange={(e) => setTxSearchQuery(e.target.value)}
+                      placeholder="Search hash, asset, address..." 
+                      className="tx-search-input font-mono"
                     />
+                    {txSearchQuery && (
+                      <button onClick={() => setTxSearchQuery('')} className="text-slate-400 hover:text-white text-xs">
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    )}
                   </div>
-                  <button className="btn-filter-icon">
-                    <Filter className="w-4 h-4 text-slate-300" />
-                  </button>
                 </div>
               </div>
 
@@ -201,51 +319,41 @@ export function App() {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>
-                          <div className="flex items-center gap-1.5 text-red-400 font-medium">
-                            <ArrowUpRight className="w-4 h-4" />
-                            <span>Transfer</span>
-                          </div>
-                        </td>
-                        <td className="font-mono font-bold text-red-400">-250.00 BTC</td>
-                        <td><span className="asset-pill-tag font-bold">BTC</span></td>
-                        <td className="font-mono text-xs text-indigo-400">0x8f3a9b...7d0e</td>
-                        <td className="font-mono text-xs text-slate-400">Cold Storage 1</td>
-                        <td className="font-mono text-xs text-slate-300">Binance Deposit</td>
-                        <td><span className="status-pill completed">Completed</span></td>
-                        <td className="text-xs text-slate-400">2m ago</td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div className="flex items-center gap-1.5 text-emerald-400 font-medium">
-                            <ArrowDownLeft className="w-4 h-4" />
-                            <span>Receive</span>
-                          </div>
-                        </td>
-                        <td className="font-mono font-bold text-emerald-400">+1,250.00 ETH</td>
-                        <td><span className="asset-pill-tag font-bold">ETH</span></td>
-                        <td className="font-mono text-xs text-indigo-400">0x4a1c90...3b21</td>
-                        <td className="font-mono text-xs text-slate-400">Coinbase Prime</td>
-                        <td className="font-mono text-xs text-slate-300">Hot Wallet 1</td>
-                        <td><span className="status-pill completed">Completed</span></td>
-                        <td className="text-xs text-slate-400">15m ago</td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div className="flex items-center gap-1.5 text-amber-400 font-medium">
-                            <ArrowUpRight className="w-4 h-4" />
-                            <span>Transfer</span>
-                          </div>
-                        </td>
-                        <td className="font-mono font-bold text-amber-400">-50,000.00 USDC</td>
-                        <td><span className="asset-pill-tag font-bold">USDC</span></td>
-                        <td className="font-mono text-xs text-indigo-400">0x99dc11...14ae</td>
-                        <td className="font-mono text-xs text-slate-400">Treasury Wallet</td>
-                        <td className="font-mono text-xs text-slate-300">Vendor Payment</td>
-                        <td><span className="status-pill pending">Pending Quorum</span></td>
-                        <td className="text-xs text-slate-400">32m ago</td>
-                      </tr>
+                      {filteredTransactions.length === 0 ? (
+                        <tr>
+                          <td colSpan={8} className="text-center py-10 text-slate-400 font-mono text-sm">
+                            No transactions match your search filter "{txSearchQuery}".
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredTransactions.map(tx => (
+                          <tr key={tx.id}>
+                            <td>
+                              <div className={`flex items-center gap-1.5 font-bold ${tx.type === 'Receive' ? 'text-emerald-400' : 'text-red-400'}`}>
+                                {tx.type === 'Receive' ? <ArrowDownLeft className="w-4 h-4" /> : <ArrowUpRight className="w-4 h-4" />}
+                                <span>{tx.type}</span>
+                              </div>
+                            </td>
+                            <td className={`font-mono font-bold ${tx.type === 'Receive' ? 'text-emerald-400' : 'text-red-400'}`}>
+                              {tx.amount}
+                            </td>
+                            <td>
+                              <span className="asset-pill-tag font-bold">{tx.asset}</span>
+                            </td>
+                            <td className="font-mono text-xs text-indigo-400 hover:underline cursor-pointer">
+                              {tx.txHash}
+                            </td>
+                            <td className="font-mono text-xs text-slate-400">{tx.from}</td>
+                            <td className="font-mono text-xs text-slate-300">{tx.to}</td>
+                            <td>
+                              <span className={`status-pill ${tx.status === 'Completed' ? 'completed' : 'pending'}`}>
+                                {tx.status}
+                              </span>
+                            </td>
+                            <td className="text-xs text-slate-400 font-mono">{tx.time}</td>
+                          </tr>
+                        ))
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -255,68 +363,76 @@ export function App() {
 
           {/* TAB 4: APPROVALS */}
           {activeTab === 'approvals' && (
-            <div className="tab-view-container">
-              <div className="max-w-4xl mx-auto">
-                <div className="overview-widget-card mb-8">
-                  <div className="widget-header">
-                    <div className="widget-title-group">
-                      <span className="widget-title text-lg">Active Multi-Sig Quorum Requests</span>
-                      <span className="high-priority-tag">Action Required</span>
+            <div className="tab-view-container max-w-4xl mx-auto">
+              <div className="section-header-row mb-6">
+                <div>
+                  <span className="section-tag-pill">QUORUM SIGNING</span>
+                  <h2 className="section-main-heading">Active Multi-Sig Quorum Requests</h2>
+                  <p className="section-sub-desc">Threshold Multi-Party Computation signing ceremony requiring 3 of 5 enclave confirmations</p>
+                </div>
+              </div>
+
+              <div className="overview-widget-card p-6 mb-8">
+                <div className="widget-header">
+                  <div className="widget-title-group">
+                    <span className="widget-title text-lg">Transfer Request #TX-481-MPC</span>
+                    <span className="high-priority-tag">Quorum Action Required</span>
+                  </div>
+                  <span className="font-mono text-xs text-indigo-400 font-bold bg-indigo-500/10 border border-indigo-500/30 px-2 py-1 rounded">
+                    3 of 5 Shards Active
+                  </span>
+                </div>
+
+                <div className="p-2">
+                  <div className="transfer-request-banner mb-6">
+                    <div className="transfer-amount-line font-mono text-2xl font-extrabold text-red-400">
+                      -250.00 BTC <span className="text-sm text-slate-400 font-normal font-sans">($16,250,000.00 USD)</span>
                     </div>
-                    <span className="font-mono text-xs text-indigo-400 font-bold">3 of 5 Shards Active</span>
+                    <div className="transfer-route-flex mt-2 text-xs">
+                      <span className="route-node font-mono">Cold Storage 1 (bc1q...7w9m)</span>
+                      <span className="text-indigo-400 font-bold text-sm">➔</span>
+                      <span className="route-node font-mono">Binance Institutional Deposit</span>
+                    </div>
                   </div>
 
-                  <div className="p-6">
-                    <div className="transfer-request-banner mb-6">
-                      <div className="transfer-amount-line font-mono text-xl font-extrabold text-white">
-                        -250.00 BTC <span className="text-sm text-slate-400 font-normal">($16,250,000.00 USD)</span>
+                  <div className="signers-list mb-6">
+                    <div className="signer-item">
+                      <div className="signer-avatar">JS</div>
+                      <div className="signer-info">
+                        <div className="signer-name font-bold">John Smith</div>
+                        <div className="signer-role text-xs text-slate-400">Chief Compliance Officer</div>
                       </div>
-                      <div className="transfer-route-flex mt-2">
-                        <span className="route-node font-mono">Cold Storage 1 (bc1q...7w9m)</span>
-                        <span className="text-indigo-400 font-bold">➔</span>
-                        <span className="route-node font-mono">Binance Institutional Deposit</span>
-                      </div>
+                      <span className="signer-status-badge approved">✓ Approved via Hardware Token</span>
                     </div>
 
-                    <div className="signers-list mb-6">
-                      <div className="signer-item">
-                        <div className="signer-avatar">JS</div>
-                        <div className="signer-info">
-                          <div className="signer-name font-bold">John Smith</div>
-                          <div className="signer-role text-xs text-slate-400">Chief Compliance Officer</div>
-                        </div>
-                        <span className="signer-status-badge approved">✓ Approved via Hardware Token</span>
+                    <div className="signer-item">
+                      <div className="signer-avatar">SJ</div>
+                      <div className="signer-info">
+                        <div className="signer-name font-bold">Sarah Johnson</div>
+                        <div className="signer-role text-xs text-slate-400">Head of Risk Management</div>
                       </div>
-
-                      <div className="signer-item">
-                        <div className="signer-avatar">SJ</div>
-                        <div className="signer-info">
-                          <div className="signer-name font-bold">Sarah Johnson</div>
-                          <div className="signer-role text-xs text-slate-400">Head of Risk Management</div>
-                        </div>
-                        <span className="signer-status-badge approved">✓ Approved via Biometric Enclave</span>
-                      </div>
-
-                      <div className="signer-item highlight">
-                        <div className="signer-avatar me">MC</div>
-                        <div className="signer-info">
-                          <div className="signer-name font-bold">Michael Chen (You)</div>
-                          <div className="signer-role text-xs text-slate-400">Treasury Manager</div>
-                        </div>
-                        <span className="signer-status-badge pending">● Signature Required</span>
-                      </div>
+                      <span className="signer-status-badge approved">✓ Approved via Biometric Enclave</span>
                     </div>
 
-                    <div className="flex gap-4 justify-end">
-                      <button className="btn-widget-reject py-3 px-6 text-sm">
-                        <X className="w-4 h-4" />
-                        <span>Reject Request</span>
-                      </button>
-                      <button className="btn-widget-approve py-3 px-8 text-sm">
-                        <ShieldCheck className="w-4 h-4" />
-                        <span>Approve & Sign MPC Shard</span>
-                      </button>
+                    <div className="signer-item highlight">
+                      <div className="signer-avatar me">MC</div>
+                      <div className="signer-info">
+                        <div className="signer-name font-bold">Michael Chen (You)</div>
+                        <div className="signer-role text-xs text-slate-400">Treasury Manager</div>
+                      </div>
+                      <span className="signer-status-badge pending">● Signature Required</span>
                     </div>
+                  </div>
+
+                  <div className="flex gap-4 justify-end">
+                    <button className="btn-widget-reject py-3 px-6 text-sm">
+                      <X className="w-4 h-4" />
+                      <span>Reject Request</span>
+                    </button>
+                    <button className="btn-widget-approve py-3 px-8 text-sm">
+                      <ShieldCheck className="w-4 h-4" />
+                      <span>Approve & Sign MPC Shard</span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -326,6 +442,13 @@ export function App() {
           {/* TAB 5: POLICIES */}
           {activeTab === 'policies' && (
             <div className="tab-view-container max-w-4xl mx-auto">
+              <div className="section-header-row mb-6">
+                <div>
+                  <span className="section-tag-pill">GOVERNANCE ENGINE</span>
+                  <h2 className="section-main-heading">Programmable Policy & Compliance Engine</h2>
+                  <p className="section-sub-desc">Enforce corporate execution rules, velocity caps, and automated AML screenings</p>
+                </div>
+              </div>
               <PolicyBuilder t={t.policy} />
             </div>
           )}
@@ -333,6 +456,13 @@ export function App() {
           {/* TAB 6: MPC */}
           {activeTab === 'mpc' && (
             <div className="tab-view-container max-w-4xl mx-auto">
+              <div className="section-header-row mb-6">
+                <div>
+                  <span className="section-tag-pill">CRYPTOGRAPHIC CORE</span>
+                  <h2 className="section-main-heading">MPC-CMP Key Infrastructure Visualizer</h2>
+                  <p className="section-sub-desc">Distributed mathematical key shard consensus with zero private key assembly</p>
+                </div>
+              </div>
               <MpcVisualizer t={t.mpc} />
             </div>
           )}
@@ -340,6 +470,13 @@ export function App() {
           {/* TAB 7: SDK */}
           {activeTab === 'sdk' && (
             <div className="tab-view-container max-w-4xl mx-auto">
+              <div className="section-header-row mb-6">
+                <div>
+                  <span className="section-tag-pill">DEVELOPER ACCESS</span>
+                  <h2 className="section-main-heading">Developer SDK & API Console</h2>
+                  <p className="section-sub-desc">Automate institutional treasury movements with type-safe client libraries</p>
+                </div>
+              </div>
               <SdkQuickstart t={t.sdk} />
             </div>
           )}
@@ -347,9 +484,19 @@ export function App() {
           {/* TAB 8: COMPLIANCE */}
           {activeTab === 'compliance' && (
             <div className="tab-view-container max-w-4xl mx-auto">
+              <div className="section-header-row mb-6">
+                <div>
+                  <span className="section-tag-pill">CERTIFICATIONS & AUDITS</span>
+                  <h2 className="section-main-heading">Institutional Compliance & Security Standards</h2>
+                  <p className="section-sub-desc">Engineered to satisfy the stringent requirements of sovereign wealth funds and tier-1 banks</p>
+                </div>
+              </div>
+
               <div className="overview-chart-card mb-8">
-                <h3 className="text-xl font-bold text-white mb-2">Technical Security & Compliance Matrix</h3>
-                <p className="text-xs text-slate-400 mb-6">Institutional grade certification and physical tamper zeroization standards</p>
+                <div className="mb-6">
+                  <h3 className="text-xl font-bold text-white mb-1">Technical Security & Compliance Matrix</h3>
+                  <p className="text-xs text-slate-400 font-medium">Institutional grade certification and physical tamper zeroization standards</p>
+                </div>
 
                 <div className="swiss-tech-table-card">
                   <table className="swiss-tech-table">
@@ -364,27 +511,27 @@ export function App() {
                     <tbody>
                       <tr>
                         <td><strong>Key Generation</strong></td>
-                        <td className="text-red-400"><X className="inline w-3.5 h-3.5" /> Single Machine Memory</td>
+                        <td className="text-red-400"><X className="inline w-3.5 h-3.5 mr-1" /> Single Machine Memory</td>
                         <td>On-Chain Contract</td>
-                        <td className="highlight-col text-emerald-400 font-bold"><Check className="inline w-3.5 h-3.5" /> Never Assembled (3/5 Shards)</td>
+                        <td className="highlight-col text-emerald-400 font-bold"><Check className="inline w-3.5 h-3.5 mr-1" /> Never Assembled (3/5 Shards)</td>
                       </tr>
                       <tr>
                         <td><strong>Signing Latency (p99)</strong></td>
                         <td>250 ms</td>
                         <td>15,000 ms (Gas Dependent)</td>
-                        <td className="highlight-col text-emerald-400 font-bold"><Check className="inline w-3.5 h-3.5" /> 14.2 ms (Sub-Millisecond)</td>
+                        <td className="highlight-col text-emerald-400 font-bold"><Check className="inline w-3.5 h-3.5 mr-1" /> 14.2 ms (Sub-Millisecond)</td>
                       </tr>
                       <tr>
                         <td><strong>Hardware Protection</strong></td>
                         <td>None / Software</td>
                         <td>None</td>
-                        <td className="highlight-col text-emerald-400 font-bold"><Check className="inline w-3.5 h-3.5" /> FIPS 140-2 Level 3 HSM</td>
+                        <td className="highlight-col text-emerald-400 font-bold"><Check className="inline w-3.5 h-3.5 mr-1" /> FIPS 140-2 Level 3 HSM</td>
                       </tr>
                       <tr>
                         <td><strong>Specie Insurance</strong></td>
                         <td>Optional</td>
                         <td>None</td>
-                        <td className="highlight-col text-emerald-400 font-bold"><Check className="inline w-3.5 h-3.5" /> $250M Lloyd's of London</td>
+                        <td className="highlight-col text-emerald-400 font-bold"><Check className="inline w-3.5 h-3.5 mr-1" /> $250M Lloyd's of London</td>
                       </tr>
                     </tbody>
                   </table>
@@ -427,6 +574,13 @@ export function App() {
           {/* TAB 9: PRICING */}
           {activeTab === 'pricing' && (
             <div className="tab-view-container max-w-4xl mx-auto">
+              <div className="section-header-row mb-6">
+                <div>
+                  <span className="section-tag-pill">SOVEREIGN TIERS</span>
+                  <h2 className="section-main-heading">Predictable Institutional Pricing</h2>
+                  <p className="section-sub-desc">Transparent custody tiers scale with your asset under management without surprise basis-point markups</p>
+                </div>
+              </div>
               <PricingSection t={t.pricing} onSelectPlan={() => setTransferModalOpen(true)} />
             </div>
           )}
@@ -434,6 +588,13 @@ export function App() {
           {/* TAB 10: FAQ */}
           {activeTab === 'faq' && (
             <div className="tab-view-container max-w-4xl mx-auto">
+              <div className="section-header-row mb-6">
+                <div>
+                  <span className="section-tag-pill">KNOWLEDGE BASE</span>
+                  <h2 className="section-main-heading">Frequently Asked Questions</h2>
+                  <p className="section-sub-desc">Detailed technical answers regarding MPC key mathematics, HSM security, and insurance coverage</p>
+                </div>
+              </div>
               <FaqSection t={t.faq} />
             </div>
           )}
