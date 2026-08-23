@@ -82,16 +82,16 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
       subtitle: 'Geodistributed mathematical key shard topology and signing ceremony'
     },
     sdk: {
-      title: sidebarT.sdk || 'Developer SDK & API',
-      subtitle: 'REST endpoints and type-safe client libraries for automated treasury'
+      title: sidebarT.sdk || 'Developer SDK',
+      subtitle: 'Type-safe multi-language APIs and RPC endpoints for treasury automation'
     },
     compliance: {
-      title: sidebarT.compliance || 'Compliance & Hardware HSM',
-      subtitle: 'FIPS 140-2 Level 3, SOC 2 Type II and Lloyd\'s of London insurance'
+      title: sidebarT.compliance || 'Compliance & HSM',
+      subtitle: 'FIPS 140-2 Level 3, SOC 2 Type II, and multi-cloud enclaves'
     },
     pricing: {
-      title: sidebarT.pricing || 'Institutional Plans',
-      subtitle: 'Transparent sovereign infrastructure scaling with your AUM'
+      title: sidebarT.pricing || 'Pricing & Tiers',
+      subtitle: 'Institutional custody tiers and asset under management billing'
     },
     faq: {
       title: sidebarT.faq || 'Knowledge Base',
@@ -115,13 +115,13 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
 
         <div className="header-title-box">
           <h1 className="header-main-title">{currentMeta.title}</h1>
-          <p className="header-sub-title">{currentMeta.subtitle}</p>
+          <p className="header-sub-title hidden sm:block">{currentMeta.subtitle}</p>
         </div>
       </div>
 
       <div className="header-right">
-        {/* Enclave Status Pill */}
-        <div className="enclave-status-indicator">
+        {/* Enclave Status Pill (Visible on md+) */}
+        <div className="enclave-status-indicator hidden md:flex">
           <Radio className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
           <span className="font-mono text-xs text-emerald-400 font-semibold">{headerT.secureEnv || 'Secure Environment'}</span>
         </div>

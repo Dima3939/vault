@@ -188,7 +188,7 @@ export function App() {
           {activeTab === 'wallets' && (
             <div className="tab-view-container">
               {/* Header Section */}
-              <div className="section-header-row">
+              <div className="section-header-row mb-6">
                 <div>
                   <span className="section-tag-pill">SOVEREIGN ENCLAVES</span>
                   <h2 className="section-main-heading">Institutional Multi-Chain Wallets</h2>
@@ -203,49 +203,55 @@ export function App() {
                 </button>
               </div>
 
-              {/* Multi-Chain Wallets Grid */}
+              {/* Multi-Chain Wallets Grid with Generous Internal Spacing */}
               <div className="wallets-cards-grid">
                 <div className="wallet-card-item">
-                  <div className="flex justify-between items-center mb-4">
-                    <div className="flex items-center gap-2.5">
+                  <div className="flex justify-between items-center mb-6">
+                    <div className="flex items-center gap-3">
                       <span className="asset-tag-circle bg-amber-500 text-black font-bold">₿</span>
-                      <span className="font-bold text-base text-white">Bitcoin Treasury</span>
+                      <span className="font-bold text-lg text-white">Bitcoin Treasury</span>
                     </div>
                     <span className="enclave-badge-tag emerald">SEGWIT NATIVE</span>
                   </div>
-                  <div className="font-mono text-3xl font-extrabold text-white mb-1">890.45 BTC</div>
-                  <div className="font-mono text-xs text-slate-400 mb-5">$58,012,450 USD</div>
-                  <div className="wallet-address-bar">
+                  <div className="my-3">
+                    <div className="font-mono text-3xl font-extrabold text-white leading-tight">890.45 BTC</div>
+                    <div className="font-mono text-xs text-slate-400 mt-1.5 mb-5">$58,012,450.00 USD</div>
+                  </div>
+                  <div className="wallet-address-bar mt-auto">
                     bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh
                   </div>
                 </div>
 
                 <div className="wallet-card-item">
-                  <div className="flex justify-between items-center mb-4">
-                    <div className="flex items-center gap-2.5">
+                  <div className="flex justify-between items-center mb-6">
+                    <div className="flex items-center gap-3">
                       <span className="asset-tag-circle bg-indigo-500 text-white font-bold">Ξ</span>
-                      <span className="font-bold text-base text-white">Ethereum Staking</span>
+                      <span className="font-bold text-lg text-white">Ethereum Staking</span>
                     </div>
                     <span className="enclave-badge-tag indigo">ERC-4337</span>
                   </div>
-                  <div className="font-mono text-3xl font-extrabold text-white mb-1">11,200.00 ETH</div>
-                  <div className="font-mono text-xs text-slate-400 mb-5">$32,238,450 USD</div>
-                  <div className="wallet-address-bar">
+                  <div className="my-3">
+                    <div className="font-mono text-3xl font-extrabold text-white leading-tight">11,200.00 ETH</div>
+                    <div className="font-mono text-xs text-slate-400 mt-1.5 mb-5">$32,238,450.00 USD</div>
+                  </div>
+                  <div className="wallet-address-bar mt-auto">
                     0x71C...8491 (Lido Staking Pool)
                   </div>
                 </div>
 
                 <div className="wallet-card-item">
-                  <div className="flex justify-between items-center mb-4">
-                    <div className="flex items-center gap-2.5">
+                  <div className="flex justify-between items-center mb-6">
+                    <div className="flex items-center gap-3">
                       <span className="asset-tag-circle bg-emerald-500 text-white font-bold">$</span>
-                      <span className="font-bold text-base text-white">USDC Liquidity</span>
+                      <span className="font-bold text-lg text-white">USDC Liquidity</span>
                     </div>
                     <span className="enclave-badge-tag cyan">YIELD VAULT</span>
                   </div>
-                  <div className="font-mono text-3xl font-extrabold text-white mb-1">19,648,350 USDC</div>
-                  <div className="font-mono text-xs text-emerald-400 font-bold mb-5">4.85% Net APY Yield</div>
-                  <div className="wallet-address-bar">
+                  <div className="my-3">
+                    <div className="font-mono text-3xl font-extrabold text-white leading-tight">19,648,350 USDC</div>
+                    <div className="font-mono text-xs text-emerald-400 font-bold mt-1.5 mb-5">4.85% Net APY Yield</div>
+                  </div>
+                  <div className="wallet-address-bar mt-auto">
                     0x49F...E21D (Circle Institutional Account)
                   </div>
                 </div>
@@ -262,7 +268,7 @@ export function App() {
           {activeTab === 'transactions' && (
             <div className="tab-view-container">
               {/* Header Section */}
-              <div className="section-header-row">
+              <div className="section-header-row mb-6">
                 <div>
                   <span className="section-tag-pill">AUDITED LEDGER</span>
                   <h2 className="section-main-heading">Cryptographic Transaction Ledger</h2>
@@ -329,8 +335,8 @@ export function App() {
                         filteredTransactions.map(tx => (
                           <tr key={tx.id}>
                             <td>
-                              <div className={`flex items-center gap-1.5 font-bold ${tx.type === 'Receive' ? 'text-emerald-400' : 'text-red-400'}`}>
-                                {tx.type === 'Receive' ? <ArrowDownLeft className="w-4 h-4" /> : <ArrowUpRight className="w-4 h-4" />}
+                              <div className={`inline-flex items-center gap-2 font-semibold ${tx.type === 'Receive' ? 'text-emerald-400' : 'text-red-400'}`}>
+                                {tx.type === 'Receive' ? <ArrowDownLeft className="w-4 h-4 shrink-0" /> : <ArrowUpRight className="w-4 h-4 shrink-0" />}
                                 <span>{tx.type}</span>
                               </div>
                             </td>
@@ -363,7 +369,7 @@ export function App() {
 
           {/* TAB 4: APPROVALS */}
           {activeTab === 'approvals' && (
-            <div className="tab-view-container max-w-4xl mx-auto">
+            <div className="tab-view-container">
               <div className="section-header-row mb-6">
                 <div>
                   <span className="section-tag-pill">QUORUM SIGNING</span>
@@ -372,59 +378,60 @@ export function App() {
                 </div>
               </div>
 
-              <div className="overview-widget-card p-6 mb-8">
-                <div className="widget-header">
+              <div className="overview-widget-card p-8 mb-8">
+                <div className="widget-header mb-6 pb-4">
                   <div className="widget-title-group">
-                    <span className="widget-title text-lg">Transfer Request #TX-481-MPC</span>
+                    <span className="widget-title text-xl font-extrabold">Transfer Request #TX-481-MPC</span>
                     <span className="high-priority-tag">Quorum Action Required</span>
                   </div>
-                  <span className="font-mono text-xs text-indigo-400 font-bold bg-indigo-500/10 border border-indigo-500/30 px-2 py-1 rounded">
+                  <span className="font-mono text-xs text-indigo-400 font-bold bg-indigo-500/10 border border-indigo-500/30 px-3 py-1.5 rounded">
                     3 of 5 Shards Active
                   </span>
                 </div>
 
                 <div className="p-2">
-                  <div className="transfer-request-banner mb-6">
-                    <div className="transfer-amount-line font-mono text-2xl font-extrabold text-red-400">
+                  <div className="transfer-request-banner mb-8 p-6">
+                    <div className="transfer-amount-line font-mono text-3xl font-extrabold text-red-400">
                       -250.00 BTC <span className="text-sm text-slate-400 font-normal font-sans">($16,250,000.00 USD)</span>
                     </div>
-                    <div className="transfer-route-flex mt-2 text-xs">
+                    <div className="transfer-route-flex mt-3 text-sm">
                       <span className="route-node font-mono">Cold Storage 1 (bc1q...7w9m)</span>
-                      <span className="text-indigo-400 font-bold text-sm">➔</span>
+                      <span className="text-indigo-400 font-bold text-base">➔</span>
                       <span className="route-node font-mono">Binance Institutional Deposit</span>
                     </div>
                   </div>
 
-                  <div className="signers-list mb-6">
-                    <div className="signer-item">
+                  <div className="signers-list mb-8 flex flex-col gap-4">
+                    <div className="signer-item p-4">
                       <div className="signer-avatar">JS</div>
                       <div className="signer-info">
-                        <div className="signer-name font-bold">John Smith</div>
+                        <div className="signer-name text-sm font-bold">John Smith</div>
                         <div className="signer-role text-xs text-slate-400">Chief Compliance Officer</div>
                       </div>
                       <span className="signer-status-badge approved">✓ Approved via Hardware Token</span>
                     </div>
 
-                    <div className="signer-item">
+                    <div className="signer-item p-4">
                       <div className="signer-avatar">SJ</div>
                       <div className="signer-info">
-                        <div className="signer-name font-bold">Sarah Johnson</div>
+                        <div className="signer-name text-sm font-bold">Sarah Johnson</div>
                         <div className="signer-role text-xs text-slate-400">Head of Risk Management</div>
                       </div>
                       <span className="signer-status-badge approved">✓ Approved via Biometric Enclave</span>
                     </div>
 
-                    <div className="signer-item highlight">
+                    <div className="signer-item highlight p-4">
                       <div className="signer-avatar me">MC</div>
                       <div className="signer-info">
-                        <div className="signer-name font-bold">Michael Chen (You)</div>
+                        <div className="signer-name text-sm font-bold">Michael Chen (You)</div>
                         <div className="signer-role text-xs text-slate-400">Treasury Manager</div>
                       </div>
                       <span className="signer-status-badge pending">● Signature Required</span>
                     </div>
                   </div>
 
-                  <div className="flex gap-4 justify-end">
+                  {/* Clean side-by-side action buttons with generous spacing */}
+                  <div className="approvals-action-row flex items-center justify-end gap-5 mt-6 pt-4 border-t border-white/10">
                     <button className="btn-widget-reject py-3 px-6 text-sm">
                       <X className="w-4 h-4" />
                       <span>Reject Request</span>
@@ -441,7 +448,7 @@ export function App() {
 
           {/* TAB 5: POLICIES */}
           {activeTab === 'policies' && (
-            <div className="tab-view-container max-w-4xl mx-auto">
+            <div className="tab-view-container">
               <div className="section-header-row mb-6">
                 <div>
                   <span className="section-tag-pill">GOVERNANCE ENGINE</span>
@@ -455,7 +462,7 @@ export function App() {
 
           {/* TAB 6: MPC */}
           {activeTab === 'mpc' && (
-            <div className="tab-view-container max-w-4xl mx-auto">
+            <div className="tab-view-container">
               <div className="section-header-row mb-6">
                 <div>
                   <span className="section-tag-pill">CRYPTOGRAPHIC CORE</span>
@@ -469,7 +476,7 @@ export function App() {
 
           {/* TAB 7: SDK */}
           {activeTab === 'sdk' && (
-            <div className="tab-view-container max-w-4xl mx-auto">
+            <div className="tab-view-container">
               <div className="section-header-row mb-6">
                 <div>
                   <span className="section-tag-pill">DEVELOPER ACCESS</span>
@@ -483,7 +490,7 @@ export function App() {
 
           {/* TAB 8: COMPLIANCE */}
           {activeTab === 'compliance' && (
-            <div className="tab-view-container max-w-4xl mx-auto">
+            <div className="tab-view-container">
               <div className="section-header-row mb-6">
                 <div>
                   <span className="section-tag-pill">CERTIFICATIONS & AUDITS</span>
@@ -573,28 +580,14 @@ export function App() {
 
           {/* TAB 9: PRICING */}
           {activeTab === 'pricing' && (
-            <div className="tab-view-container max-w-4xl mx-auto">
-              <div className="section-header-row mb-6">
-                <div>
-                  <span className="section-tag-pill">SOVEREIGN TIERS</span>
-                  <h2 className="section-main-heading">Predictable Institutional Pricing</h2>
-                  <p className="section-sub-desc">Transparent custody tiers scale with your asset under management without surprise basis-point markups</p>
-                </div>
-              </div>
+            <div className="tab-view-container">
               <PricingSection t={t.pricing} onSelectPlan={() => setTransferModalOpen(true)} />
             </div>
           )}
 
           {/* TAB 10: FAQ */}
           {activeTab === 'faq' && (
-            <div className="tab-view-container max-w-4xl mx-auto">
-              <div className="section-header-row mb-6">
-                <div>
-                  <span className="section-tag-pill">KNOWLEDGE BASE</span>
-                  <h2 className="section-main-heading">Frequently Asked Questions</h2>
-                  <p className="section-sub-desc">Detailed technical answers regarding MPC key mathematics, HSM security, and insurance coverage</p>
-                </div>
-              </div>
+            <div className="tab-view-container">
               <FaqSection t={t.faq} />
             </div>
           )}

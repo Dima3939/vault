@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
-import {
-  TrendingUp,
-  Wallet,
-  ArrowUpRight,
-  ArrowDownLeft,
-  ShieldCheck,
-  AlertCircle,
-  Sliders,
-  Plus,
-  Check,
-  X,
-  Layers
+import { 
+  TrendingUp, 
+  Shield, 
+  Key, 
+  Clock, 
+  ArrowUpRight, 
+  ArrowDownLeft, 
+  Sliders, 
+  Plus, 
+  Check, 
+  X, 
+  ShieldCheck
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { DashboardTab } from '../Sidebar';
 
 interface OverviewViewProps {
-  onNavigateTab: (tab: any) => void;
+  onNavigateTab: (tab: DashboardTab) => void;
   onInitiateTransfer: () => void;
   t: any;
 }
@@ -24,129 +25,117 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
   onNavigateTab,
   t
 }) => {
-  const [timeframe, setTimeframe] = useState<'1H' | '24H' | '7D' | '30D' | '1Y'>('24H');
-  const [approvalsCount, setApprovalsCount] = useState(3);
-  const [userApproved, setUserApproved] = useState(false);
-  const [approvedSigners, setApprovedSigners] = useState<Record<string, boolean>>({
-    'john': true,
-    'sarah': true,
-    'michael': false,
-    'david': false,
-    'emily': false
+  const [selectedTimeframe, setSelectedTimeframe] = useState<'1H' | '24H' | '7D' | '30D' | '1Y'>('24H');
+  const [approvedSigners, setApprovedSigners] = useState<{ john: boolean; sarah: boolean; michael: boolean }>({
+    john: true,
+    sarah: true,
+    michael: false
   });
+  const [userApproved, setUserApproved] = useState(false);
+  const [policies, setPolicies] = useState([
+    { id: 'p1', title: 'Large Transfer Quorum', desc: 'Transfers > $100,000 require 3+ approvals', conditions: '3 of 5', active: true },
+    { id: 'p2', title: 'New Beneficiary Policy', desc: 'New addresses require 24h whitelist delay', conditions: '24h Lock', active: true },
+    { id: 'p3', title: 'Time-lock Vault Security', desc: 'Lock transfers outside corporate hours', conditions: '08:00-18:00', active: false },
+    { id: 'p4', title: 'Multi-Cloud HSM Routing', desc: 'Require AWS Nitro + GCP Confidential VM', conditions: 'Multi-Cloud', active: true },
+  ]);
 
   const ovT = t?.os?.overview || {};
 
-  const [policies, setPolicies] = useState([
-    { id: '1', title: 'Large Transaction Policy', desc: 'Transfers > $100,000 require 3+ approvals', active: true, conditions: 2 },
-    { id: '2', title: 'New Beneficiary Policy', desc: 'New addresses require whitelist approval', active: true, conditions: 3 },
-    { id: '3', title: 'Time-based Policy', desc: 'Transactions outside business hours locked', active: true, conditions: 2 },
-    { id: '4', title: 'Asset Policy', desc: 'Specific gas rules for high-value tokens', active: true, conditions: 4 },
-    { id: '5', title: 'Geographic Policy', desc: 'Hardware enclave IP whitelist validation', active: false, conditions: 1 },
-  ]);
+  const handleApproveTransaction = () => {
+    setApprovedSigners(prev => ({ ...prev, michael: true }));
+    setUserApproved(true);
+    confetti({
+      particleCount: 80,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+  };
+
+  const handleRejectTransaction = () => {
+    setApprovedSigners(prev => ({ ...prev, michael: false }));
+    setUserApproved(false);
+  };
 
   const togglePolicy = (id: string) => {
     setPolicies(prev => prev.map(p => p.id === id ? { ...p, active: !p.active } : p));
   };
 
-  const handleApproveTransaction = () => {
-    if (userApproved) return;
-    setUserApproved(true);
-    setApprovedSigners(prev => ({ ...prev, michael: true }));
-    setApprovalsCount(prev => Math.max(0, prev - 1));
-    confetti({ particleCount: 70, spread: 60, origin: { y: 0.7 } });
-  };
-
-  const handleRejectTransaction = () => {
-    setUserApproved(false);
-    setApprovedSigners(prev => ({ ...prev, michael: false }));
-  };
-
   return (
     <div className="overview-container">
-      {/* 1. TOP METRIC SUMMARY CARDS */}
+      {/* 1. TOP 4 METRIC STAT CARDS */}
       <div className="overview-metrics-grid">
-        {/* Total Assets */}
+        {/* Card 1: Total Portfolio Value */}
         <div className="overview-stat-card">
           <div className="stat-card-header">
-            <span className="stat-card-label">{ovT.totalAssets || 'Total Assets'}</span>
+            <span className="stat-card-label">{ovT.totalBalance || 'Total Portfolio Value'}</span>
             <div className="stat-card-icon-wrap emerald">
-              <TrendingUp className="w-4 h-4 text-emerald-400" />
+              <TrendingUp className="w-5 h-5 text-emerald-400" />
             </div>
           </div>
-          <div className="stat-card-body">
-            <div className="stat-card-value font-mono">$128,750,350.45</div>
-            <div className="stat-card-badge positive">
-              <TrendingUp className="w-3 h-3" />
-              <span>+3.24% (24h)</span>
-            </div>
+          <div className="stat-card-value font-mono">$109,899,250.00</div>
+          <div className="stat-card-badge positive">
+            <TrendingUp className="w-3.5 h-3.5" />
+            <span>+4.28% {ovT.growthPeriod || '(24h)'}</span>
           </div>
         </div>
 
-        {/* Wallets */}
+        {/* Card 2: Active Cold Enclaves */}
         <div className="overview-stat-card">
           <div className="stat-card-header">
-            <span className="stat-card-label">{ovT.activeWallets || 'Active Wallets'}</span>
+            <span className="stat-card-label">{ovT.activeEnclaves || 'Active Cold Enclaves'}</span>
             <div className="stat-card-icon-wrap indigo">
-              <Wallet className="w-4 h-4 text-indigo-400" />
+              <Shield className="w-5 h-5 text-indigo-400" />
             </div>
           </div>
-          <div className="stat-card-body">
-            <div className="stat-card-value font-mono">24</div>
-            <div className="stat-card-subtext">{ovT.walletsSub || 'Segregated Enclaves'}</div>
-          </div>
+          <div className="stat-card-value font-mono">18 / 18</div>
+          <div className="stat-card-subtext">{ovT.fipsStatus || 'FIPS 140-2 Level 3 Active'}</div>
         </div>
 
-        {/* Transactions (24h) */}
-        <div className="overview-stat-card">
-          <div className="stat-card-header">
-            <span className="stat-card-label">{ovT.transactions24h || 'Transactions (24h)'}</span>
-            <div className="stat-card-icon-wrap purple">
-              <Layers className="w-4 h-4 text-purple-400" />
-            </div>
-          </div>
-          <div className="stat-card-body">
-            <div className="stat-card-value font-mono">47</div>
-            <div className="stat-card-badge positive">
-              <span>{ovT.volume24h || '+12.5% volume'}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Pending Approvals */}
-        <div className="overview-stat-card">
+        {/* Card 3: Pending Approvals */}
+        <div className="overview-stat-card cursor-pointer" onClick={() => onNavigateTab('approvals')}>
           <div className="stat-card-header">
             <span className="stat-card-label">{ovT.pendingApprovals || 'Pending Approvals'}</span>
             <div className="stat-card-icon-wrap amber">
-              <AlertCircle className="w-4 h-4 text-amber-400" />
+              <Clock className="w-5 h-5 text-amber-400" />
             </div>
           </div>
-          <div className="stat-card-body">
-            <div className="stat-card-value font-mono text-amber-400">{userApproved ? 2 : approvalsCount}</div>
-            <div className="stat-card-subtext text-amber-400/80 font-medium">{ovT.requiresQuorum || 'Requires Quorum Action'}</div>
+          <div className="stat-card-value font-mono text-amber-400">7</div>
+          <div className="stat-card-subtext">{ovT.quorumActionNeeded || '3 Requires Your Signature'}</div>
+        </div>
+
+        {/* Card 4: MPC Key Groups */}
+        <div className="overview-stat-card cursor-pointer" onClick={() => onNavigateTab('mpc')}>
+          <div className="stat-card-header">
+            <span className="stat-card-label">{ovT.mpcKeyHealth || 'MPC Shard Quorum'}</span>
+            <div className="stat-card-icon-wrap purple">
+              <Key className="w-5 h-5 text-purple-400" />
+            </div>
           </div>
+          <div className="stat-card-value font-mono text-emerald-400">100%</div>
+          <div className="stat-card-subtext">{ovT.zeroKnowledgeValid || 'Zero-Knowledge Verified'}</div>
         </div>
       </div>
 
-      {/* 2. CHARTS ROW: PORTFOLIO BALANCE + ASSET ALLOCATION */}
+      {/* 2. MIDDLE ROW: PORTFOLIO BALANCE AREA CHART & ASSET DONUT */}
       <div className="overview-charts-grid">
         {/* Left: Portfolio Balance Area Chart */}
-        <div className="overview-chart-card balance-card">
+        <div className="overview-chart-card balance-chart-card">
           <div className="chart-card-header">
             <div>
-              <div className="chart-card-title">{ovT.portfolioBalance || 'Portfolio Balance'}</div>
+              <div className="chart-card-title">{ovT.balanceHistory || 'Portfolio Balance Curve'}</div>
               <div className="chart-main-val font-mono">
-                $128,750,350.45 <span className="chart-delta-tag">+3.24% (24h)</span>
+                $109,899,250.00
+                <span className="chart-delta-tag font-mono">+12.4% {ovT.chartYear || 'vs Last Month'}</span>
               </div>
             </div>
 
-            {/* Timeframe selector */}
+            {/* Timeframe Picker */}
             <div className="chart-timeframe-picker">
-              {(['1H', '24H', '7D', '30D', '1Y'] as const).map(tf => (
+              {(['1H', '24H', '7D', '30D', '1Y'] as const).map((tf) => (
                 <button
                   key={tf}
-                  onClick={() => setTimeframe(tf)}
-                  className={`timeframe-btn ${timeframe === tf ? 'active' : ''}`}
+                  onClick={() => setSelectedTimeframe(tf)}
+                  className={`timeframe-btn ${selectedTimeframe === tf ? 'active' : ''}`}
                 >
                   {tf}
                 </button>
@@ -232,7 +221,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                 {/* USDC slice (15.3%) */}
                 <circle
                   cx="80" cy="80" r="58"
-                  fill="none" stroke="#00E599" strokeWidth="18"
+                  fill="none" stroke="#10B981" strokeWidth="18"
                   strokeDasharray="55.7 364.4"
                   strokeDashoffset="-255.9"
                 />
@@ -258,7 +247,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                   <span className="legend-asset-name">Bitcoin</span>
                 </div>
                 <div className="text-right">
-                  <div className="legend-pct font-mono font-bold">45.2%</div>
+                  <span className="legend-pct font-mono font-bold">52.8%</span>
                   <div className="legend-usd font-mono">$58,012,450</div>
                 </div>
               </div>
@@ -269,30 +258,19 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                   <span className="legend-asset-name">Ethereum</span>
                 </div>
                 <div className="text-right">
-                  <div className="legend-pct font-mono font-bold">25.1%</div>
+                  <span className="legend-pct font-mono font-bold">29.3%</span>
                   <div className="legend-usd font-mono">$32,238,450</div>
                 </div>
               </div>
 
               <div className="legend-row">
                 <div className="flex items-center gap-2">
-                  <span className="legend-dot bg-emerald-400"></span>
-                  <span className="legend-asset-name">USDC</span>
+                  <span className="legend-dot bg-emerald-500"></span>
+                  <span className="legend-asset-name">USDC Yield</span>
                 </div>
                 <div className="text-right">
-                  <div className="legend-pct font-mono font-bold">15.3%</div>
+                  <span className="legend-pct font-mono font-bold">17.9%</span>
                   <div className="legend-usd font-mono">$19,648,350</div>
-                </div>
-              </div>
-
-              <div className="legend-row">
-                <div className="flex items-center gap-2">
-                  <span className="legend-dot bg-cyan-400"></span>
-                  <span className="legend-asset-name">Solana / Other</span>
-                </div>
-                <div className="text-right">
-                  <div className="legend-pct font-mono font-bold">14.4%</div>
-                  <div className="legend-usd font-mono">$18,740,100</div>
                 </div>
               </div>
             </div>
@@ -303,9 +281,12 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
       {/* 3. RECENT TRANSACTIONS TABLE */}
       <div className="overview-table-card">
         <div className="table-card-header">
-          <div className="chart-card-title">{ovT.recentTransactions || 'Recent Transactions'}</div>
+          <div>
+            <h3 className="text-base font-bold text-white">{ovT.recentTransactions || 'Recent Vault Operations'}</h3>
+            <p className="text-xs text-slate-400 mt-0.5">{ovT.ledgerSubtitle || 'Multi-Sig Quorum Signed Transactions'}</p>
+          </div>
           <button onClick={() => onNavigateTab('transactions')} className="view-all-link">
-            {ovT.viewAll || 'View all'}
+            {ovT.viewLedger || 'Full Ledger'} ➔
           </button>
         </div>
 
@@ -325,14 +306,14 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
             <tbody>
               <tr>
                 <td>
-                  <div className="flex items-center gap-1.5 text-red-400">
-                    <ArrowUpRight className="w-4 h-4" />
+                  <div className="inline-flex items-center gap-2 font-semibold text-red-400">
+                    <ArrowUpRight className="w-4 h-4 shrink-0" />
                     <span>{ovT.transfer || 'Transfer'}</span>
                   </div>
                 </td>
                 <td className="font-mono font-bold text-red-400">-250.00 BTC</td>
                 <td>
-                  <div className="flex items-center gap-1.5 font-bold">
+                  <div className="inline-flex items-center gap-1.5 font-bold">
                     <span className="asset-tag-circle bg-amber-500 text-black">₿</span>
                     <span>BTC</span>
                   </div>
@@ -342,19 +323,19 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                 <td>
                   <span className="status-pill completed">{ovT.completed || 'Completed'}</span>
                 </td>
-                <td className="text-xs text-slate-400">2m ago</td>
+                <td className="text-xs text-slate-400 font-mono">2m ago</td>
               </tr>
 
               <tr>
                 <td>
-                  <div className="flex items-center gap-1.5 text-emerald-400">
-                    <ArrowDownLeft className="w-4 h-4" />
+                  <div className="inline-flex items-center gap-2 font-semibold text-emerald-400">
+                    <ArrowDownLeft className="w-4 h-4 shrink-0" />
                     <span>{ovT.receive || 'Receive'}</span>
                   </div>
                 </td>
                 <td className="font-mono font-bold text-emerald-400">+1,250.00 ETH</td>
                 <td>
-                  <div className="flex items-center gap-1.5 font-bold">
+                  <div className="inline-flex items-center gap-1.5 font-bold">
                     <span className="asset-tag-circle bg-indigo-500 text-white">Ξ</span>
                     <span>ETH</span>
                   </div>
@@ -364,19 +345,19 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                 <td>
                   <span className="status-pill completed">{ovT.completed || 'Completed'}</span>
                 </td>
-                <td className="text-xs text-slate-400">15m ago</td>
+                <td className="text-xs text-slate-400 font-mono">15m ago</td>
               </tr>
 
               <tr>
                 <td>
-                  <div className="flex items-center gap-1.5 text-amber-400">
-                    <ArrowUpRight className="w-4 h-4" />
+                  <div className="inline-flex items-center gap-2 font-semibold text-amber-400">
+                    <ArrowUpRight className="w-4 h-4 shrink-0" />
                     <span>{ovT.transfer || 'Transfer'}</span>
                   </div>
                 </td>
                 <td className="font-mono font-bold text-amber-400">-50,000.00 USDC</td>
                 <td>
-                  <div className="flex items-center gap-1.5 font-bold">
+                  <div className="inline-flex items-center gap-1.5 font-bold">
                     <span className="asset-tag-circle bg-emerald-500 text-white">$</span>
                     <span>USDC</span>
                   </div>
@@ -386,7 +367,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                 <td>
                   <span className="status-pill pending">{ovT.pending || 'Pending Quorum'}</span>
                 </td>
-                <td className="text-xs text-slate-400">32m ago</td>
+                <td className="text-xs text-slate-400 font-mono">32m ago</td>
               </tr>
             </tbody>
           </table>
@@ -398,11 +379,11 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
         {/* Module 1: Transaction Approval Flow */}
         <div className="overview-widget-card approval-widget">
           <div className="widget-header">
-            <div className="widget-title-group">
+            <div className="flex flex-col gap-1">
               <span className="widget-title">{ovT.approvalFlowTitle || 'Transaction Approval Flow'}</span>
-              <span className="high-priority-tag">{ovT.highPriority || 'High Priority'}</span>
+              <span className="high-priority-tag w-fit">{ovT.highPriority || 'High Priority'}</span>
             </div>
-            <span className="text-xs font-mono text-indigo-400">
+            <span className="text-xs font-mono text-indigo-400 font-bold bg-indigo-500/10 border border-indigo-500/30 px-2 py-1 rounded">
               {Object.values(approvedSigners).filter(Boolean).length} {ovT.approvalsCollected || 'of 5 Approvals'}
             </span>
           </div>
@@ -412,7 +393,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
               <div className="transfer-amount-line font-mono">
                 -250.00 BTC <span className="text-xs text-slate-400 font-sans">($16,250,000.00 USD)</span>
               </div>
-              <div className="transfer-route-flex">
+              <div className="transfer-route-flex mt-1">
                 <div className="route-node font-mono">Cold Storage 1 (0x8f3a)</div>
                 <div className="text-indigo-400 font-bold">➔</div>
                 <div className="route-node font-mono">Binance Deposit</div>
@@ -506,7 +487,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                   </div>
                 </div>
                 <div className="policy-row-right">
-                  <span className="policy-condition-tag font-mono">{p.conditions} {ovT.rulesCount || 'rules'}</span>
+                  <span className="policy-condition-tag font-mono">{p.conditions}</span>
                   <button 
                     onClick={() => togglePolicy(p.id)}
                     className={`policy-toggle-switch ${p.active ? 'on' : 'off'}`}
@@ -531,22 +512,22 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
           <div className="mpc-widget-body">
             <div className="mpc-numbers-row">
               <div className="mpc-mini-stat">
-                <span className="text-[10px] text-slate-400 uppercase">{ovT.keyGroups || 'Key Groups'}</span>
-                <span className="font-mono text-xl font-bold text-white">24</span>
+                <span className="text-[10px] text-slate-400 uppercase font-mono">{ovT.keyGroups || 'Key Groups'}</span>
+                <span className="font-mono text-xl font-bold text-white mt-1">24</span>
               </div>
               <div className="mpc-mini-stat">
-                <span className="text-[10px] text-slate-400 uppercase">{ovT.totalKeyShares || 'Total Key Shares'}</span>
-                <span className="font-mono text-xl font-bold text-white">120</span>
+                <span className="text-[10px] text-slate-400 uppercase font-mono">{ovT.totalKeyShares || 'Key Shares'}</span>
+                <span className="font-mono text-xl font-bold text-white mt-1">120</span>
               </div>
               <div className="mpc-mini-stat">
-                <span className="text-[10px] text-slate-400 uppercase">{ovT.threshold || 'Threshold'}</span>
-                <span className="font-mono text-xl font-bold text-indigo-400">3 of 5</span>
+                <span className="text-[10px] text-slate-400 uppercase font-mono">{ovT.threshold || 'Threshold'}</span>
+                <span className="font-mono text-xl font-bold text-indigo-400 mt-1">3 of 5</span>
               </div>
             </div>
 
             <div className="primary-wallet-group-box">
-              <div className="flex justify-between items-center mb-2">
-                <span className="font-mono text-xs font-bold text-slate-200">{ovT.primaryKeyShards || 'Primary Treasury Key Shards'}</span>
+              <div className="flex justify-between items-center mb-3">
+                <span className="font-mono text-xs font-bold text-slate-200">{ovT.primaryKeyShards || 'Primary Key Shards'}</span>
                 <span className="enclave-badge-mini font-mono">{ovT.teeActive || 'TEE ACTIVE'}</span>
               </div>
 
@@ -554,14 +535,24 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                 <div className="shard-circle active">S1</div>
                 <div className="shard-circle active">S2</div>
                 <div className="shard-circle active">S3</div>
-                <div className="shard-circle inactive">S4</div>
-                <div className="shard-circle inactive">S5</div>
+                <div className="shard-circle">S4</div>
+                <div className="shard-circle">S5</div>
               </div>
 
-              <div className="flex justify-between text-[11px] text-slate-400 font-mono mt-3">
-                <span>Curve: secp256k1</span>
-                <span>Latency: 14.2ms</span>
-                <span>Lloyd's: $250M</span>
+              {/* High-Contrast Distinct Metrics Grid */}
+              <div className="grid grid-cols-3 gap-2 mt-4 pt-3 border-t border-white/10 text-center">
+                <div className="p-1.5 rounded bg-black/40 border border-white/5 flex flex-col">
+                  <span className="text-[9px] text-slate-400 font-mono">CURVE</span>
+                  <span className="text-[11px] font-mono text-white font-bold mt-0.5">secp256k1</span>
+                </div>
+                <div className="p-1.5 rounded bg-black/40 border border-white/5 flex flex-col">
+                  <span className="text-[9px] text-slate-400 font-mono">LATENCY</span>
+                  <span className="text-[11px] font-mono text-emerald-400 font-bold mt-0.5">14.2 ms</span>
+                </div>
+                <div className="p-1.5 rounded bg-black/40 border border-white/5 flex flex-col">
+                  <span className="text-[9px] text-slate-400 font-mono">COVERAGE</span>
+                  <span className="text-[11px] font-mono text-indigo-400 font-bold mt-0.5">$250M</span>
+                </div>
               </div>
             </div>
           </div>
