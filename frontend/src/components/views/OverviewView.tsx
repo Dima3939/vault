@@ -532,10 +532,13 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
             </div>
 
             <div className="primary-wallet-group-box">
-              <div className="flex justify-between items-center mb-3">
-                <span className="font-mono text-xs font-bold text-slate-200 uppercase tracking-wide">
-                  {ovT.primaryKeyShards || 'Primary Key Shards'}
-                </span>
+              <div className="shard-box-header">
+                <div className="flex items-center gap-2">
+                  <Key className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                  <span className="font-mono text-xs font-bold text-slate-200 uppercase tracking-wider">
+                    {ovT.primaryKeyShards || 'Primary Key Shards'}
+                  </span>
+                </div>
                 <span className="enclave-badge-mini font-mono">{ovT.teeActive || 'TEE ACTIVE'}</span>
               </div>
 
