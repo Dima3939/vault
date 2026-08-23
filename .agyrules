@@ -1,24 +1,55 @@
-# Vault Project Context & Guidelines
+# Vault — Institutional Cryptographic Custody & Digital Asset Treasury
+# Project Context, Strategy & Memory Guidelines
 
-## 1. Project Overview
-- **Name**: Vault (Institutional Cryptographic Custody & Digital Asset Treasury)
-- **Live URL**: https://dima3939.github.io/vault/
-- **GitHub Repository**: https://github.com/Dima3939/vault
+## 1. Project Background & Portfolio Strategy
+- **Role in Portfolio**: Project #3 in a strategic 5-project portfolio for a Mid/Senior Frontend Developer (~5 years experience) targeting high-tier remote roles ($100k+) and elite clients on Upwork/Fiverr.
+- **Portfolio Context**:
+  - Project #1: **Luminary** (AI Vector Search & LLM Embeddings Infrastructure Platform)
+  - Project #2: **Nexus** (Real-Time Multiplayer Collaborative Spatial Canvas)
+  - Project #3: **Vault** (Institutional Cryptographic Custody & Sovereign Digital Asset Treasury OS)
+- **Design Philosophy**: Radical differentiation. Must not look like a generic landing page or clone of previous projects. Built as a full-fledged **Web3 Institutional SaaS Operating System / Treasury Dashboard** inspired by private Swiss banking and institutional crypto custody (Fireblocks, Anchorage Digital, Copper).
+
+## 2. Repository & Deployment Details
 - **Local Directory**: `D:\OpenServer\home\vault`
+- **GitHub Repository**: https://github.com/Dima3939/vault
+- **Live Production URL**: https://dima3939.github.io/vault/
+- **CI/CD Pipeline**: GitHub Actions (`.github/workflows/deploy.yml`) building `frontend/dist` with Vite base `/vault/` and publishing to GitHub Pages on every push to `main`.
 
-## 2. Architecture & Technology Stack
-- **Frontend**: React 19, TypeScript (Strict Mode), Vite, D3.js (v7), Tailwind CSS / Custom Swiss FinTech Tokens, Lucide Icons, Lenis Smooth Scroll, Canvas Confetti.
-- **Backend**: Node.js, Express API, JSON waitlist storage (`backend/waitlist.json`).
-- **Deployment**: GitHub Actions CI/CD pipeline (`.github/workflows/deploy.yml`) building to GitHub Pages with `base: '/vault/'`.
+## 3. Technology Stack & Architecture
+- **Frontend Core**: React 19, TypeScript (Strict Mode), Vite 6.
+- **Data Visualizations**: D3.js (v7) for dynamic force-directed physics graphs (MPC Shards) and scaled asset liquidity distribution charts.
+- **Design System & Styling**:
+  - Titanium Obsidian Dark Mode (`#07080C`, `#0B0F17`, emerald `#00E599` accents, cyan telemetry glow).
+  - Swiss White Private Banking Light Mode (`#F4F6F9`, `#FFFFFF`, graphite navy `#0F172A`, gold `#F59E0B` & emerald badges).
+  - Glassmorphism token system, CSS custom variables with instant `localStorage` persistence.
+- **Icons & Polish**: Lucide React, Lenis smooth scrolling, Canvas Confetti.
+- **Internationalization (i18n)**: Fully custom type-safe 6-language dictionary (`frontend/src/i18n.ts`):
+  - English (`EN`, default)
+  - Ukrainian (`UA`)
+  - German (`DE`)
+  - Spanish (`ES`)
+  - French (`FR`)
+  - Russian (`RU`)
+- **Backend API**: Node.js, Express.js (`backend/server.js`), JSON storage (`backend/waitlist.json`), CORS enabled.
 
-## 3. Key Feature Specifications
-- **Interactive D3 MPC Visualizer**: Real-time 3-of-5 threshold cryptographic key signing ceremony with dynamic node physics and ECDSA DER payload outputs.
-- **Interactive D3 Treasury Flow**: Dynamic multi-chain asset allocation bar and liquidity chart with hover analytics.
-- **Programmable Policy Engine**: Toggleable institutional rule governance matrix.
-- **Dual Theme Engine**: Titanium Obsidian (`dark`) & Swiss White Banking (`light`) with persistence in `localStorage`.
-- **6-Language i18n**: English (`EN`), Ukrainian (`UA`), German (`DE`), Spanish (`ES`), French (`FR`), Russian (`RU`) in an adaptive dropdown menu.
-- **Developer SDK Hub**: Copy-ready code snippets for TypeScript, Python, Go, Rust, and cURL.
+## 4. Platform Modules & Functional Tabs (Vault OS)
+1. **Overview**: Executive treasury KPI cards (Total AUM, 24h Settlement, Active Signers, Cold Storage Ratio), interactive portfolio balance curve chart with multi-timeframe filters (`1H`, `24H`, `7D`, `30D`, `1Y`), asset allocation distribution, live pending approval queue, and recent transactions.
+2. **Wallets & Treasury**: Multi-chain institutional vault management (Bitcoin SegWit Native, Ethereum Staking Enclave, USDC Liquidity Reserve, Solana Cold Storage) + interactive D3.js liquidity routing chart (`TreasuryFlowChart.tsx`).
+3. **Transactions**: Real-time cryptographic ledger with hash/asset/address search, status filters (`ALL`, `TRANSFER`, `RECEIVE`, `PENDING`), and detailed explorer data.
+4. **Approvals (Multi-Sig Quorum)**: Interactive 3-of-5 threshold signing queue with live signer avatars, role badges, hardware token status, timelocks, and action triggers (`Reject Request` vs `Approve & Sign MPC Shard`).
+5. **Policy Engine**: Programmable institutional governance matrix (`PolicyBuilder.tsx`) with instant toggles for transfer thresholds, geofencing, multi-approval rules, automated AML screening, and dynamic institutional safety score.
+6. **MPC Key Shards**: Interactive D3.js threshold secret sharing simulation (`MpcVisualizer.tsx`) with 5 distributed enclaves (AWS Nitro, GCP Confidential, Hardware HSM, SGX Node, Air-gapped), real-time DER signature generation, and entropy telemetry.
+7. **Compliance & HSM Matrix**: Detailed institutional security standards (FIPS 140-2 Level 3/4, FINMA Swiss Banking Secrecy, SOC2 Type II, ISO 27001, physical zeroization specs).
+8. **Developer SDK**: Copy-ready code snippets with one-click clipboard feedback across TypeScript, Python, Go, Rust, and cURL (`SdkQuickstart.tsx`).
+9. **Pricing & Tiers**: Sovereign custody subscription plans with Monthly vs Annual billing switch (-20% discount) and feature checklists (`PricingSection.tsx`).
+10. **FAQ**: Accordion with in-depth technical answers on MPC mathematics, HSM hardware, recovery, and insurance (`FaqSection.tsx`).
+11. **Modal Actions**: Interactive `+ New Transfer` modal (`NewTransferModal.tsx`) with asset selection, address input, gas fee policy, and quorum signing trigger.
 
-## 4. Code & Contribution Rules
-- **Language & Comments**: All code comments, variable names, documentation, and commit messages must be strictly in **English**.
-- **Discretion**: Zero mentions of AI generation, prompts, or LLMs in source code, commits, or client-facing metadata.
+## 5. Mobile Responsiveness Standards (Tested on iPhone XS & iPhone 15 Pro)
+- Viewports down to 320px–375px must render flawlessly with zero horizontal scrolling.
+- Mobile Header: Compact logo `[ ☰ ] VAULT.`, ultra-compact language dropdown `[🌐 EN ⌵]`, theme toggle `[☀️/🌙]`, and square transfer button `[ + ]` (32x32px) without wrapping or pushing elements off-screen.
+- All wallet cards, approval blocks, and policy cards must stack cleanly with `width: 100%; box-sizing: border-box; overflow-x: hidden;`.
+
+## 6. Code & Contribution Rules
+- **Strict English**: All source code, comments, docstrings, variable names, documentation, and Git commit messages must be strictly in English.
+- **Zero AI Mentions**: Absolutely no mentions of AI, LLMs, prompts, or AI generators in code, comments, commits, or client-facing metadata.
