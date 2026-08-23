@@ -1,43 +1,45 @@
 :root {
-  --vault-bg: #07080C;
-  --vault-surface: #0E1017;
-  --vault-surface-light: #151822;
-  --vault-surface-hover: #1C212E;
+  --vault-bg: #06080C;
+  --vault-surface: #0B0F17;
+  --vault-surface-light: #121824;
+  --vault-surface-hover: #1A2232;
   --vault-text: #F8FAFC;
   --vault-text-muted: #94A3B8;
   --vault-text-dim: #64748B;
   --vault-emerald: #00E599;
-  --vault-emerald-glow: rgba(0, 229, 153, 0.4);
+  --vault-emerald-glow: rgba(0, 229, 153, 0.35);
   --vault-emerald-dim: rgba(0, 229, 153, 0.12);
+  --vault-gold: #F59E0B;
+  --vault-gold-dim: rgba(245, 158, 11, 0.15);
   --vault-cyan: #00F0FF;
-  --vault-cyan-glow: rgba(0, 240, 255, 0.35);
-  --vault-gold: #FFD700;
-  --vault-border: rgba(255, 255, 255, 0.09);
-  --vault-border-glow: rgba(0, 229, 153, 0.45);
-  --vault-header-bg: rgba(7, 8, 12, 0.94);
-  --vault-footer-bg: #040508;
+  --vault-cyan-glow: rgba(0, 240, 255, 0.3);
+  --vault-border: rgba(255, 255, 255, 0.08);
+  --vault-border-glow: rgba(0, 229, 153, 0.4);
+  --vault-header-bg: rgba(6, 8, 12, 0.95);
+  --vault-footer-bg: #030508;
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 }
 
 [data-theme="light"] {
-  --vault-bg: #F4F6F9;
+  --vault-bg: #F1F4F8;
   --vault-surface: #FFFFFF;
-  --vault-surface-light: #EAEFF5;
-  --vault-surface-hover: #DFE5EF;
+  --vault-surface-light: #E6ECF4;
+  --vault-surface-hover: #D9E3EF;
   --vault-text: #0F172A;
   --vault-text-muted: #475569;
   --vault-text-dim: #64748B;
-  --vault-emerald: #00B377;
-  --vault-emerald-glow: rgba(0, 179, 119, 0.25);
-  --vault-emerald-dim: rgba(0, 179, 119, 0.1);
+  --vault-emerald: #00A86B;
+  --vault-emerald-glow: rgba(0, 168, 107, 0.25);
+  --vault-emerald-dim: rgba(0, 168, 107, 0.1);
+  --vault-gold: #D97706;
+  --vault-gold-dim: rgba(217, 119, 6, 0.12);
   --vault-cyan: #0284C7;
   --vault-cyan-glow: rgba(2, 132, 199, 0.2);
-  --vault-gold: #D97706;
-  --vault-border: rgba(0, 0, 0, 0.08);
-  --vault-border-glow: rgba(0, 179, 119, 0.35);
-  --vault-header-bg: rgba(244, 246, 249, 0.95);
-  --vault-footer-bg: #E2E8F0;
+  --vault-border: rgba(0, 0, 0, 0.09);
+  --vault-border-glow: rgba(0, 168, 107, 0.3);
+  --vault-header-bg: rgba(241, 244, 248, 0.96);
+  --vault-footer-bg: #DCE3EC;
 }
 
 * {
@@ -68,7 +70,9 @@ a {
   flex-direction: column;
 }
 
-/* Combined Fixed Header (Navbar + Telemetry Stream) */
+/* ==========================================================================
+   Fixed Header (Navbar + Telemetry Stream)
+   ========================================================================== */
 .vault-fixed-header-wrapper {
   position: fixed;
   top: 0;
@@ -76,17 +80,14 @@ a {
   width: 100%;
   z-index: 1000;
   background: var(--vault-header-bg);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.2);
 }
 
 .vault-main-content {
   flex: 1;
-  padding-top: 96px; /* Exact offset so header never clips any content */
+  padding-top: 100px;
 }
 
-/* ==========================================================================
-   Header Navigation Bar
-   ========================================================================== */
 .vault-header {
   position: relative;
   width: 100%;
@@ -120,31 +121,32 @@ a {
 }
 
 .vault-logo-shield {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: var(--vault-emerald-dim);
-  border: 1px solid var(--vault-emerald-glow);
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--vault-gold-dim);
+  border: 1px solid var(--vault-gold);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .vault-logo-icon {
-  width: 18px;
-  height: 18px;
-  color: var(--vault-emerald);
+  width: 19px;
+  height: 19px;
+  color: var(--vault-gold);
 }
 
 .vault-brand-text {
   font-weight: 800;
   font-size: 1.25rem;
-  letter-spacing: -0.5px;
+  letter-spacing: 0.5px;
   color: var(--vault-text);
+  font-family: var(--font-mono);
 }
 
 .vault-brand-dot {
-  color: var(--vault-emerald);
+  color: var(--vault-gold);
 }
 
 .vault-header-version-pill {
@@ -190,7 +192,7 @@ a {
 }
 
 .vault-nav-link:hover {
-  color: var(--vault-emerald);
+  color: var(--vault-gold);
 }
 
 /* Header Actions */
@@ -221,7 +223,7 @@ a {
 .vault-globe-icon {
   width: 14px;
   height: 14px;
-  color: var(--vault-emerald);
+  color: var(--vault-gold);
   flex-shrink: 0;
 }
 
@@ -258,11 +260,11 @@ a {
 .vault-theme-icon.moon { color: var(--vault-text); }
 
 .vault-lang-btn:hover, .vault-theme-btn:hover {
-  border-color: var(--vault-emerald);
-  box-shadow: 0 0 12px var(--vault-emerald-glow);
+  border-color: var(--vault-gold);
+  box-shadow: 0 0 12px var(--vault-gold-dim);
 }
 
-/* Positioned Language Dropdown */
+/* Language Dropdown */
 .vault-lang-dropdown-menu {
   position: absolute;
   top: calc(100% + 8px);
@@ -304,12 +306,12 @@ a {
 
 .vault-lang-item:hover {
   background: var(--vault-surface-light);
-  color: var(--vault-emerald);
+  color: var(--vault-gold);
 }
 
 .vault-lang-item.active {
-  background: var(--vault-emerald-dim);
-  color: var(--vault-emerald);
+  background: var(--vault-gold-dim);
+  color: var(--vault-gold);
   font-weight: 700;
 }
 
@@ -337,11 +339,11 @@ a {
 .vault-check-icon {
   width: 14px;
   height: 14px;
-  color: var(--vault-emerald);
+  color: var(--vault-gold);
 }
 
 .vault-btn-header-primary {
-  background: var(--vault-emerald);
+  background: var(--vault-gold);
   color: #040508 !important;
   font-weight: 700;
   font-size: 0.82rem;
@@ -354,8 +356,8 @@ a {
 }
 
 .vault-btn-header-primary:hover {
-  background: #00FFAC;
-  box-shadow: 0 0 15px var(--vault-emerald-glow);
+  background: #FBBF24;
+  box-shadow: 0 0 15px var(--vault-gold-dim);
 }
 
 .vault-mobile-toggle-btn {
@@ -388,11 +390,9 @@ a {
   padding: 0.3rem 0;
 }
 
-/* ==========================================================================
-   Global Telemetry Ticker Bar
-   ========================================================================== */
+/* Global Telemetry Ticker Bar */
 .vault-top-telemetry-bar {
-  background: #040508;
+  background: #030508;
   border-bottom: 1px solid var(--vault-border);
   padding: 0.35rem 1rem;
   overflow: hidden;
@@ -498,7 +498,7 @@ a {
 }
 
 /* ==========================================================================
-   Hero Section
+   Hero Section (Swiss Private Banking Command Center)
    ========================================================================== */
 .vault-hero {
   padding: 3.5rem 2rem 4rem 2rem;
@@ -522,9 +522,9 @@ a {
   gap: 0.5rem;
   padding: 0.3rem 0.8rem;
   border-radius: 20px;
-  background: var(--vault-emerald-dim);
-  border: 1px solid var(--vault-emerald-glow);
-  color: var(--vault-emerald);
+  background: var(--vault-gold-dim);
+  border: 1px solid var(--vault-gold);
+  color: var(--vault-gold);
   font-size: 0.78rem;
   font-family: var(--font-mono);
   margin-bottom: 1.4rem;
@@ -558,8 +558,8 @@ a {
 }
 
 .vault-waitlist-form:focus-within {
-  border-color: var(--vault-emerald);
-  box-shadow: 0 0 25px var(--vault-emerald-glow);
+  border-color: var(--vault-gold);
+  box-shadow: 0 0 25px var(--vault-gold-dim);
 }
 
 .vault-waitlist-input {
@@ -574,7 +574,7 @@ a {
 }
 
 .vault-btn-submit {
-  background: var(--vault-emerald);
+  background: var(--vault-gold);
   color: #040508;
   border: none;
   padding: 0.75rem 1.4rem;
@@ -590,7 +590,7 @@ a {
 }
 
 .vault-btn-submit:hover {
-  background: #00FFAC;
+  background: #FBBF24;
 }
 
 .vault-form-msg {
@@ -623,7 +623,7 @@ a {
 }
 
 .meta-icon.emerald { color: var(--vault-emerald); }
-.meta-icon.cyan { color: var(--vault-cyan); }
+.meta-icon.cyan { color: var(--vault-gold); }
 
 .meta-text {
   font-family: var(--font-mono);
@@ -657,13 +657,13 @@ a {
   height: auto;
   border-radius: 24px;
   border: 1px solid var(--vault-border);
-  box-shadow: 0 0 50px var(--vault-emerald-glow);
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.6);
   animation: float-core 7s ease-in-out infinite;
 }
 
 @keyframes float-core {
   0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-10px) rotate(1deg); }
+  50% { transform: translateY(-8px) rotate(0.5deg); }
 }
 
 .vault-stat-badge {
@@ -675,7 +675,7 @@ a {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
   z-index: 10;
   backdrop-filter: blur(12px);
   max-width: 320px;
@@ -707,8 +707,8 @@ a {
 }
 
 .stat-icon.cyan {
-  background: var(--vault-cyan-glow);
-  color: var(--vault-cyan);
+  background: var(--vault-gold-dim);
+  color: var(--vault-gold);
 }
 
 .stat-title {
@@ -800,7 +800,7 @@ a {
 .section-tag {
   font-size: 0.75rem;
   font-family: var(--font-mono);
-  color: var(--vault-emerald);
+  color: var(--vault-gold);
   text-transform: uppercase;
   letter-spacing: 1.5px;
   display: inline-block;
@@ -822,7 +822,7 @@ a {
 }
 
 /* ==========================================================================
-   HSM Server Rack Chassis (Light and Dark Theme)
+   HSM Server Rack Chassis (Responsive & Non-Clipping)
    ========================================================================== */
 .hsm-rack-chassis {
   background: #030407;
@@ -899,8 +899,8 @@ a {
 
 .enclave-panel:hover {
   transform: translateY(-4px);
-  border-color: var(--vault-emerald);
-  box-shadow: 0 10px 30px var(--vault-emerald-dim);
+  border-color: var(--vault-gold);
+  box-shadow: 0 10px 30px var(--vault-gold-dim);
 }
 
 .panel-header-bar {
@@ -911,16 +911,14 @@ a {
   margin-bottom: 1.1rem;
   border-bottom: 1px solid var(--vault-border);
   gap: 0.5rem;
-  flex-wrap: nowrap;
+  flex-wrap: wrap; /* CRITICAL: Prevents badge clipping on narrow screens */
 }
 
 .panel-title-group {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
   line-height: 1;
-  white-space: nowrap;
-  flex-shrink: 0;
 }
 
 .panel-header-icon {
@@ -933,12 +931,11 @@ a {
 
 .panel-header-text {
   font-family: var(--font-mono);
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   font-weight: 700;
   line-height: 1;
   display: flex;
   align-items: center;
-  white-space: nowrap;
 }
 
 .panel-status-tag {
@@ -948,8 +945,6 @@ a {
   background: var(--vault-emerald-dim);
   padding: 0.15rem 0.45rem;
   border-radius: 4px;
-  white-space: nowrap;
-  flex-shrink: 0;
 }
 
 .enclave-img-wrap {
@@ -1354,12 +1349,12 @@ a {
 }
 
 .policy-item:hover {
-  border-color: var(--vault-emerald);
+  border-color: var(--vault-gold);
 }
 
 .policy-item.active {
-  border-color: var(--vault-emerald);
-  box-shadow: 0 0 15px var(--vault-emerald-dim);
+  border-color: var(--vault-gold);
+  box-shadow: 0 0 15px var(--vault-gold-dim);
 }
 
 .policy-item-icon {
@@ -1431,8 +1426,8 @@ a {
 }
 
 .sdk-copy-action-btn:hover {
-  background: var(--vault-emerald-dim);
-  border-color: var(--vault-emerald);
+  background: var(--vault-gold-dim);
+  border-color: var(--vault-gold);
 }
 
 .sdk-code-box {
@@ -1515,10 +1510,10 @@ a {
 }
 
 .switch-segment.active {
-  background: var(--vault-emerald);
+  background: var(--vault-gold);
   color: #040508 !important;
   font-weight: 700;
-  box-shadow: 0 0 15px var(--vault-emerald-glow);
+  box-shadow: 0 0 15px var(--vault-gold-dim);
 }
 
 .discount-tag {
@@ -1553,8 +1548,8 @@ a {
 }
 
 .pricing-card.featured {
-  border-color: var(--vault-emerald);
-  box-shadow: 0 15px 45px var(--vault-emerald-dim);
+  border-color: var(--vault-gold);
+  box-shadow: 0 15px 45px var(--vault-gold-dim);
 }
 
 .featured-ribbon {
@@ -1562,7 +1557,7 @@ a {
   top: -12px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--vault-emerald);
+  background: var(--vault-gold);
   color: #040508;
   font-size: 0.68rem;
   font-weight: 800;
@@ -1655,12 +1650,12 @@ a {
 }
 
 .faq-accordion-item:hover {
-  border-color: rgba(0, 229, 153, 0.4);
+  border-color: rgba(245, 158, 11, 0.4);
 }
 
 .faq-accordion-item.open {
-  border-color: var(--vault-emerald);
-  box-shadow: 0 0 20px var(--vault-emerald-dim);
+  border-color: var(--vault-gold);
+  box-shadow: 0 0 20px var(--vault-gold-dim);
 }
 
 .faq-question-btn {
@@ -1678,7 +1673,7 @@ a {
 .faq-question-icon {
   width: 18px;
   height: 18px;
-  color: var(--vault-emerald);
+  color: var(--vault-gold);
   flex-shrink: 0;
 }
 
@@ -1717,7 +1712,7 @@ a {
 }
 
 .vault-cta-banner {
-  background: radial-gradient(circle at 50% 0%, var(--vault-emerald-dim) 0%, var(--vault-surface) 85%);
+  background: radial-gradient(circle at 50% 0%, var(--vault-gold-dim) 0%, var(--vault-surface) 85%);
   border: 1px solid var(--vault-border);
   border-radius: 28px;
   padding: 4.5rem 2rem;
@@ -1809,7 +1804,7 @@ a {
 }
 
 .footer-links-list a:hover {
-  color: var(--vault-emerald);
+  color: var(--vault-gold);
 }
 
 .vault-footer-bottom {
@@ -1843,7 +1838,7 @@ a {
 }
 
 .footer-legal-link:hover {
-  color: var(--vault-emerald) !important;
+  color: var(--vault-gold) !important;
 }
 
 /* ==========================================================================
