@@ -1,0 +1,225 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { 
+  Bell, 
+  Globe, 
+  Sun, 
+  Moon, 
+  Plus, 
+  Menu, 
+  ChevronDown, 
+  Check, 
+  Radio
+} from 'lucide-react';
+import { LanguageCode, supportedLanguages } from '../i18n';
+import { DashboardTab } from './Sidebar';
+
+interface TopHeaderProps {
+  activeTab: DashboardTab;
+  currentLang: LanguageCode;
+  onLanguageChange: (lang: LanguageCode) => void;
+  currentTheme: 'dark' | 'light';
+  onThemeToggle: () => void;
+  onOpenMobileMenu: () => void;
+  onNewTransferClick: () => void;
+  langMenuTitle: string;
+}
+
+export const TopHeader: React.FC<TopHeaderProps> = ({
+  activeTab,
+  currentLang,
+  onLanguageChange,
+  currentTheme,
+  onThemeToggle,
+  onOpenMobileMenu,
+  onNewTransferClick,
+  langMenuTitle
+}) => {
+  const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const langRef = useRef<HTMLDivElement | null>(null);
+  const notifRef = useRef<HTMLDivElement | null>(null);
+
+  // Click outside to close dropdowns
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (langRef.current && !langRef.current.contains(e.target as Node)) {
+        setLangDropdownOpen(false);
+      }
+      if (notifRef.current && !notifRef.current.contains(e.target as Node)) {
+        setNotificationsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const tabTitles: Record<DashboardTab, { title: string; subtitle: string }> = {
+    overview: {
+      title: 'Overview',
+      subtitle: 'Real-time summary of your digital asset treasury & enclave operations'
+    },
+    wallets: {
+      title: 'Wallets & Treasury',
+      subtitle: 'Multi-chain liquidity routing and segregated cold storage enclaves'
+    },
+    transactions: {
+      title: 'Transactions',
+      subtitle: 'Audited cryptographic ledger of institutional fund movements'
+    },
+    approvals: {
+      title: 'Pending Approvals',
+      subtitle: 'Multi-Party Computation (MPC-CMP) 3-of-5 threshold quorum requests'
+    },
+    policies: {
+      title: 'Policy Engine',
+      subtitle: 'Rule-based execution guards, velocity controls, and whitelists'
+    },
+    mpc: {
+      title: 'MPC Key Infrastructure',
+      subtitle: 'Geodistributed mathematical key shard topology and signing ceremony'
+    },
+    sdk: {
+      title: 'Developer SDK & API',
+      subtitle: 'REST endpoints and type-safe client libraries for automated treasury'
+    },
+    compliance: {
+      title: 'Compliance & Hardware HSM',
+      subtitle: 'FIPS 140-2 Level 3, SOC 2 Type II and Lloyd\'s of London insurance'
+    },
+    pricing: {
+      title: 'Institutional Plans',
+      subtitle: 'Transparent sovereign infrastructure scaling with your AUM'
+    },
+    faq: {
+      title: 'Knowledge Base',
+      subtitle: 'Deep cryptographic architecture, security guarantees and operations'
+    }
+  };
+
+  const currentMeta = tabTitles[activeTab] || tabTitles.overview;
+  const currentLangObj = supportedLanguages.find(l => l.code === currentLang) || supportedLanguages[0];
+
+  return (
+    <header className="vault-top-header">
+      <div className="header-left">
+        <button 
+          onClick={onOpenMobileMenu} 
+          className="header-mobile-toggle"
+          aria-label="Toggle Navigation"
+        >
+          <Menu className="w-5 h-5 text-slate-300" />
+        </button>
+
+        <div className="header-title-box">
+          <h1 className="header-main-title">{currentMeta.title}</h1>
+          <p className="header-sub-title">{currentMeta.subtitle}</p>
+        </div>
+      </div>
+
+      <div className="header-right">
+        {/* Enclave Status Pill */}
+        <div className="enclave-status-indicator">
+          <Radio className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+          <span className="font-mono text-xs text-emerald-400 font-semibold">Secure Environment</span>
+        </div>
+
+        {/* Notifications */}
+        <div className="relative" ref={notifRef}>
+          <button 
+            onClick={() => setNotificationsOpen(!notificationsOpen)}
+            className="header-action-icon-btn"
+            aria-label="Notifications"
+          >
+            <Bell className="w-4 h-4 text-slate-300" />
+            <span className="notif-badge-dot"></span>
+          </button>
+
+          {notificationsOpen && (
+            <div className="header-notif-dropdown">
+              <div className="notif-dropdown-header">
+                <span className="font-bold text-xs">Security Notifications</span>
+                <span className="text-[10px] text-emerald-400 font-mono">ALL ENCLAVES OK</span>
+              </div>
+              <div className="notif-list">
+                <div className="notif-item unread">
+                  <div className="notif-dot"></div>
+                  <div className="notif-content">
+                    <p className="notif-title">Quorum Signing Requested</p>
+                    <p className="notif-desc">Transfer -250.00 BTC requires your signature</p>
+                    <span className="notif-time">2 min ago</span>
+                  </div>
+                </div>
+                <div className="notif-item">
+                  <div className="notif-dot gray"></div>
+                  <div className="notif-content">
+                    <p className="notif-title">Zurich Shard Refreshed</p>
+                    <p className="notif-desc">Ephemeral memory zeroized successfully</p>
+                    <span className="notif-time">14 min ago</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Language Dropdown */}
+        <div className="relative" ref={langRef}>
+          <button 
+            onClick={() => setLangDropdownOpen(!langDropdownOpen)}
+            className="header-lang-btn"
+          >
+            <Globe className="w-3.5 h-3.5 text-indigo-400" />
+            <span className="font-mono text-xs font-bold">{currentLangObj.badge}</span>
+            <ChevronDown className={`w-3 h-3 text-slate-400 transition-transform ${langDropdownOpen ? 'rotate-180' : ''}`} />
+          </button>
+
+          {langDropdownOpen && (
+            <div className="header-lang-dropdown">
+              <div className="lang-menu-title">
+                {langMenuTitle || 'Language'}
+              </div>
+              {supportedLanguages.map(l => (
+                <button
+                  key={l.code}
+                  onClick={() => {
+                    onLanguageChange(l.code);
+                    setLangDropdownOpen(false);
+                  }}
+                  className={`lang-option-row ${currentLang === l.code ? 'active' : ''}`}
+                >
+                  <span className="text-xs font-medium">{l.name}</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-mono text-[10px] text-slate-400 bg-slate-800 px-1 py-0.5 rounded">{l.badge}</span>
+                    {currentLang === l.code && <Check className="w-3.5 h-3.5 text-indigo-400" />}
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Theme Toggle */}
+        <button 
+          onClick={onThemeToggle}
+          className="header-action-icon-btn"
+          title="Toggle Theme"
+        >
+          {currentTheme === 'dark' ? (
+            <Sun className="w-4 h-4 text-amber-400" />
+          ) : (
+            <Moon className="w-4 h-4 text-slate-700" />
+          )}
+        </button>
+
+        {/* New Transfer Quick Action */}
+        <button 
+          onClick={onNewTransferClick}
+          className="header-cta-btn"
+        >
+          <Plus className="w-4 h-4" />
+          <span className="hidden sm:inline">New Transfer</span>
+        </button>
+      </div>
+    </header>
+  );
+};
