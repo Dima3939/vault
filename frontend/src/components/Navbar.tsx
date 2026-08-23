@@ -17,6 +17,7 @@ interface NavbarProps {
     faq: string;
     launchApp: string;
     requestAccess: string;
+    langTitle?: string;
   };
   onRequestAccess: () => void;
 }
@@ -96,7 +97,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             {langMenuOpen && (
               <div className="vault-lang-dropdown-menu">
                 <div className="vault-lang-menu-title">
-                  Language / Мова / Sprache
+                  {t.langTitle || 'Language'}
                 </div>
                 {supportedLanguages.map((lang) => (
                   <button

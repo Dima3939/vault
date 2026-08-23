@@ -26,7 +26,8 @@ export const translations = {
       pricing: "Pricing",
       faq: "FAQ",
       launchApp: "Launch Console",
-      requestAccess: "Request Sovereign Vault"
+      requestAccess: "Request Sovereign Vault",
+      langTitle: "Language"
     },
     hero: {
       badge: "Cryptographic Engine v3.8 Active",
@@ -165,7 +166,8 @@ export const translations = {
       pricing: "Тарифи",
       faq: "FAQ",
       launchApp: "Консоль",
-      requestAccess: "Замовити Vault"
+      requestAccess: "Замовити Vault",
+      langTitle: "Мова"
     },
     hero: {
       badge: "Криптографічний рушій v3.8 Активний",
@@ -304,7 +306,8 @@ export const translations = {
       pricing: "Preise",
       faq: "FAQ",
       launchApp: "Konsole",
-      requestAccess: "Sovereign Vault anfordern"
+      requestAccess: "Sovereign Vault anfordern",
+      langTitle: "Sprache"
     },
     hero: {
       badge: "Kryptografische Engine v3.8 Aktiv",
@@ -443,7 +446,8 @@ export const translations = {
       pricing: "Precios",
       faq: "FAQ",
       launchApp: "Consola",
-      requestAccess: "Solicitar Vault"
+      requestAccess: "Solicitar Vault",
+      langTitle: "Idioma"
     },
     hero: {
       badge: "Motor Criptográfico v3.8 Activo",
@@ -582,7 +586,8 @@ export const translations = {
       pricing: "Tarifs",
       faq: "FAQ",
       launchApp: "Console",
-      requestAccess: "Demander un Vault"
+      requestAccess: "Demander un Vault",
+      langTitle: "Langue"
     },
     hero: {
       badge: "Moteur Cryptographique v3.8 Actif",
@@ -721,7 +726,8 @@ export const translations = {
       pricing: "Тарифы",
       faq: "FAQ",
       launchApp: "Консоль",
-      requestAccess: "Запросить Vault"
+      requestAccess: "Запросить Vault",
+      langTitle: "Язык"
     },
     hero: {
       badge: "Криптографический движок v3.8 Активен",

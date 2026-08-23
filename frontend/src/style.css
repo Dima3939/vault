@@ -14,7 +14,7 @@
   --vault-gold: #FFD700;
   --vault-border: rgba(255, 255, 255, 0.09);
   --vault-border-glow: rgba(0, 229, 153, 0.45);
-  --vault-header-bg: rgba(7, 8, 12, 0.92);
+  --vault-header-bg: rgba(7, 8, 12, 0.94);
   --vault-footer-bg: #040508;
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
@@ -73,13 +73,50 @@ a {
 }
 
 /* ==========================================================================
+   Global Telemetry Ticker Bar
+   ========================================================================== */
+.vault-top-telemetry-bar {
+  margin-top: 56px;
+  background: #040508;
+  border-bottom: 1px solid var(--vault-border);
+  padding: 0.35rem 1rem;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.telemetry-ticker-track {
+  display: flex;
+  gap: 2.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--vault-text-dim);
+  animation: ticker-slide 30s linear infinite;
+}
+
+@keyframes ticker-slide {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.ticker-item strong {
+  color: var(--vault-text-muted);
+}
+
+/* ==========================================================================
    Header Navigation Bar
    ========================================================================== */
 .vault-header {
   position: fixed;
   top: 0; left: 0; width: 100%;
   z-index: 1000;
-  padding: 0.85rem 2rem;
+  padding: 0.75rem 2rem;
   background: var(--vault-header-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -251,7 +288,7 @@ a {
   box-shadow: 0 0 12px var(--vault-emerald-glow);
 }
 
-/* Perfectly Positioned Language Dropdown */
+/* Positioned Language Dropdown */
 .vault-lang-dropdown-menu {
   position: absolute;
   top: calc(100% + 8px);
@@ -377,7 +414,9 @@ a {
   padding: 0.3rem 0;
 }
 
-/* Buttons */
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
 .vault-btn-primary {
   background: var(--vault-emerald);
   color: #040508 !important;
@@ -390,7 +429,8 @@ a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.45rem;
+  gap: 0.55rem;
+  line-height: 1;
   transition: all 0.2s;
   box-shadow: 0 0 20px var(--vault-emerald-glow);
 }
@@ -412,7 +452,8 @@ a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.45rem;
+  gap: 0.55rem;
+  line-height: 1;
   transition: all 0.2s;
 }
 
@@ -421,18 +462,24 @@ a {
   border-color: var(--vault-emerald);
 }
 
+.btn-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
 /* ==========================================================================
    Hero Section
    ========================================================================== */
 .vault-hero {
-  padding: 8rem 2rem 4rem 2rem;
+  padding: 4rem 2rem 4rem 2rem;
   max-width: 1320px;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 3.5rem;
-  min-height: 85vh;
+  min-height: 80vh;
 }
 
 .vault-hero-content {
@@ -740,8 +787,39 @@ a {
 }
 
 /* ==========================================================================
-   Swiss Enclave Terminal Grid (Distinct from Luminary)
+   HSM Server Rack Chassis (Distinct Visual Identity)
    ========================================================================== */
+.hsm-rack-chassis {
+  background: #030407;
+  border: 2px solid #1E293B;
+  border-radius: 24px;
+  padding: 1.8rem;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.8), 0 20px 60px rgba(0, 0, 0, 0.6);
+  position: relative;
+}
+
+.rack-top-rail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1.2rem;
+  margin-bottom: 1.4rem;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.rack-ear {
+  display: flex;
+  gap: 4px;
+}
+
+.rack-ear span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #334155;
+  border: 1px solid #475569;
+}
+
 .enclave-terminal-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -772,6 +850,31 @@ a {
   padding-bottom: 0.9rem;
   margin-bottom: 1.1rem;
   border-bottom: 1px solid var(--vault-border);
+}
+
+/* Perfect Flexbox Title Alignment */
+.panel-title-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  line-height: 1;
+}
+
+.panel-header-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+}
+
+.panel-header-text {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1;
+  display: flex;
+  align-items: center;
 }
 
 .panel-status-tag {
@@ -900,7 +1003,7 @@ a {
 /* ==========================================================================
    Interactive Components (MPC & Treasury)
    ========================================================================== */
-.mpc-visualizer-card, .treasury-card, .policy-builder-card, .sdk-hub-card, .compliance-matrix-card {
+.mpc-visualizer-card, .treasury-card, .policy-builder-card, .sdk-hub-card, .compliance-matrix-card, .swiss-tech-table-card {
   background: var(--vault-surface);
   border: 1px solid var(--vault-border);
   border-radius: 22px;
@@ -915,6 +1018,28 @@ a {
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
   gap: 1rem;
+}
+
+.mpc-header-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  line-height: 1;
+}
+
+.mpc-header-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--vault-emerald);
+  flex-shrink: 0;
+}
+
+.mpc-header-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--vault-text);
+  line-height: 1.2;
+  margin: 0;
 }
 
 .mpc-badge-active {
@@ -939,6 +1064,13 @@ a {
   padding: 1rem;
 }
 
+.mpc-d3-svg {
+  width: 100%;
+  height: auto;
+  max-height: 380px;
+  user-select: none;
+}
+
 .mpc-terminal-box {
   margin-top: 1.2rem;
 }
@@ -948,6 +1080,29 @@ a {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.4rem;
+}
+
+.terminal-header-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  color: var(--vault-emerald);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.terminal-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.terminal-header-meta {
+  font-size: 0.68rem;
+  font-family: var(--font-mono);
+  color: var(--vault-text-dim);
 }
 
 .mpc-metrics-grid {
@@ -984,6 +1139,39 @@ a {
   gap: 1rem;
   margin-top: 1.2rem;
   flex-wrap: wrap;
+}
+
+/* Technical Comparison Table */
+.swiss-tech-table-card {
+  overflow-x: auto;
+}
+
+.swiss-tech-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  text-align: left;
+}
+
+.swiss-tech-table th {
+  padding: 1rem 1.2rem;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  color: var(--vault-text-muted);
+  border-bottom: 1px solid var(--vault-border);
+}
+
+.swiss-tech-table td {
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid var(--vault-border);
+  color: var(--vault-text-muted);
+}
+
+.swiss-tech-table .highlight-col {
+  background: var(--vault-emerald-dim);
+  border-left: 1px solid var(--vault-emerald-glow);
+  border-right: 1px solid var(--vault-emerald-glow);
 }
 
 /* Treasury Chart */
@@ -1537,7 +1725,7 @@ a {
   .vault-hero {
     flex-direction: column;
     text-align: center;
-    padding: 5.5rem 1rem 3rem 1rem;
+    padding: 3.5rem 1rem 3rem 1rem;
   }
   .vault-hero-content {
     margin: 0 auto;

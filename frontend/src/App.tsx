@@ -18,7 +18,9 @@ import {
   Award,
   Lock,
   Cpu,
-  Server
+  Server,
+  Check,
+  X
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -141,6 +143,18 @@ export function App() {
       />
 
       <main className="vault-main-content">
+        {/* GLOBAL ENCLAVE NODES TELEMETRY TICKER */}
+        <div className="vault-top-telemetry-bar">
+          <div className="telemetry-ticker-track">
+            <span className="ticker-item"><span className="pulse-dot"></span> <strong>ZURICH CH-01:</strong> 2.1ms (PRIMARY TEE)</span>
+            <span className="ticker-item"><span className="pulse-dot"></span> <strong>FRANKFURT DE-02:</strong> 4.8ms</span>
+            <span className="ticker-item"><span className="pulse-dot"></span> <strong>LONDON UK-01:</strong> 5.4ms</span>
+            <span className="ticker-item"><span className="pulse-dot"></span> <strong>NEW YORK US-01:</strong> 12.1ms (HSM CLUSTER)</span>
+            <span className="ticker-item"><span className="pulse-dot"></span> <strong>TOKYO JP-01:</strong> 18.4ms</span>
+            <span className="ticker-item"><span className="pulse-dot"></span> <strong>SINGAPORE SG-01:</strong> 16.2ms</span>
+          </div>
+        </div>
+
         {/* HERO SECTION */}
         <section className="vault-hero" id="waitlist-section">
           <div className="vault-hero-content">
@@ -260,106 +274,116 @@ export function App() {
           </div>
         </section>
 
-        {/* SWISS ENCLAVE ARCHITECTURE GRID */}
+        {/* HARDWARE ENCLAVE RACK (SWISS HSM SERVER UNIT) */}
         <section className="vault-section" id="features">
-          <div className="section-header text-center max-w-3xl mx-auto mb-12">
+          <div className="section-header">
             <span className="section-tag">{t.features.tag}</span>
             <h2 className="section-title">{t.features.title}</h2>
             <p className="section-desc">{t.features.desc}</p>
           </div>
 
-          <div className="enclave-terminal-grid">
-            {/* Enclave Card 1: MPC Threshold Sharding */}
-            <div className="enclave-panel large">
-              <div className="panel-header-bar">
-                <div className="flex items-center gap-2">
-                  <Server className="w-4 h-4 text-emerald-400" />
-                  <span className="font-mono text-xs text-emerald-400 font-bold">[ENCLAVE: CH-ZURICH-01]</span>
-                </div>
-                <span className="panel-status-tag">{t.features.card1Badge}</span>
+          <div className="hsm-rack-chassis">
+            <div className="rack-top-rail">
+              <div className="rack-ear left"><span></span><span></span></div>
+              <div className="rack-title font-mono text-xs text-slate-400">
+                SWISS_ENCLAVE_SYSTEMS // MODEL: V-HSM-9000 // STATUS: ALL NODES SYNCHRONIZED
               </div>
-              <div className="enclave-panel-body">
-                <div className="enclave-img-wrap">
-                  <img src={`${baseUrl}card-mpc.jpg`} alt="MPC Protocol" className="enclave-img" />
+              <div className="rack-ear right"><span></span><span></span></div>
+            </div>
+
+            <div className="enclave-terminal-grid">
+              {/* Blade 01: MPC-CMP Threshold Sharding */}
+              <div className="enclave-panel large">
+                <div className="panel-header-bar">
+                  <div className="panel-title-group">
+                    <Server className="panel-header-icon text-emerald-400" />
+                    <span className="panel-header-text text-emerald-400">[ENCLAVE: CH-ZURICH-01]</span>
+                  </div>
+                  <span className="panel-status-tag">{t.features.card1Badge}</span>
                 </div>
-                <div className="enclave-info">
-                  <h3 className="enclave-heading">{t.features.card1Title}</h3>
-                  <p className="enclave-desc" dangerouslySetInnerHTML={{ __html: t.features.card1Desc }} />
-                  
-                  <div className="telemetry-bar-box">
-                    <div className="telemetry-header-line">
-                      <span className="telemetry-sub">{t.features.card1LiveLabel}</span>
-                      <span className="telemetry-live-state">
-                        <span className="pulse-dot"></span> {t.features.card1LiveStatus}
-                      </span>
-                    </div>
-                    <div className="telemetry-log-lines">
-                      <div>[14:02:18] <span className="text-emerald-400 font-bold">AWS_NITRO</span> Shard_A refreshed (0x8491) <span className="text-cyan-400 font-bold">✓ OK</span></div>
-                      <div>[14:02:19] <span className="text-emerald-400 font-bold">GCP_TEE</span> Shard_B zeroized ephemeral memory <span className="text-cyan-400 font-bold">✓ 12ms</span></div>
-                      <div>[14:02:20] <span className="text-emerald-400 font-bold">HSM_CORE</span> 3-of-5 threshold quorum established <span className="text-cyan-400 font-bold">✓ Verified</span></div>
+                <div className="enclave-panel-body">
+                  <div className="enclave-img-wrap">
+                    <img src={`${baseUrl}card-mpc.jpg`} alt="MPC Protocol" className="enclave-img" />
+                  </div>
+                  <div className="enclave-info">
+                    <h3 className="enclave-heading">{t.features.card1Title}</h3>
+                    <p className="enclave-desc" dangerouslySetInnerHTML={{ __html: t.features.card1Desc }} />
+                    
+                    <div className="telemetry-bar-box">
+                      <div className="telemetry-header-line">
+                        <span className="telemetry-sub">{t.features.card1LiveLabel}</span>
+                        <span className="telemetry-live-state">
+                          <span className="pulse-dot"></span> {t.features.card1LiveStatus}
+                        </span>
+                      </div>
+                      <div className="telemetry-log-lines">
+                        <div>[14:02:18] <span className="text-emerald-400 font-bold">AWS_NITRO</span> Shard_A refreshed (0x8491) <span className="text-cyan-400 font-bold">✓ OK</span></div>
+                        <div>[14:02:19] <span className="text-emerald-400 font-bold">GCP_TEE</span> Shard_B zeroized ephemeral memory <span className="text-cyan-400 font-bold">✓ 12ms</span></div>
+                        <div>[14:02:20] <span className="text-emerald-400 font-bold">HSM_CORE</span> 3-of-5 threshold quorum established <span className="text-cyan-400 font-bold">✓ Verified</span></div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Enclave Card 2: FIPS 140-2 Level 3 HSM */}
-            <div className="enclave-panel">
-              <div className="panel-header-bar">
-                <div className="flex items-center gap-2">
-                  <Cpu className="w-4 h-4 text-amber-400" />
-                  <span className="font-mono text-xs text-amber-400 font-bold">[HARDWARE: FIPS 140-2]</span>
+              {/* Blade 02: FIPS 140-2 Level 3 HSM */}
+              <div className="enclave-panel">
+                <div className="panel-header-bar">
+                  <div className="panel-title-group">
+                    <Cpu className="panel-header-icon text-amber-400" />
+                    <span className="panel-header-text text-amber-400">[HARDWARE: FIPS 140-2]</span>
+                  </div>
+                  <span className="panel-status-tag">{t.features.card2Badge}</span>
                 </div>
-                <span className="panel-status-tag">{t.features.card2Badge}</span>
-              </div>
-              <div className="enclave-img-wrap">
-                <img src={`${baseUrl}card-hsm.jpg`} alt="Hardware HSM" className="enclave-img" />
-              </div>
-              <div className="enclave-info">
-                <h3 className="enclave-heading">{t.features.card2Title}</h3>
-                <p className="enclave-desc">{t.features.card2Desc}</p>
-              </div>
-            </div>
-
-            {/* Enclave Card 3: Programmable Policy Governance */}
-            <div className="enclave-panel">
-              <div className="panel-header-bar">
-                <div className="flex items-center gap-2">
-                  <Lock className="w-4 h-4 text-cyan-400" />
-                  <span className="font-mono text-xs text-cyan-400 font-bold">[GOVERNANCE: TSS-QUORUM]</span>
-                </div>
-                <span className="panel-status-tag">{t.features.card3Badge}</span>
-              </div>
-              <div className="enclave-img-wrap">
-                <img src={`${baseUrl}card-policy.jpg`} alt="Policy Governance" className="enclave-img" />
-              </div>
-              <div className="enclave-info">
-                <h3 className="enclave-heading">{t.features.card3Title}</h3>
-                <p className="enclave-desc">{t.features.card3Desc}</p>
-              </div>
-            </div>
-
-            {/* Enclave Card 4: Instant Cross-Chain Treasury */}
-            <div className="enclave-panel wide">
-              <div className="panel-header-bar">
-                <div className="flex items-center gap-2">
-                  <Zap className="w-4 h-4 text-emerald-400" />
-                  <span className="font-mono text-xs text-emerald-400 font-bold">[SETTLEMENT: MULTI-CHAIN]</span>
-                </div>
-                <span className="panel-status-tag">{t.features.card4Badge}</span>
-              </div>
-              <div className="enclave-panel-body wide-grid">
                 <div className="enclave-img-wrap">
-                  <img src={`${baseUrl}card-treasury.jpg`} alt="Cross-Chain Liquidity" className="enclave-img" />
+                  <img src={`${baseUrl}card-hsm.jpg`} alt="Hardware HSM" className="enclave-img" />
                 </div>
                 <div className="enclave-info">
-                  <h3 className="enclave-heading">{t.features.card4Title}</h3>
-                  <p className="enclave-desc">{t.features.card4Desc}</p>
-                  <div className="vault-tags-row">
-                    <span className="vault-pill-tag">Bitcoin Native SegWit</span>
-                    <span className="vault-pill-tag">Ethereum ERC-4337</span>
-                    <span className="vault-pill-tag">Solana SPL Token2022</span>
-                    <span className="vault-pill-tag">Zero-Knowledge Proofs</span>
+                  <h3 className="enclave-heading">{t.features.card2Title}</h3>
+                  <p className="enclave-desc">{t.features.card2Desc}</p>
+                </div>
+              </div>
+
+              {/* Blade 03: Programmable Policy Governance */}
+              <div className="enclave-panel">
+                <div className="panel-header-bar">
+                  <div className="panel-title-group">
+                    <Lock className="panel-header-icon text-cyan-400" />
+                    <span className="panel-header-text text-cyan-400">[GOVERNANCE: TSS-QUORUM]</span>
+                  </div>
+                  <span className="panel-status-tag">{t.features.card3Badge}</span>
+                </div>
+                <div className="enclave-img-wrap">
+                  <img src={`${baseUrl}card-policy.jpg`} alt="Policy Governance" className="enclave-img" />
+                </div>
+                <div className="enclave-info">
+                  <h3 className="enclave-heading">{t.features.card3Title}</h3>
+                  <p className="enclave-desc">{t.features.card3Desc}</p>
+                </div>
+              </div>
+
+              {/* Blade 04: Instant Cross-Chain Treasury */}
+              <div className="enclave-panel wide">
+                <div className="panel-header-bar">
+                  <div className="panel-title-group">
+                    <Zap className="panel-header-icon text-emerald-400" />
+                    <span className="panel-header-text text-emerald-400">[SETTLEMENT: MULTI-CHAIN]</span>
+                  </div>
+                  <span className="panel-status-tag">{t.features.card4Badge}</span>
+                </div>
+                <div className="enclave-panel-body wide-grid">
+                  <div className="enclave-img-wrap">
+                    <img src={`${baseUrl}card-treasury.jpg`} alt="Cross-Chain Liquidity" className="enclave-img" />
+                  </div>
+                  <div className="enclave-info">
+                    <h3 className="enclave-heading">{t.features.card4Title}</h3>
+                    <p className="enclave-desc">{t.features.card4Desc}</p>
+                    <div className="vault-tags-row">
+                      <span className="vault-pill-tag">Bitcoin Native SegWit</span>
+                      <span className="vault-pill-tag">Ethereum ERC-4337</span>
+                      <span className="vault-pill-tag">Solana SPL Token2022</span>
+                      <span className="vault-pill-tag">Zero-Knowledge Proofs</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -369,7 +393,7 @@ export function App() {
 
         {/* D3.JS MPC SIGNING SIMULATOR */}
         <section className="vault-section" id="mpc-simulator">
-          <div className="section-header text-center max-w-3xl mx-auto mb-12">
+          <div className="section-header">
             <span className="section-tag">{t.mpc.tag}</span>
             <h2 className="section-title">{t.mpc.title}</h2>
             <p className="section-desc">{t.mpc.desc}</p>
@@ -382,7 +406,7 @@ export function App() {
 
         {/* D3.JS TREASURY LIQUIDITY FLOW */}
         <section className="vault-section" id="treasury-flow">
-          <div className="section-header text-center max-w-3xl mx-auto mb-12">
+          <div className="section-header">
             <span className="section-tag">{t.treasury.tag}</span>
             <h2 className="section-title">{t.treasury.title}</h2>
             <p className="section-desc">{t.treasury.desc}</p>
@@ -402,7 +426,7 @@ export function App() {
 
         {/* DEVELOPER SDK & API HUB */}
         <section className="vault-section" id="developers">
-          <div className="section-header text-center max-w-3xl mx-auto mb-12">
+          <div className="section-header">
             <span className="section-tag">{t.sdk.tag}</span>
             <h2 className="section-title">{t.sdk.title}</h2>
           </div>
@@ -412,12 +436,59 @@ export function App() {
           </div>
         </section>
 
-        {/* COMPLIANCE STANDARDS MATRIX */}
+        {/* TECHNICAL SECURITY COMPARISON MATRIX */}
         <section className="vault-section" id="compliance">
-          <div className="section-header text-center max-w-3xl mx-auto mb-12">
+          <div className="section-header">
             <span className="section-tag">{t.compliance.tag}</span>
             <h2 className="section-title">{t.compliance.title}</h2>
             <p className="section-desc">{t.compliance.desc}</p>
+          </div>
+
+          <div className="max-w-4xl mx-auto mb-12">
+            <div className="swiss-tech-table-card">
+              <table className="swiss-tech-table">
+                <thead>
+                  <tr>
+                    <th>Security Capability</th>
+                    <th>Legacy Hot Wallets</th>
+                    <th>Smart Contract Multi-Sig</th>
+                    <th className="highlight-col">Vault Sovereign MPC-CMP</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Key Generation</strong></td>
+                    <td className="text-red-400"><X className="inline w-3.5 h-3.5" /> Single Machine Memory</td>
+                    <td>On-Chain Contract</td>
+                    <td className="highlight-col text-emerald-400 font-bold"><Check className="inline w-3.5 h-3.5" /> Never Assembled (3/5 Shards)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Signing Latency (p99)</strong></td>
+                    <td>250 ms</td>
+                    <td>15,000 ms (Gas Dependent)</td>
+                    <td className="highlight-col text-emerald-400 font-bold"><Check className="inline w-3.5 h-3.5" /> 14.2 ms (Sub-Millisecond)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Blockchain Portability</strong></td>
+                    <td>Standard</td>
+                    <td className="text-red-400"><X className="inline w-3.5 h-3.5" /> EVM Only</td>
+                    <td className="highlight-col text-emerald-400 font-bold"><Check className="inline w-3.5 h-3.5" /> Universal Chain-Agnostic</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Hardware Protection</strong></td>
+                    <td>None / Software</td>
+                    <td>None</td>
+                    <td className="highlight-col text-emerald-400 font-bold"><Check className="inline w-3.5 h-3.5" /> FIPS 140-2 Level 3 HSM</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Specie Insurance</strong></td>
+                    <td>Optional</td>
+                    <td>None</td>
+                    <td className="highlight-col text-emerald-400 font-bold"><Check className="inline w-3.5 h-3.5" /> $250M Lloyd's of London</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <div className="max-w-4xl mx-auto">

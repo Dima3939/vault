@@ -176,11 +176,11 @@ export const MpcVisualizer: React.FC<MpcVisualizerProps> = ({ t }) => {
   return (
     <div className="mpc-visualizer-card">
       <div className="mpc-header">
-        <div className="flex items-center gap-2">
-          <ShieldCheck className="text-emerald-400 w-5 h-5" />
-          <h3 className="text-lg font-bold text-white tracking-tight">{t.title}</h3>
+        <div className="mpc-header-left">
+          <ShieldCheck className="mpc-header-icon" />
+          <h3 className="mpc-header-title">{t.title}</h3>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="mpc-header-right">
           <span className="mpc-badge-active">
             <span className="pulse-dot"></span> 3/5 Quorum Active
           </span>
@@ -191,20 +191,20 @@ export const MpcVisualizer: React.FC<MpcVisualizerProps> = ({ t }) => {
         <svg 
           ref={svgRef} 
           viewBox="0 0 600 400" 
-          className="w-full h-auto max-h-[380px] select-none"
+          className="mpc-d3-svg"
         />
       </div>
 
       {/* Cryptographic Signature Output Terminal */}
       <div className="mpc-terminal-box">
         <div className="terminal-header">
-          <div className="flex items-center gap-2 text-xs font-mono text-emerald-400">
-            <Zap className="w-3.5 h-3.5" />
+          <div className="terminal-header-title">
+            <Zap className="terminal-icon" />
             <span>ECDSA_SIGNATURE_PAYLOAD (DER FORMAT)</span>
           </div>
-          <span className="text-[11px] font-mono text-slate-400">Curve: secp256k1</span>
+          <span className="terminal-header-meta">Curve: secp256k1</span>
         </div>
-        <div className="terminal-body font-mono text-xs text-slate-300 break-all bg-black/40 p-3 rounded-lg border border-white/5">
+        <div className="terminal-body font-mono text-xs text-slate-300 break-all bg-black/50 p-3 rounded-lg border border-white/5">
           <span className="text-emerald-400 font-semibold">{signatureHash}</span>
         </div>
       </div>
@@ -234,12 +234,12 @@ export const MpcVisualizer: React.FC<MpcVisualizerProps> = ({ t }) => {
         >
           {isSigning ? (
             <>
-              <RefreshCw className="w-4 h-4 animate-spin" />
+              <RefreshCw className="btn-icon animate-spin" />
               <span>Generating TSS Protocol Proof...</span>
             </>
           ) : (
             <>
-              <Key className="w-4 h-4" />
+              <Key className="btn-icon" />
               <span>{t.initiateBtn}</span>
             </>
           )}
