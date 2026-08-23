@@ -204,8 +204,8 @@ export const MpcVisualizer: React.FC<MpcVisualizerProps> = ({ t }) => {
           </div>
           <span className="terminal-header-meta">Curve: secp256k1</span>
         </div>
-        <div className="terminal-body font-mono text-xs text-slate-300 break-all bg-black/50 p-3 rounded-lg border border-white/5">
-          <span className="text-emerald-400 font-semibold">{signatureHash}</span>
+        <div className="terminal-body">
+          <span className="signature-hash-text">{signatureHash}</span>
         </div>
       </div>
 

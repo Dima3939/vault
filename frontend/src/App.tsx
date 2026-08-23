@@ -132,17 +132,17 @@ export function App() {
 
   return (
     <div className="vault-app">
-      {/* Fixed Navigation Bar */}
-      <Navbar
-        currentLang={currentLang}
-        onLanguageChange={handleLanguageChange}
-        currentTheme={currentTheme}
-        onThemeToggle={handleThemeToggle}
-        t={t.nav}
-        onRequestAccess={() => triggerWaitlistFocus('Institutional Sovereign')}
-      />
+      {/* Fixed Combined Header (Navbar + Telemetry Stream) */}
+      <header className="vault-fixed-header-wrapper">
+        <Navbar
+          currentLang={currentLang}
+          onLanguageChange={handleLanguageChange}
+          currentTheme={currentTheme}
+          onThemeToggle={handleThemeToggle}
+          t={t.nav}
+          onRequestAccess={() => triggerWaitlistFocus('Institutional Sovereign')}
+        />
 
-      <main className="vault-main-content">
         {/* GLOBAL ENCLAVE NODES TELEMETRY TICKER */}
         <div className="vault-top-telemetry-bar">
           <div className="telemetry-ticker-track">
@@ -154,7 +154,9 @@ export function App() {
             <span className="ticker-item"><span className="pulse-dot"></span> <strong>SINGAPORE SG-01:</strong> 16.2ms</span>
           </div>
         </div>
+      </header>
 
+      <main className="vault-main-content">
         {/* HERO SECTION */}
         <section className="vault-hero" id="waitlist-section">
           <div className="vault-hero-content">
