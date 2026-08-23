@@ -114,6 +114,8 @@ a {
   max-width: 1600px;
   width: 100%;
   margin: 0 auto;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .tab-view-container {
@@ -121,6 +123,9 @@ a {
   flex-direction: column;
   gap: 2.2rem;
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 /* ==========================================================================
@@ -133,6 +138,8 @@ a {
   margin-bottom: 2.2rem;
   gap: 1.5rem;
   flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .section-tag-pill {
@@ -361,6 +368,8 @@ a {
   position: sticky;
   top: 0;
   z-index: 50;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .header-left {
@@ -424,6 +433,7 @@ a {
   cursor: pointer;
   position: relative;
   transition: all 0.15s;
+  flex-shrink: 0;
 }
 
 .header-action-icon-btn:hover {
@@ -452,6 +462,7 @@ a {
   color: var(--os-text);
   cursor: pointer;
   transition: all 0.15s;
+  flex-shrink: 0;
 }
 
 .header-lang-btn:hover {
@@ -575,10 +586,12 @@ a {
   font-size: 0.84rem;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.45rem;
   cursor: pointer;
   transition: all 0.2s;
   box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+  flex-shrink: 0;
 }
 
 .header-cta-btn:hover {
@@ -674,12 +687,16 @@ a {
   display: flex;
   flex-direction: column;
   gap: 2.2rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .overview-metrics-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
+  width: 100%;
 }
 
 .overview-stat-card {
@@ -691,6 +708,8 @@ a {
   flex-direction: column;
   justify-content: space-between;
   transition: transform 0.2s, border-color 0.2s;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .overview-stat-card:hover {
@@ -754,6 +773,7 @@ a {
   display: grid;
   grid-template-columns: 1.85fr 1.15fr;
   gap: 1.6rem;
+  width: 100%;
 }
 
 .overview-chart-card {
@@ -761,6 +781,8 @@ a {
   border: 1px solid var(--os-border);
   border-radius: 22px;
   padding: 2rem 2.2rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .chart-card-header {
@@ -825,6 +847,7 @@ a {
 .chart-svg-wrapper {
   position: relative;
   width: 100%;
+  overflow: hidden;
 }
 
 .balance-area-svg {
@@ -847,6 +870,7 @@ a {
   grid-template-columns: 150px 1fr;
   gap: 2.2rem;
   align-items: center;
+  width: 100%;
 }
 
 .donut-svg-box {
@@ -876,6 +900,7 @@ a {
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
+  width: 100%;
 }
 
 .legend-row {
@@ -927,6 +952,8 @@ a {
   border: 1px solid var(--os-border);
   border-radius: 22px;
   padding: 2rem 2.2rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .table-card-header {
@@ -939,6 +966,7 @@ a {
 .table-responsive-wrapper {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  width: 100%;
 }
 
 .vault-os-table {
@@ -1059,6 +1087,7 @@ a {
   align-items: center;
   gap: 0.85rem;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .tx-filter-pills {
@@ -1130,6 +1159,7 @@ a {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.6rem;
+  width: 100%;
 }
 
 .overview-widget-card {
@@ -1139,6 +1169,8 @@ a {
   padding: 1.9rem;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .widget-header {
@@ -1183,6 +1215,8 @@ a {
   border-radius: 14px;
   padding: 1.1rem;
   margin-bottom: 1.3rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .transfer-amount-line {
@@ -1213,6 +1247,7 @@ a {
   flex-direction: column;
   gap: 0.8rem;
   margin-bottom: 1.5rem;
+  width: 100%;
 }
 
 .signer-item {
@@ -1224,6 +1259,8 @@ a {
   padding: 0.75rem 1rem;
   border-radius: 12px;
   gap: 0.6rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .signer-item.highlight {
@@ -1284,6 +1321,7 @@ a {
   display: flex;
   gap: 0.85rem;
   margin-top: auto;
+  width: 100%;
 }
 
 .btn-widget-reject {
@@ -1344,6 +1382,7 @@ a {
   margin-top: 2rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--os-border);
+  width: 100%;
 }
 
 .approvals-action-row .btn-widget-reject {
@@ -1377,6 +1416,7 @@ a {
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
+  width: 100%;
 }
 
 .policy-row-item {
@@ -1387,6 +1427,8 @@ a {
   border: 1px solid var(--os-border);
   padding: 0.8rem 1rem;
   border-radius: 12px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .policy-row-left {
@@ -1447,6 +1489,7 @@ a {
   cursor: pointer;
   position: relative;
   transition: background 0.2s;
+  flex-shrink: 0;
 }
 
 .policy-toggle-switch.on { background: var(--os-emerald); }
@@ -1470,6 +1513,7 @@ a {
   grid-template-columns: repeat(3, 1fr);
   gap: 0.95rem;
   margin-bottom: 1.3rem;
+  width: 100%;
 }
 
 .mpc-mini-stat {
@@ -1486,6 +1530,8 @@ a {
   border: 1px solid var(--os-border);
   border-radius: 16px;
   padding: 1.3rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .shard-box-header {
@@ -1517,6 +1563,7 @@ a {
   justify-content: space-between;
   gap: 0.55rem;
   margin: 0.95rem 0;
+  width: 100%;
 }
 
 .shard-circle {
@@ -1548,6 +1595,7 @@ a {
   grid-template-columns: repeat(3, 1fr);
   gap: 0.65rem;
   margin-top: 1rem;
+  width: 100%;
 }
 
 .mpc-chip {
@@ -1582,6 +1630,9 @@ a {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.8rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .wallet-card-item {
@@ -1594,6 +1645,9 @@ a {
   justify-content: space-between;
   min-height: 240px;
   transition: transform 0.2s, border-color 0.2s;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .wallet-card-item:hover {
@@ -1607,6 +1661,7 @@ a {
   align-items: center;
   gap: 1rem;
   margin-bottom: 1.5rem;
+  width: 100%;
 }
 
 .wallet-card-brand {
@@ -1682,6 +1737,8 @@ a {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* Treasury Flow Chart */
@@ -1690,6 +1747,8 @@ a {
   border: 1px solid var(--os-border);
   border-radius: 24px;
   padding: 2.4rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .treasury-header {
@@ -1706,6 +1765,7 @@ a {
   grid-template-columns: 1.35fr 1fr;
   gap: 2.2rem;
   align-items: center;
+  width: 100%;
 }
 
 .treasury-d3-box {
@@ -1714,6 +1774,7 @@ a {
   border-radius: 18px;
   padding: 1.4rem;
   overflow: hidden;
+  width: 100%;
 }
 
 .treasury-asset-detail-card {
@@ -1721,6 +1782,8 @@ a {
   border: 1px solid var(--os-border);
   border-radius: 20px;
   padding: 2.2rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .asset-detail-header {
@@ -1749,6 +1812,8 @@ a {
   border: 1px solid var(--os-border);
   border-radius: 24px;
   padding: 2.4rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .mpc-header {
@@ -1758,6 +1823,7 @@ a {
   margin-bottom: 2rem;
   flex-wrap: wrap;
   gap: 1rem;
+  width: 100%;
 }
 
 .mpc-header-left {
@@ -1771,6 +1837,7 @@ a {
   width: 24px;
   height: 24px;
   color: var(--os-primary);
+  flex-shrink: 0;
 }
 
 .mpc-header-title {
@@ -1792,6 +1859,7 @@ a {
   align-items: center;
   gap: 0.5rem;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .mpc-d3-container {
@@ -1805,6 +1873,7 @@ a {
   box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
   width: 100%;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .mpc-d3-svg {
@@ -1819,6 +1888,7 @@ a {
   grid-template-columns: repeat(3, 1fr);
   gap: 1.4rem;
   margin: 1.8rem 0;
+  width: 100%;
 }
 
 .metric-box {
@@ -1829,6 +1899,8 @@ a {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .metric-label {
@@ -1848,6 +1920,7 @@ a {
 
 .mpc-terminal-box {
   margin-top: 1.5rem;
+  width: 100%;
 }
 
 .terminal-header {
@@ -1887,6 +1960,7 @@ a {
   padding: 1.1rem;
   width: 100%;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .signature-hash-text {
@@ -1906,16 +1980,19 @@ a {
   gap: 1.2rem;
   margin-top: 1.8rem;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 /* ==========================================================================
-   Policy Builder Component
+   Policy Builder Component (Redesigned with Top Icons)
    ========================================================================== */
 .policy-builder-card {
   background: var(--os-card);
   border: 1px solid var(--os-border);
   border-radius: 24px;
   padding: 2.4rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .policy-header {
@@ -1943,43 +2020,91 @@ a {
 .policy-rules-list {
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;
+  gap: 1.2rem;
+  width: 100%;
 }
 
-.policy-item {
+.policy-item-v2 {
   background: var(--os-card-light);
   border: 1px solid var(--os-border);
-  border-radius: 16px;
-  padding: 1.3rem 1.6rem;
+  border-radius: 18px;
+  padding: 1.4rem 1.6rem;
   display: flex;
-  align-items: center;
-  gap: 1.2rem;
+  flex-direction: column;
+  gap: 0.8rem;
   cursor: pointer;
   transition: all 0.2s;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.policy-item:hover {
+.policy-item-v2:hover {
   border-color: var(--os-primary);
 }
 
-.policy-item.active {
+.policy-item-v2.active {
   border-color: var(--os-primary);
-  box-shadow: 0 0 18px var(--os-primary-dim);
+  box-shadow: 0 0 20px var(--os-primary-dim);
 }
 
-.policy-item-icon {
-  width: 46px;
-  height: 46px;
-  border-radius: 12px;
-  background: var(--os-sidebar);
+.policy-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.policy-item-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
-.policy-item-content {
-  flex: 1;
+.policy-item-icon-box.emerald {
+  background: var(--os-emerald-dim);
+  border: 1px solid var(--os-emerald);
+}
+
+.policy-item-icon-box.cyan {
+  background: var(--os-cyan-dim);
+  border: 1px solid var(--os-cyan);
+}
+
+.policy-item-icon-box.amber {
+  background: var(--os-amber-dim);
+  border: 1px solid var(--os-amber);
+}
+
+.policy-status-pill {
+  font-size: 0.7rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.policy-status-pill.active {
+  background: var(--os-emerald-dim);
+  color: var(--os-emerald);
+  border: 1px solid var(--os-emerald);
+}
+
+.policy-status-pill.disabled {
+  background: rgba(100, 116, 139, 0.15);
+  color: var(--os-text-dim);
+  border: 1px solid var(--os-text-dim);
+}
+
+.policy-item-description {
+  font-size: 0.86rem;
+  color: var(--os-text-muted);
+  line-height: 1.6;
 }
 
 /* ==========================================================================
@@ -1990,6 +2115,8 @@ a {
   border: 1px solid var(--os-border);
   border-radius: 24px;
   padding: 2.4rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .sdk-header {
@@ -2057,6 +2184,8 @@ a {
   border-radius: 18px;
   padding: 1.8rem;
   overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .sdk-copy-action-btn {
@@ -2098,6 +2227,8 @@ a {
   border: 1px solid var(--os-border);
   border-radius: 22px;
   padding: 2rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .swiss-tech-table {
@@ -2135,6 +2266,7 @@ a {
   grid-template-columns: repeat(4, 1fr);
   gap: 1.6rem;
   margin-top: 2.2rem;
+  width: 100%;
 }
 
 .compliance-cell {
@@ -2143,6 +2275,8 @@ a {
   border-radius: 20px;
   padding: 2rem;
   text-align: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .compliance-badge-icon {
@@ -2176,6 +2310,7 @@ a {
 .pricing-section-wrapper {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .segmented-switch-wrapper {
@@ -2232,6 +2367,7 @@ a {
   gap: 2rem;
   align-items: stretch;
   margin-top: 1.5rem !important;
+  width: 100%;
 }
 
 .pricing-card {
@@ -2244,6 +2380,8 @@ a {
   justify-content: space-between;
   position: relative;
   transition: transform 0.3s;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .pricing-card:hover {
@@ -2345,12 +2483,14 @@ a {
 .faq-section-wrapper {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .faq-container {
   display: flex;
   flex-direction: column;
   gap: 1.3rem;
+  width: 100%;
 }
 
 .faq-accordion-item {
@@ -2359,6 +2499,8 @@ a {
   border-radius: 20px;
   overflow: hidden;
   transition: border-color 0.25s, box-shadow 0.25s;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .faq-accordion-item:hover {
@@ -2609,9 +2751,19 @@ a {
   .header-mobile-toggle {
     display: flex;
   }
-  /* Force Hide Enclave Status on Tablet & Mobile to prevent header squish */
   .enclave-status-indicator {
     display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .mpc-metrics-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.85rem !important;
+    width: 100% !important;
+  }
+  .metric-box {
+    width: 100% !important;
   }
 }
 
@@ -2624,11 +2776,7 @@ a {
     padding: 0.65rem 0.85rem !important;
   }
   .header-main-title {
-    font-size: 1rem !important;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 130px;
+    display: none !important;
   }
   .header-sub-title {
     display: none !important;
@@ -2637,7 +2785,7 @@ a {
     gap: 0.45rem !important;
   }
   .header-lang-btn {
-    padding: 0 0.5rem !important;
+    padding: 0 0.55rem !important;
     height: 32px !important;
   }
   .header-action-icon-btn {
@@ -2646,8 +2794,12 @@ a {
   }
   .header-cta-btn {
     height: 32px !important;
-    padding: 0 0.75rem !important;
-    font-size: 0.76rem !important;
+    width: 32px !important;
+    padding: 0 !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   .section-header-row {
@@ -2748,17 +2900,43 @@ a {
     justify-content: center;
   }
 
-  /* Policy items on mobile */
-  .policy-row-item {
+  /* Policy Engine V2 on Mobile */
+  .policy-builder-card {
+    padding: 1.3rem !important;
+  }
+  .policy-header {
     flex-direction: column !important;
     align-items: flex-start !important;
+    gap: 0.85rem !important;
+  }
+  .policy-item-v2 {
+    padding: 1.1rem !important;
+  }
+  .policy-item-header {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+  }
+
+  /* MPC Visualizer Mobile */
+  .mpc-visualizer-card {
+    padding: 1.3rem !important;
+  }
+  .mpc-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.85rem !important;
+  }
+  .mpc-d3-container {
+    padding: 0.75rem !important;
+    min-height: 280px !important;
+  }
+  .mpc-metrics-grid {
+    grid-template-columns: 1fr !important;
     gap: 0.75rem !important;
   }
-  .policy-row-right {
-    width: 100%;
-    justify-content: space-between;
-    padding-top: 0.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  .metric-box {
+    padding: 0.95rem 1.1rem !important;
   }
 
   /* Key Management Mobile */

@@ -34,45 +34,51 @@ export const PolicyBuilder: React.FC<PolicyBuilderProps> = ({ t }) => {
 
       <div className="policy-rules-list">
         {/* Rule 1 */}
-        <div className={`policy-item ${rule1Active ? 'active' : ''}`} onClick={() => setRule1Active(!rule1Active)}>
-          <div className="policy-item-icon">
-            <Clock className="w-5 h-5 text-emerald-400" />
-          </div>
-          <div className="policy-item-content">
-            <div className="flex items-center justify-between">
+        <div className={`policy-item-v2 ${rule1Active ? 'active' : ''}`} onClick={() => setRule1Active(!rule1Active)}>
+          <div className="policy-item-header">
+            <div className="flex items-center gap-3">
+              <div className="policy-item-icon-box emerald">
+                <Clock className="w-4 h-4 text-emerald-400" />
+              </div>
               <h4 className="font-bold text-sm text-white">{t.rule1}</h4>
-              <span className="font-mono text-xs text-emerald-400">{rule1Active ? 'ENFORCED' : 'DISABLED'}</span>
             </div>
-            <p className="text-xs text-slate-400 mt-1">{t.rule1Desc}</p>
+            <span className={`policy-status-pill font-mono ${rule1Active ? 'active' : 'disabled'}`}>
+              {rule1Active ? 'ENFORCED' : 'DISABLED'}
+            </span>
           </div>
+          <p className="policy-item-description">{t.rule1Desc}</p>
         </div>
 
         {/* Rule 2 */}
-        <div className={`policy-item ${rule2Active ? 'active' : ''}`} onClick={() => setRule2Active(!rule2Active)}>
-          <div className="policy-item-icon">
-            <Globe className="w-5 h-5 text-cyan-400" />
-          </div>
-          <div className="policy-item-content">
-            <div className="flex items-center justify-between">
+        <div className={`policy-item-v2 ${rule2Active ? 'active' : ''}`} onClick={() => setRule2Active(!rule2Active)}>
+          <div className="policy-item-header">
+            <div className="flex items-center gap-3">
+              <div className="policy-item-icon-box cyan">
+                <Globe className="w-4 h-4 text-cyan-400" />
+              </div>
               <h4 className="font-bold text-sm text-white">{t.rule2}</h4>
-              <span className="font-mono text-xs text-cyan-400">{rule2Active ? 'ENFORCED' : 'DISABLED'}</span>
             </div>
-            <p className="text-xs text-slate-400 mt-1">{t.rule2Desc}</p>
+            <span className={`policy-status-pill font-mono ${rule2Active ? 'active' : 'disabled'}`}>
+              {rule2Active ? 'ENFORCED' : 'DISABLED'}
+            </span>
           </div>
+          <p className="policy-item-description">{t.rule2Desc}</p>
         </div>
 
         {/* Rule 3 */}
-        <div className={`policy-item ${rule3Active ? 'active' : ''}`} onClick={() => setRule3Active(!rule3Active)}>
-          <div className="policy-item-icon">
-            <CheckCircle className="w-5 h-5 text-amber-400" />
-          </div>
-          <div className="policy-item-content">
-            <div className="flex items-center justify-between">
+        <div className={`policy-item-v2 ${rule3Active ? 'active' : ''}`} onClick={() => setRule3Active(!rule3Active)}>
+          <div className="policy-item-header">
+            <div className="flex items-center gap-3">
+              <div className="policy-item-icon-box amber">
+                <CheckCircle className="w-4 h-4 text-amber-400" />
+              </div>
               <h4 className="font-bold text-sm text-white">{t.rule3}</h4>
-              <span className="font-mono text-xs text-amber-400">{rule3Active ? 'ENFORCED' : 'DISABLED'}</span>
             </div>
-            <p className="text-xs text-slate-400 mt-1">{t.rule3Desc}</p>
+            <span className={`policy-status-pill font-mono ${rule3Active ? 'active' : 'disabled'}`}>
+              {rule3Active ? 'ENFORCED' : 'DISABLED'}
+            </span>
           </div>
+          <p className="policy-item-description">{t.rule3Desc}</p>
         </div>
       </div>
     </div>
